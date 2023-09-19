@@ -12,15 +12,15 @@ using System.Windows.Forms.DataVisualization.Charting;
 namespace Lab1
 {
     public partial class Task2Res : Form
-    {
+    {    
         public Task2Res()
         {
             InitializeComponent();
-            SelectColor();
         }
+
         private void CreateHist(int[] r, int[] g, int[] b, Chart chart)
         {
-            //chart.Series.Clear();
+            chart.Series.Clear();
 
             Series redSeries = new Series("Red");
             Series greenSeries = new Series("Green");
@@ -61,9 +61,10 @@ namespace Lab1
 
             try
             {
-                Bitmap img1 = new Bitmap(pixelRed.Image);
-                Bitmap img2 = new Bitmap(pixelGreen.Image);
-                Bitmap img3 = new Bitmap(pixelBlue.Image);
+                
+                Bitmap img1 = new Bitmap(pictureBox2.Image);
+                Bitmap img2 = new Bitmap(pictureBox2.Image);
+                Bitmap img3 = new Bitmap(pictureBox2.Image);
                 for (int i = 0; i < img1.Width; i++)
                 {
                     for (int j = 0; j < img1.Height; j++)
@@ -125,5 +126,53 @@ namespace Lab1
         {
 
         }
+
+        private void pixelBlue_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void chartRed_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            SelectColor();
+        }
+
+        private void pictureBox2_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+
+            // Настройте фильтр файлов, чтобы пользователь мог выбирать только изображения
+            openFileDialog.Filter = "Изображения (*.jpg;*.png;*.gif;*.bmp)|*.jpg;*.png;*.gif;*.bmp|Все файлы (*.*)|*.*";
+
+            if (openFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                // Если в pictureBox1 уже есть изображение, удалите его
+                if (pictureBox2.Image != null)
+                {
+                    pictureBox2.Image.Dispose();
+                    pictureBox2.Image = null;
+                }
+
+                // Получите путь к выбранному файлу
+                string selectedImagePath = openFileDialog.FileName;
+
+                try
+                {
+                    // Попробуйте загрузить новое изображение
+                    pictureBox2.Image = new Bitmap(openFileDialog.FileName);
+                }
+                catch (Exception ex)
+                {
+                    // Обработайте ошибку, если файл не является изображением
+                    MessageBox.Show("Выбранный файл не является изображением.\nОшибка: " + ex.Message);
+                }
+            }
+      
+    }
     }
 }

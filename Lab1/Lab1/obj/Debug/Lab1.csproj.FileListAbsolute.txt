@@ -10,3 +10,14 @@ D:\AI\Lab1\Lab1\obj\Debug\Lab1.exe
 D:\AI\Lab1\Lab1\obj\Debug\Lab1.pdb
 D:\AI\Lab1\Lab1\obj\Debug\Lab1.Task2.resources
 D:\AI\Lab1\Lab1\obj\Debug\Lab1.Task2Res.resources
+D:\CompGraph\Lab1\Lab1\bin\Debug\Lab1.exe.config
+D:\CompGraph\Lab1\Lab1\bin\Debug\Lab1.exe
+D:\CompGraph\Lab1\Lab1\bin\Debug\Lab1.pdb
+D:\CompGraph\Lab1\Lab1\obj\Debug\Lab1.csproj.AssemblyReference.cache
+D:\CompGraph\Lab1\Lab1\obj\Debug\Lab1.Form1.resources
+D:\CompGraph\Lab1\Lab1\obj\Debug\Lab1.Properties.Resources.resources
+D:\CompGraph\Lab1\Lab1\obj\Debug\Lab1.Task2Res.resources
+D:\CompGraph\Lab1\Lab1\obj\Debug\Lab1.csproj.GenerateResource.cache
+D:\CompGraph\Lab1\Lab1\obj\Debug\Lab1.csproj.CoreCompileInputs.cache
+D:\CompGraph\Lab1\Lab1\obj\Debug\Lab1.exe
+D:\CompGraph\Lab1\Lab1\obj\Debug\Lab1.pdb

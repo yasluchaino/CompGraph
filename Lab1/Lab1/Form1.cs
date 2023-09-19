@@ -19,7 +19,7 @@ namespace Lab1
 
         private void task2_Click(object sender, EventArgs e)
         {
- Task2 task2 = new Task2();
+ Task2Res task2 = new Task2Res();
             // Show the settings form
             task2.Show();
         }
