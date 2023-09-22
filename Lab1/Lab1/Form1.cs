@@ -30,5 +30,11 @@ namespace Lab1
             task3.Show();
            
         }
+        private void task1_Click_1(object sender, EventArgs e)
+        {
+            Task1Res task1 = new Task1Res();
+            task1.Show();
+        }
+
     }
 }

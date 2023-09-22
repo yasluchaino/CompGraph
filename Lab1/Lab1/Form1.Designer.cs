@@ -35,18 +35,21 @@
             // 
             // task1
             // 
-            this.task1.Location = new System.Drawing.Point(12, 107);
+            this.task1.Location = new System.Drawing.Point(9, 87);
+            this.task1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.task1.Name = "task1";
-            this.task1.Size = new System.Drawing.Size(154, 58);
+            this.task1.Size = new System.Drawing.Size(116, 47);
             this.task1.TabIndex = 0;
             this.task1.Text = "Задание 1";
             this.task1.UseVisualStyleBackColor = true;
+            this.task1.Click += new System.EventHandler(this.task1_Click_1);
             // 
             // task3
             // 
-            this.task3.Location = new System.Drawing.Point(420, 107);
+            this.task3.Location = new System.Drawing.Point(315, 87);
+            this.task3.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.task3.Name = "task3";
-            this.task3.Size = new System.Drawing.Size(154, 58);
+            this.task3.Size = new System.Drawing.Size(116, 47);
             this.task3.TabIndex = 1;
             this.task3.Text = "Задание 3";
             this.task3.UseVisualStyleBackColor = true;
@@ -54,9 +57,10 @@
             // 
             // task2
             // 
-            this.task2.Location = new System.Drawing.Point(220, 107);
+            this.task2.Location = new System.Drawing.Point(165, 87);
+            this.task2.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.task2.Name = "task2";
-            this.task2.Size = new System.Drawing.Size(154, 58);
+            this.task2.Size = new System.Drawing.Size(116, 47);
             this.task2.TabIndex = 2;
             this.task2.Text = "Задание 2";
             this.task2.UseVisualStyleBackColor = true;
@@ -64,12 +68,13 @@
             // 
             // Form1
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(626, 345);
+            this.ClientSize = new System.Drawing.Size(470, 280);
             this.Controls.Add(this.task2);
             this.Controls.Add(this.task3);
             this.Controls.Add(this.task1);
+            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.Name = "Form1";
             this.Text = "Form1";
             this.ResumeLayout(false);
