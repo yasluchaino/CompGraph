@@ -37,3 +37,4 @@ D:\Comp Graphics\lab_2\Lab1\Lab1\obj\Debug\Lab1.csproj.CoreCompileInputs.cache
 D:\Comp Graphics\lab_2\Lab1\Lab1\obj\Debug\Lab1.exe
 D:\Comp Graphics\lab_2\Lab1\Lab1\obj\Debug\Lab1.pdb
 >>>>>>> Stashed changes
+D:\CompGraph\Lab1\Lab1\obj\Debug\Lab1.Task3.resources
