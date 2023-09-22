@@ -19,13 +19,19 @@ namespace Lab1
 
         private void task2_Click(object sender, EventArgs e)
         {
+<<<<<<< Updated upstream
  Task2Res task2 = new Task2Res();
+=======
+            Task2 task2 = new Task2();
+>>>>>>> Stashed changes
             // Show the settings form
             task2.Show();
         }
 
         private void task3_Click(object sender, EventArgs e)
         {
+            Task3 task3 = new Task3();
+            task3.Show();
            
         }
     }
