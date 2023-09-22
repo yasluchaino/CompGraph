@@ -10,7 +10,6 @@ D:\AI\Lab1\Lab1\obj\Debug\Lab1.exe
 D:\AI\Lab1\Lab1\obj\Debug\Lab1.pdb
 D:\AI\Lab1\Lab1\obj\Debug\Lab1.Task2.resources
 D:\AI\Lab1\Lab1\obj\Debug\Lab1.Task2Res.resources
-<<<<<<< Updated upstream
 D:\CompGraph\Lab1\Lab1\bin\Debug\Lab1.exe.config
 D:\CompGraph\Lab1\Lab1\bin\Debug\Lab1.exe
 D:\CompGraph\Lab1\Lab1\bin\Debug\Lab1.pdb
