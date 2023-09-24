@@ -50,3 +50,4 @@ D:\Учеба\Универ\4 курс(1 сем)\КГ\2 лаба\CompGraph\Lab1\L
 D:\Учеба\Универ\4 курс(1 сем)\КГ\2 лаба\CompGraph\Lab1\Lab1\obj\Debug\Lab1.exe
 D:\Учеба\Универ\4 курс(1 сем)\КГ\2 лаба\CompGraph\Lab1\Lab1\obj\Debug\Lab1.pdb
 D:\Учеба\Универ\4 курс(1 сем)\КГ\2 лаба\CompGraph\Lab1\Lab1\obj\Debug\Lab1.Task1Res.resources
+D:\CompGraph\Lab1\Lab1\obj\Debug\Lab1.Task1Res.resources

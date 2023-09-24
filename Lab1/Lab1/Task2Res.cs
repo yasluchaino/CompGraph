@@ -46,34 +46,26 @@ namespace Lab1
           
             chart.ChartAreas[0].AxisX.Minimum = 0;
             chart.ChartAreas[0].AxisX.Maximum = 255;
-            chart.ChartAreas[0].AxisY.Minimum = 0;
-            chart.ChartAreas[0].AxisY.Maximum = 25000;
+
             chart.ChartAreas[0].AxisX.Title = "Color Value";
             chart.ChartAreas[0].AxisY.Title = "Frequency";
         }
         private void SelectColor()
         {
+            Bitmap bmp = new Bitmap(pictureBox2.Image);
 
             int[] redHist1 = new int[256];
             int[] greenHist1 = new int[256];
             int[] blueHist1 = new int[256];
 
-            //int[] redHist2 = new int[256];
-            //int[] greenHist2 = new int[256];
-            //int[] blueHist2 = new int[256];
-
-            //int[] redHist3 = new int[256];
-            //int[] greenHist3 = new int[256];
-            //int[] blueHist3 = new int[256];
-
             try
             { 
-                Bitmap img1 = new Bitmap(pictureBox2.Image);
-                Bitmap img2 = new Bitmap(pictureBox2.Image);
-                Bitmap img3 = new Bitmap(pictureBox2.Image);
-                for (int i = 0; i < img1.Width; i++)
+                Bitmap img1 = new Bitmap(bmp);
+                Bitmap img2 = new Bitmap(bmp);
+                Bitmap img3 = new Bitmap(bmp);
+                for (int i = 0; i < bmp.Width; i++)
                 {
-                    for (int j = 0; j < img1.Height; j++)
+                    for (int j = 0; j < bmp.Height; j++)
                     {
                         Color c = img1.GetPixel(i, j);
                         Color nc = Color.FromArgb(c.A, c.R, 0, 0);

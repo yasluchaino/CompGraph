@@ -63,16 +63,14 @@ namespace Lab1
                 {
                     Color c = img.GetPixel(i, j);
 
-                    var grey0 = (int)(0.3 * c.R + 0.59 * c.G + 0.11 * c.B);
-                    Color nc0 = Color.FromArgb(grey0, grey0, grey0);
-                    img0.SetPixel(i, j, nc0);
+                    //(int)(0.299 * r + 0.587 * g + 0.114 * b);
 
-                    var grey1 = (int)(0.3 * c.R + 0.59 * c.G);
+                    var grey1 = (int)(0.299 * c.R + 0.587 * c.G +0.114*c.B);
                     Color nc1 = Color.FromArgb(grey1, grey1, grey1);
                     img1.SetPixel(i, j, nc1);
                     intensity1[grey1]++;
-
-                    var grey2 = (int)(0.11 * c.B);
+                    //(int)(0.2126 * r + 0.7152 * g + 0.0722 * b);
+                    var grey2 = (int)(0.2126 * c.R + 0.7152 * c.G + 0.0722 * c.B);
                     Color nc2 = Color.FromArgb(grey2, grey2, grey2);
                     img2.SetPixel(i, j, nc2);
                     intensity2[grey2]++;
@@ -82,7 +80,7 @@ namespace Lab1
                     img3.SetPixel(i, j, nc3);
                 }
             }
-            pictureBox2.Image = img0;
+           
             pictureBox3.Image = img1;
             pictureBox4.Image = img2;
             pictureBox5.Image = img3;
@@ -112,6 +110,11 @@ namespace Lab1
             chart2.ChartAreas[0].AxisX.Maximum = 255;
             chart2.ChartAreas[0].AxisY.Minimum = 0;
             chart2.ChartAreas[0].AxisY.Maximum = 25000;
+        }
+
+        private void pictureBox3_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }
