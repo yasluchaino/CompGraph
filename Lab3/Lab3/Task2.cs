@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -24,7 +25,7 @@ namespace Lab3
             bitmap = new Bitmap(pictureBox1.Width, pictureBox1.Height);
             g = Graphics.FromImage(bitmap);
 
-            // Добавляем обработчики событий для PictureBox
+
             pictureBox1.MouseDown += PictureBox_MouseDown;
             pictureBox1.MouseMove += PictureBox_MouseMove;
             pictureBox1.MouseUp += PictureBox_MouseUp;
@@ -54,7 +55,7 @@ namespace Lab3
                 }
                 else
                 {
-                    MessageBox.Show("Please, select a method.");
+                    WU(startX, startY, e.X, e.Y);
                 }
             }
         }
@@ -81,7 +82,7 @@ namespace Lab3
             {
                 for (int x = x0; x < x1; x++)
                 {
-                    g.FillRectangle(Brushes.Black,x, y, 1, 1);
+                    g.FillRectangle(Brushes.DarkOliveGreen, x, y, 1, 1);
                     if (D > 0)
                     {
                         y = y + yi;
@@ -112,7 +113,7 @@ namespace Lab3
             {
                 for (int y = y0; y < y1; y++)
                 {
-                    g.FillRectangle(Brushes.Black, x, y, 1, 1);
+                    g.FillRectangle(Brushes.DarkOliveGreen, x, y, 1, 1);
                     if (D > 0)
                     {
                         x = x + xi;
@@ -155,6 +156,127 @@ namespace Lab3
 
         }
 
+        private void Swap(ref int a, ref int b)
+        {
+            int temp = a;
+            a = b;
+            b = temp;
+        }
+        public static int IPart(float x)
+        {
+            return (int)Math.Floor(x);
+        }
+
+        public static int Round(float x)
+        {
+            return IPart(x + 0.5f);
+        }
+
+        public static float FPart(float x)
+        {
+            return x - IPart(x);
+        }
+
+        public static float RFPart(float x)
+        {
+            return 1 - FPart(x);
+        }
+
+        private void Plot(int x, int y, float brightness)
+        {
+            int c = (int)(255 * brightness);
+            using (Graphics g = Graphics.FromImage(bitmap))
+            {
+                SolidBrush brush = new SolidBrush(Color.FromArgb(c, c, c));
+               g.FillRectangle(brush, x, y, 1, 1);
+            }
+        }
+
+        public void WU(int x0, int y0, int x1, int y1)
+        {
+            bool steep = Math.Abs(y1 - y0) > Math.Abs(x1 - x0);
+
+            if (steep)
+            {
+                Swap(ref x0, ref y0);
+                Swap(ref x1, ref y1);
+            }
+
+            if (x0 > x1)
+            {
+                Swap(ref x0, ref x1);
+                Swap(ref y0, ref y1);
+            }
+
+            float dx = x1 - x0;
+            float dy = y1 - y0;
+            float gradient = dx != 0.0f ? dy / dx : 1;
+
+            int xpxl1 = x0;
+            int xpxl2 = x1;
+            float intersectY = y0;
+
+
+
+            if (steep)
+            {
+                for (int x = xpxl1; x <= xpxl2; x++)
+                {
+                    Plot(IPart(intersectY), x, RFPart(intersectY));
+                    Plot(IPart(intersectY) - 1, x, FPart(intersectY));
+                    intersectY += gradient;
+                }
+            }
+            else
+            {
+                for (int x = xpxl1; x <= xpxl2; x++)
+                {
+                    Plot(x, IPart(intersectY), RFPart(intersectY));
+                    Plot(x, IPart(intersectY) - 1, FPart(intersectY));
+                    intersectY += gradient;
+                }
+            }
+
+            pictureBox1.Image = bitmap;
+        }
 
     }
 }
+
+
+
+//для последних точек в алгоритме ву
+//int xend = Round(x0);
+//float yend = y0 + gradient * (xend - x0);
+//float xgap = RFPart(x0 + 0.5f);
+//int xpxl1 = xend; // this will be used in the main loop
+//int ypxl1 = IPart(yend);
+//if (steep)
+//{
+//    Plot(ypxl1, xpxl1, RFPart(yend) * xgap);
+//    Plot(ypxl1 + 1, xpxl1, FPart(yend) * xgap);
+//}
+//else
+//{
+//    Plot(xpxl1, ypxl1, RFPart(yend) * xgap);
+//    Plot(xpxl1, ypxl1 + 1, FPart(yend) * xgap);
+//}
+
+//float intersectY = yend + gradient; // first y-intersection for the main loop
+
+
+//xend = Round(x1);
+//yend = y1 + gradient * (xend - x1);
+//xgap = FPart(x1 + 0.5f);
+//int xpxl2 = xend; //this will be used in the main loop
+//int ypxl2 = IPart(yend);
+//if (steep)
+//{
+//    Plot(ypxl2, xpxl2, RFPart(yend) * xgap);
+//    Plot(ypxl2 + 1, xpxl2, FPart(yend) * xgap);
+//}
+//else
+//{
+//    Plot(xpxl2, ypxl2, RFPart(yend) * xgap);
+//    Plot(xpxl2, ypxl2 + 1, FPart(yend) * xgap);
+//}
