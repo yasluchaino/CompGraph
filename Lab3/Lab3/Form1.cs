@@ -27,13 +27,18 @@ namespace Lab3
 
         }
 
-        private void task_1_click_Click(object sender, EventArgs e)
+        private void Form1_Load(object sender, EventArgs e)
         {
-                Task1 task1 = new Task1();
-                task1.Show();
+
         }
 
-        private void Form1_Load(object sender, EventArgs e)
+        private void button1_Click(object sender, EventArgs e)
+        {
+            Task1bc task1 = new Task1bc();
+            task1.ShowDialog();
+        }
+
+        private void button2_Click(object sender, EventArgs e)
         {
 
         }
