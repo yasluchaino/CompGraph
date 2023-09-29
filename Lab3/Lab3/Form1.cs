@@ -19,7 +19,9 @@ namespace Lab3
 
         private void task_2_click_Click(object sender, EventArgs e)
         {
-            
+            Task2 task2 = new Task2();
+            task2.Show();
+
         }
 
         private void task_3_click_Click(object sender, EventArgs e)

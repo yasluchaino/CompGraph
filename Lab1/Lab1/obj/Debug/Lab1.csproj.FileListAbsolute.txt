@@ -35,7 +35,6 @@ D:\Comp Graphics\lab_2\Lab1\Lab1\obj\Debug\Lab1.csproj.GenerateResource.cache
 D:\Comp Graphics\lab_2\Lab1\Lab1\obj\Debug\Lab1.csproj.CoreCompileInputs.cache
 D:\Comp Graphics\lab_2\Lab1\Lab1\obj\Debug\Lab1.exe
 D:\Comp Graphics\lab_2\Lab1\Lab1\obj\Debug\Lab1.pdb
->>>>>>> Stashed changes
 D:\CompGraph\Lab1\Lab1\obj\Debug\Lab1.Task3.resources
 D:\Учеба\Универ\4 курс(1 сем)\КГ\2 лаба\CompGraph\Lab1\Lab1\bin\Debug\Lab1.exe.config
 D:\Учеба\Универ\4 курс(1 сем)\КГ\2 лаба\CompGraph\Lab1\Lab1\bin\Debug\Lab1.exe
