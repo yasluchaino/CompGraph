@@ -325,11 +325,10 @@ namespace Lab3
                         //startPoint.Y = imageMouseCoordinates.Y;
                         HighlightBound(imageMouseCoordinates.X, imageMouseCoordinates.Y);
                         DrawBorder();
-                            label3.Text = borderPixels.Count().ToString();
                         break;
                     default:
                         MessageBox.Show("Выберите задание");
-                       // FloodFill(imageMouseCoordinates.X, imageMouseCoordinates.Y, targetColor, replacementImage);
+                       
                         break;
                 }              
             }
