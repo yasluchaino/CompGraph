@@ -15,11 +15,14 @@ namespace Lab4
     {
 
         List<PointF> points = new List<PointF>();
+        SolidBrush brush = new SolidBrush(Color.Red);
+        private Graphics g;
         public Form1()
         {
             InitializeComponent();
 
             pictureBox1.MouseClick += new MouseEventHandler(pictureBox1_MouseClick);
+            g = pictureBox1.CreateGraphics();
 
         }
 
@@ -28,7 +31,7 @@ namespace Lab4
             //   точка
             if (checkBox1.Checked)
             {
-                
+                drawPoint(e.Location);
           
             }
             // ребро
@@ -45,7 +48,6 @@ namespace Lab4
 
             }
 
-            pictureBox1.Invalidate();
         }
 
 
@@ -59,16 +61,19 @@ namespace Lab4
                 // сбрасываем остальные, если уже какой-то выбран
                 if (checkBox == checkBox1)
                 {
+                    line_box.Visible = false;
                     checkBox2.Checked = false;
                     checkBox3.Checked = false;
                 }
                 else if (checkBox == checkBox2)
                 {
+                    line_box.Visible = true;
                     checkBox1.Checked = false;
                     checkBox3.Checked = false;
                 }
                 else if (checkBox == checkBox3)
                 {
+                    line_box.Visible = false;
                     checkBox1.Checked = false;
                     checkBox2.Checked = false;
                 }
@@ -89,8 +94,19 @@ namespace Lab4
             checkBox1.Checked = false;
             checkBox2.Checked = false;
             checkBox3.Checked = false;
+            g.Clear(Color.White);
 
         }
 
+        private void button2_Click(object sender, EventArgs e)
+        {
+
+        }
+
+
+        void drawPoint(PointF location)
+        {
+            g.FillEllipse(brush, location.X - 3, location.Y - 3, 5, 5);
+        }
     }
 }
