@@ -181,52 +181,47 @@ namespace Lab1
         {
             //string message = $"Hue: {H}, Sat: {S}, Val: {V}";
             //MessageBox.Show(message, "Значения h s v ");
-            double R = 0; double G = 0; double B = 0;
-            int Hi = (int)(H / 60) % 6;
+            int R = 0; int G = 0; int B = 0;
 
-            double Vmin = (1 - S) * V;
-            double a = (V - Vmin) * (H / 60 - Math.Truncate(H / 60));
-            double Vinc = Vmin + a;
-            double Vdec = V - a;
+            int hi = Convert.ToInt32(Math.Floor(H / 60)) % 6;
+            double f = (H / 60) - Math.Floor(H / 60);
+            double p = V * (1 - S);
+            double q = V * (1 - f * S);
+            double t = V * (1 - (1 - f) * S);
 
-            if (Hi == 0)
-            {
+            if (hi == 0) {
+                R = Convert.ToInt32(V * 255);
+                G = Convert.ToInt32(t * 255);
+                B = Convert.ToInt32(p * 255);
+            }
+            else if (hi == 1) {
+                R = Convert.ToInt32(q * 255);
+                G = Convert.ToInt32(V * 255);
+                B = Convert.ToInt32(p * 255);
+            }
+            else if (hi == 2) {
+                R = Convert.ToInt32(p * 255);
+                G = Convert.ToInt32(V * 255);
+                B = Convert.ToInt32(t * 255);
+            }
+            else if (hi == 3) {
+                R = Convert.ToInt32(p * 255);
+                G = Convert.ToInt32(q * 255);
+                B = Convert.ToInt32(V * 255);
+            }
+            else if (hi == 4) {
+                R = Convert.ToInt32(t * 255);
+                G = Convert.ToInt32(p * 255);
+                B = Convert.ToInt32(V * 255);
+            }
+            else {
+                R = Convert.ToInt32(V * 255);
+                G = Convert.ToInt32(p * 255);
+                B = Convert.ToInt32(q * 255);
+            }
+            
 
-                R = V * 255;
-                G = Vinc * 255;
-                B = Vmin * 255;
-            }
-            else if (Hi == 1)
-            {
-                R = Vdec * 255;
-                G = V * 255;
-                B = Vmin * 255;
-            }
-            else if (Hi == 2)
-            {
-                R = Vmin * 255;
-                G = V * 255;
-                B = Vinc * 255;
-            }
-            else if (Hi == 3)
-            {
-                R = Vmin * 255;
-                G = Vdec * 255;
-                B = V * 255;
-            }
-            else if (Hi == 4)
-            {
-                R = Vinc * 255;
-                G = Vmin * 255;
-                B = V * 255;
-            }
-            else if (Hi == 5)
-            {
-                R = V * 255;
-                G = Vmin * 255;
-                B = Vdec * 255;
-            }
-            return Color.FromArgb((int)R, (int)G, (int)B);
+            return Color.FromArgb(R, G, B);
         }
 
         private void save_buttom_Click(object sender, EventArgs e)
