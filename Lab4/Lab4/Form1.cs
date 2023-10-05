@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -11,42 +12,98 @@ using System.Windows.Forms.VisualStyles;
 
 namespace Lab4
 {
+    public class Line
+    {
+        public PointF StartPoint { get; set; }
+        public PointF EndPoint { get; set; }
+        public Color Color { get; set; }
+    }
+
+
     public partial class Form1 : Form
     {
 
-        List<PointF> points = new List<PointF>();
-        SolidBrush brush = new SolidBrush(Color.Red);
+        private List<Line> lines = new List<Line>();
+        private List<PointF> points = new List<PointF>();
+        private SolidBrush brush = new SolidBrush(Color.Red);
         private Graphics g;
+        private bool isDrawing = false;
+        private PointF startPoint;
+        private PointF endPoint;
+
+
         public Form1()
         {
             InitializeComponent();
-
-            pictureBox1.MouseClick += new MouseEventHandler(pictureBox1_MouseClick);
             g = pictureBox1.CreateGraphics();
 
         }
 
-        private void pictureBox1_MouseClick(object sender, MouseEventArgs e)
+     
+        
+        private void pictureBox1_MouseDown(object sender, MouseEventArgs e)
         {
-            //   точка
             if (checkBox1.Checked)
             {
+             
                 drawPoint(e.Location);
-          
             }
-            // ребро
-            else if ( checkBox2.Checked)
+            else if (checkBox2.Checked)
             {
 
-                
+                isDrawing = true;
+                startPoint = e.Location;
+                endPoint = e.Location;
             }
-            // полигон
             else if (checkBox3.Checked)
             {
-               
-                
 
             }
+        } 
+        
+        private void pictureBox1_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (isDrawing && checkBox2.Checked)
+            {
+
+                endPoint = e.Location;
+
+
+                pictureBox1.Invalidate();
+            }
+        }
+
+        private void pictureBox1_MouseUp(object sender, MouseEventArgs e)
+        {
+            if (isDrawing && checkBox2.Checked)
+            {
+                isDrawing = false;
+
+                // Сохраняем текущий отрезок
+                Line line = new Line { StartPoint = startPoint, EndPoint = endPoint, Color = Color.Black };
+                lines.Add(line);
+
+
+                pictureBox1.Invalidate();
+            }
+        }
+
+
+        private void pictureBox1_Paint(object sender, PaintEventArgs e)
+        {
+            
+            foreach (var line in lines)
+            {
+                e.Graphics.DrawLine(new Pen(line.Color), line.StartPoint, line.EndPoint);
+            }
+            
+            if (isDrawing && checkBox2.Checked)
+            {
+                e.Graphics.DrawLine(Pens.Black, startPoint, endPoint);
+            }
+
+
+
 
         }
 
@@ -108,5 +165,7 @@ namespace Lab4
         {
             g.FillEllipse(brush, location.X - 3, location.Y - 3, 5, 5);
         }
+
+        
     }
 }

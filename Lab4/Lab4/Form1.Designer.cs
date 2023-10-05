@@ -1,4 +1,7 @@
-﻿namespace Lab4
+﻿using System;
+using System.Windows.Forms;
+
+namespace Lab4
 {
     partial class Form1
     {
@@ -51,11 +54,11 @@
             this.checkBox3 = new System.Windows.Forms.CheckBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.line_box = new System.Windows.Forms.GroupBox();
-            this.button2 = new System.Windows.Forms.Button();
-            this.textBox1 = new System.Windows.Forms.TextBox();
-            this.textBox2 = new System.Windows.Forms.TextBox();
-            this.label9 = new System.Windows.Forms.Label();
             this.label10 = new System.Windows.Forms.Label();
+            this.label9 = new System.Windows.Forms.Label();
+            this.textBox2 = new System.Windows.Forms.TextBox();
+            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.button2 = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown3)).BeginInit();
@@ -106,7 +109,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(48, 114);
+            this.label1.Location = new System.Drawing.Point(46, 69);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(145, 16);
             this.label1.TabIndex = 6;
@@ -279,11 +282,17 @@
             this.pictureBox1.Size = new System.Drawing.Size(1075, 670);
             this.pictureBox1.TabIndex = 22;
             this.pictureBox1.TabStop = false;
+            this.pictureBox1.MouseDown += new MouseEventHandler(this.pictureBox1_MouseDown);
+            this.pictureBox1.MouseUp += new MouseEventHandler(this.pictureBox1_MouseUp);
+            this.pictureBox1.MouseMove += new MouseEventHandler(this.pictureBox1_MouseMove);
+            this.pictureBox1.Paint += new PaintEventHandler(this.pictureBox1_Paint);
+
+
             // 
             // checkBox1
             // 
             this.checkBox1.AutoSize = true;
-            this.checkBox1.Location = new System.Drawing.Point(58, 142);
+            this.checkBox1.Location = new System.Drawing.Point(49, 88);
             this.checkBox1.Name = "checkBox1";
             this.checkBox1.Size = new System.Drawing.Size(67, 20);
             this.checkBox1.TabIndex = 23;
@@ -294,7 +303,7 @@
             // checkBox2
             // 
             this.checkBox2.AutoSize = true;
-            this.checkBox2.Location = new System.Drawing.Point(58, 168);
+            this.checkBox2.Location = new System.Drawing.Point(47, 114);
             this.checkBox2.Name = "checkBox2";
             this.checkBox2.Size = new System.Drawing.Size(69, 20);
             this.checkBox2.TabIndex = 24;
@@ -305,7 +314,7 @@
             // checkBox3
             // 
             this.checkBox3.AutoSize = true;
-            this.checkBox3.Location = new System.Drawing.Point(58, 194);
+            this.checkBox3.Location = new System.Drawing.Point(47, 140);
             this.checkBox3.Name = "checkBox3";
             this.checkBox3.Size = new System.Drawing.Size(83, 20);
             this.checkBox3.TabIndex = 25;
@@ -331,9 +340,9 @@
             this.groupBox1.Controls.Add(this.numericUpDown5);
             this.groupBox1.Controls.Add(this.label6);
             this.groupBox1.Controls.Add(this.rotate_button);
-            this.groupBox1.Location = new System.Drawing.Point(49, 240);
+            this.groupBox1.Location = new System.Drawing.Point(26, 166);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(292, 423);
+            this.groupBox1.Size = new System.Drawing.Size(299, 508);
             this.groupBox1.TabIndex = 26;
             this.groupBox1.TabStop = false;
             this.groupBox1.Visible = false;
@@ -345,36 +354,21 @@
             this.line_box.Controls.Add(this.textBox2);
             this.line_box.Controls.Add(this.textBox1);
             this.line_box.Controls.Add(this.button2);
-            this.line_box.Location = new System.Drawing.Point(0, 304);
+            this.line_box.Location = new System.Drawing.Point(6, 308);
             this.line_box.Name = "line_box";
             this.line_box.Size = new System.Drawing.Size(286, 119);
             this.line_box.TabIndex = 27;
             this.line_box.TabStop = false;
             this.line_box.Visible = false;
             // 
-            // button2
+            // label10
             // 
-            this.button2.Location = new System.Drawing.Point(32, 64);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(221, 39);
-            this.button2.TabIndex = 0;
-            this.button2.Text = "Найти точку пересечения";
-            this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.button2_Click);
-            // 
-            // textBox1
-            // 
-            this.textBox1.Location = new System.Drawing.Point(173, 36);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(69, 22);
-            this.textBox1.TabIndex = 1;
-            // 
-            // textBox2
-            // 
-            this.textBox2.Location = new System.Drawing.Point(50, 36);
-            this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(69, 22);
-            this.textBox2.TabIndex = 2;
+            this.label10.AutoSize = true;
+            this.label10.Location = new System.Drawing.Point(152, 39);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(16, 16);
+            this.label10.TabIndex = 29;
+            this.label10.Text = "Y";
             // 
             // label9
             // 
@@ -385,14 +379,29 @@
             this.label9.TabIndex = 28;
             this.label9.Text = "X";
             // 
-            // label10
+            // textBox2
             // 
-            this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(152, 39);
-            this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(16, 16);
-            this.label10.TabIndex = 29;
-            this.label10.Text = "Y";
+            this.textBox2.Location = new System.Drawing.Point(50, 36);
+            this.textBox2.Name = "textBox2";
+            this.textBox2.Size = new System.Drawing.Size(69, 22);
+            this.textBox2.TabIndex = 2;
+            // 
+            // textBox1
+            // 
+            this.textBox1.Location = new System.Drawing.Point(173, 36);
+            this.textBox1.Name = "textBox1";
+            this.textBox1.Size = new System.Drawing.Size(69, 22);
+            this.textBox1.TabIndex = 1;
+            // 
+            // button2
+            // 
+            this.button2.Location = new System.Drawing.Point(32, 64);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(221, 39);
+            this.button2.TabIndex = 0;
+            this.button2.Text = "Найти точку пересечения";
+            this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
             // Form1
             // 
@@ -424,6 +433,8 @@
             this.PerformLayout();
 
         }
+
+       
 
         #endregion
         private System.Windows.Forms.Button button1;
