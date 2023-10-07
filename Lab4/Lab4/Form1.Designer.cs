@@ -53,6 +53,8 @@ namespace Lab4
             this.checkBox2 = new System.Windows.Forms.CheckBox();
             this.checkBox3 = new System.Windows.Forms.CheckBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.rotate_box = new System.Windows.Forms.GroupBox();
+            this.rotate_edge = new System.Windows.Forms.Button();
             this.line_box = new System.Windows.Forms.GroupBox();
             this.label10 = new System.Windows.Forms.Label();
             this.label9 = new System.Windows.Forms.Label();
@@ -66,12 +68,13 @@ namespace Lab4
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown5)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.groupBox1.SuspendLayout();
+            this.rotate_box.SuspendLayout();
             this.line_box.SuspendLayout();
             this.SuspendLayout();
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(49, 12);
+            this.button1.Location = new System.Drawing.Point(12, 12);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(130, 33);
             this.button1.TabIndex = 1;
@@ -81,9 +84,9 @@ namespace Lab4
             // 
             // move_button
             // 
-            this.move_button.Location = new System.Drawing.Point(59, 62);
+            this.move_button.Location = new System.Drawing.Point(179, 18);
             this.move_button.Name = "move_button";
-            this.move_button.Size = new System.Drawing.Size(130, 33);
+            this.move_button.Size = new System.Drawing.Size(80, 30);
             this.move_button.TabIndex = 3;
             this.move_button.Text = "move";
             this.move_button.UseVisualStyleBackColor = true;
@@ -91,18 +94,18 @@ namespace Lab4
             // 
             // rotate_button
             // 
-            this.rotate_button.Location = new System.Drawing.Point(59, 149);
+            this.rotate_button.Location = new System.Drawing.Point(179, 61);
             this.rotate_button.Name = "rotate_button";
-            this.rotate_button.Size = new System.Drawing.Size(130, 33);
+            this.rotate_button.Size = new System.Drawing.Size(80, 28);
             this.rotate_button.TabIndex = 4;
             this.rotate_button.Text = "rotate";
             this.rotate_button.UseVisualStyleBackColor = true;
             // 
             // scale_button
             // 
-            this.scale_button.Location = new System.Drawing.Point(69, 241);
+            this.scale_button.Location = new System.Drawing.Point(212, 108);
             this.scale_button.Name = "scale_button";
-            this.scale_button.Size = new System.Drawing.Size(130, 33);
+            this.scale_button.Size = new System.Drawing.Size(80, 27);
             this.scale_button.TabIndex = 5;
             this.scale_button.Text = "scale";
             this.scale_button.UseVisualStyleBackColor = true;
@@ -110,7 +113,7 @@ namespace Lab4
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(46, 69);
+            this.label1.Location = new System.Drawing.Point(12, 48);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(145, 16);
             this.label1.TabIndex = 6;
@@ -119,7 +122,7 @@ namespace Lab4
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(29, 36);
+            this.label2.Location = new System.Drawing.Point(15, 18);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(15, 16);
             this.label2.TabIndex = 7;
@@ -128,7 +131,7 @@ namespace Lab4
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(142, 36);
+            this.label3.Location = new System.Drawing.Point(88, 20);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(16, 16);
             this.label3.TabIndex = 8;
@@ -137,7 +140,7 @@ namespace Lab4
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(54, 127);
+            this.label4.Location = new System.Drawing.Point(15, 67);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(31, 16);
             this.label4.TabIndex = 12;
@@ -145,7 +148,7 @@ namespace Lab4
             // 
             // numericUpDown1
             // 
-            this.numericUpDown1.Location = new System.Drawing.Point(50, 34);
+            this.numericUpDown1.Location = new System.Drawing.Point(32, 18);
             this.numericUpDown1.Maximum = new decimal(new int[] {
             1000,
             0,
@@ -162,7 +165,7 @@ namespace Lab4
             // 
             // numericUpDown2
             // 
-            this.numericUpDown2.Location = new System.Drawing.Point(164, 34);
+            this.numericUpDown2.Location = new System.Drawing.Point(110, 18);
             this.numericUpDown2.Maximum = new decimal(new int[] {
             1000,
             0,
@@ -179,7 +182,7 @@ namespace Lab4
             // 
             // numericUpDown3
             // 
-            this.numericUpDown3.Location = new System.Drawing.Point(91, 121);
+            this.numericUpDown3.Location = new System.Drawing.Point(56, 65);
             this.numericUpDown3.Maximum = new decimal(new int[] {
             360,
             0,
@@ -197,7 +200,7 @@ namespace Lab4
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(29, 213);
+            this.label5.Location = new System.Drawing.Point(3, 114);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(15, 16);
             this.label5.TabIndex = 16;
@@ -206,7 +209,7 @@ namespace Lab4
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(142, 213);
+            this.label6.Location = new System.Drawing.Point(107, 114);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(16, 16);
             this.label6.TabIndex = 17;
@@ -214,7 +217,7 @@ namespace Lab4
             // 
             // numericUpDown4
             // 
-            this.numericUpDown4.Location = new System.Drawing.Point(50, 213);
+            this.numericUpDown4.Location = new System.Drawing.Point(125, 110);
             this.numericUpDown4.Maximum = new decimal(new int[] {
             300,
             0,
@@ -226,7 +229,7 @@ namespace Lab4
             0,
             0});
             this.numericUpDown4.Name = "numericUpDown4";
-            this.numericUpDown4.Size = new System.Drawing.Size(44, 22);
+            this.numericUpDown4.Size = new System.Drawing.Size(56, 22);
             this.numericUpDown4.TabIndex = 18;
             this.numericUpDown4.Value = new decimal(new int[] {
             100,
@@ -236,7 +239,7 @@ namespace Lab4
             // 
             // numericUpDown5
             // 
-            this.numericUpDown5.Location = new System.Drawing.Point(164, 213);
+            this.numericUpDown5.Location = new System.Drawing.Point(21, 108);
             this.numericUpDown5.Maximum = new decimal(new int[] {
             300,
             0,
@@ -248,7 +251,7 @@ namespace Lab4
             0,
             0});
             this.numericUpDown5.Name = "numericUpDown5";
-            this.numericUpDown5.Size = new System.Drawing.Size(44, 22);
+            this.numericUpDown5.Size = new System.Drawing.Size(58, 22);
             this.numericUpDown5.TabIndex = 19;
             this.numericUpDown5.Value = new decimal(new int[] {
             100,
@@ -259,7 +262,7 @@ namespace Lab4
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(100, 219);
+            this.label7.Location = new System.Drawing.Point(82, 113);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(19, 16);
             this.label7.TabIndex = 20;
@@ -268,7 +271,7 @@ namespace Lab4
             // label8
             // 
             this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(214, 219);
+            this.label8.Location = new System.Drawing.Point(187, 116);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(19, 16);
             this.label8.TabIndex = 21;
@@ -291,7 +294,7 @@ namespace Lab4
             // checkBox1
             // 
             this.checkBox1.AutoSize = true;
-            this.checkBox1.Location = new System.Drawing.Point(49, 88);
+            this.checkBox1.Location = new System.Drawing.Point(15, 67);
             this.checkBox1.Name = "checkBox1";
             this.checkBox1.Size = new System.Drawing.Size(67, 20);
             this.checkBox1.TabIndex = 23;
@@ -302,7 +305,7 @@ namespace Lab4
             // checkBox2
             // 
             this.checkBox2.AutoSize = true;
-            this.checkBox2.Location = new System.Drawing.Point(47, 114);
+            this.checkBox2.Location = new System.Drawing.Point(15, 93);
             this.checkBox2.Name = "checkBox2";
             this.checkBox2.Size = new System.Drawing.Size(69, 20);
             this.checkBox2.TabIndex = 24;
@@ -313,7 +316,7 @@ namespace Lab4
             // checkBox3
             // 
             this.checkBox3.AutoSize = true;
-            this.checkBox3.Location = new System.Drawing.Point(47, 140);
+            this.checkBox3.Location = new System.Drawing.Point(15, 119);
             this.checkBox3.Name = "checkBox3";
             this.checkBox3.Size = new System.Drawing.Size(83, 20);
             this.checkBox3.TabIndex = 25;
@@ -323,6 +326,7 @@ namespace Lab4
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.rotate_box);
             this.groupBox1.Controls.Add(this.line_box);
             this.groupBox1.Controls.Add(this.move_button);
             this.groupBox1.Controls.Add(this.numericUpDown2);
@@ -339,12 +343,32 @@ namespace Lab4
             this.groupBox1.Controls.Add(this.numericUpDown5);
             this.groupBox1.Controls.Add(this.label6);
             this.groupBox1.Controls.Add(this.rotate_button);
-            this.groupBox1.Location = new System.Drawing.Point(26, 166);
+            this.groupBox1.Location = new System.Drawing.Point(15, 145);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(299, 508);
             this.groupBox1.TabIndex = 26;
             this.groupBox1.TabStop = false;
             this.groupBox1.Visible = false;
+            // 
+            // rotate_box
+            // 
+            this.rotate_box.Controls.Add(this.rotate_edge);
+            this.rotate_box.Location = new System.Drawing.Point(6, 433);
+            this.rotate_box.Name = "rotate_box";
+            this.rotate_box.Size = new System.Drawing.Size(287, 69);
+            this.rotate_box.TabIndex = 28;
+            this.rotate_box.TabStop = false;
+            this.rotate_box.Visible = false;
+            // 
+            // rotate_edge
+            // 
+            this.rotate_edge.Location = new System.Drawing.Point(32, 21);
+            this.rotate_edge.Name = "rotate_edge";
+            this.rotate_edge.Size = new System.Drawing.Size(221, 42);
+            this.rotate_edge.TabIndex = 0;
+            this.rotate_edge.Text = "Повернуть ребро";
+            this.rotate_edge.UseVisualStyleBackColor = true;
+            this.rotate_edge.Click += new System.EventHandler(this.rotate_edge_Click);
             // 
             // line_box
             // 
@@ -426,6 +450,7 @@ namespace Lab4
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
+            this.rotate_box.ResumeLayout(false);
             this.line_box.ResumeLayout(false);
             this.line_box.PerformLayout();
             this.ResumeLayout(false);
@@ -464,6 +489,8 @@ namespace Lab4
         private System.Windows.Forms.TextBox textBox2;
         private System.Windows.Forms.TextBox textBox1;
         private System.Windows.Forms.Button button2;
+        private GroupBox rotate_box;
+        private Button rotate_edge;
     }
 }
 

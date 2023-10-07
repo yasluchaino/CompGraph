@@ -173,6 +173,7 @@ namespace Lab4
                 else if (checkBox == checkBox2)
                 {
                     line_box.Visible = true;
+                    rotate_box.Visible = true;
                     checkBox1.Checked = false;
                     checkBox3.Checked = false;
                 }
@@ -245,5 +246,9 @@ namespace Lab4
             public Color Color { get; set; }
         }
 
+        private void rotate_edge_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }
