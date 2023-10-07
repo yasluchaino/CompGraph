@@ -100,6 +100,7 @@ namespace Lab4
             this.rotate_button.TabIndex = 4;
             this.rotate_button.Text = "rotate";
             this.rotate_button.UseVisualStyleBackColor = true;
+            this.rotate_button.Click += new System.EventHandler(this.rotate_button_Click);
             // 
             // scale_button
             // 
@@ -109,6 +110,7 @@ namespace Lab4
             this.scale_button.TabIndex = 5;
             this.scale_button.Text = "scale";
             this.scale_button.UseVisualStyleBackColor = true;
+            this.scale_button.Click += new System.EventHandler(this.scale_button_Click);
             // 
             // label1
             // 

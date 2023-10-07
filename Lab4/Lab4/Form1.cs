@@ -216,7 +216,16 @@ namespace Lab4
         {
 
         }
+private void rotatePolygon(List<PointF> polygon, float angle, Point pivot)
+            {
+            PointF[] polygonArray = polygon.ToArray();
+            Matrix rotationMatrix = new Matrix();
+                rotationMatrix.RotateAt(angle, pivot);
+                rotationMatrix.TransformPoints(polygonArray);
 
+            polygon.Clear();
+            polygon.AddRange(polygonArray);
+            }
         private void translatePolygon(List<PointF> polygon, int dx, int dy)
         {
             PointF[] polygonArray = polygon.ToArray();  // Преобразуем List<Point> в массив Point[]
@@ -229,6 +238,17 @@ namespace Lab4
             polygon.Clear();
             polygon.AddRange(polygonArray);
         }
+        private void scalePolygon(List<PointF> polygon, float scaleX, float scaleY, Point pivot)
+        {
+            PointF[] polygonArray = polygon.ToArray();
+            Matrix scalingMatrix = new Matrix();
+            scalingMatrix.Scale(scaleX, scaleY);
+            scalingMatrix.Translate(pivot.X * (1 - scaleX), pivot.Y * (1 - scaleY), MatrixOrder.Append);
+            scalingMatrix.TransformPoints(polygonArray);
+
+            polygon.Clear();
+            polygon.AddRange(polygonArray);
+        }
 
         private void move_button_Click(object sender, EventArgs e)
         {
@@ -238,7 +258,22 @@ namespace Lab4
             translatePolygon(polygonPoints, dx, dy);
             pictureBox1.Invalidate();
         }
+  private void rotate_button_Click(object sender, EventArgs e)
+        {
+            float angle = (float)numericUpDown3.Value;
 
+            rotatePolygon(polygonPoints, angle,point);
+            pictureBox1.Invalidate();
+
+        } 
+        private void scale_button_Click(object sender, EventArgs e)
+        {
+            float scaleX = (float)numericUpDown4.Value;
+            float scaleY = (float)numericUpDown5.Value;
+            scalePolygon(polygonPoints, scaleX, scaleY, point);
+
+            pictureBox1.Invalidate();
+        }
         public class Line
         {
             public PointF StartPoint { get; set; }
@@ -282,5 +317,7 @@ namespace Lab4
 
             pictureBox1.Invalidate();
         }
+
+      
     }
 }
