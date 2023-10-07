@@ -19,10 +19,10 @@ namespace Lab4
     {
 
         private List<Line> lines = new List<Line>();
-        private List<PointF> points = new List<PointF>();
+        private Point point = new Point(0,0);
         private List<PointF> polygonPoints = new List<PointF>();
 
-        private SolidBrush brush = new SolidBrush(Color.DarkViolet);
+        private SolidBrush brush = new SolidBrush(Color.BurlyWood);
         private Graphics g;
 
         private bool isDrawing = false;
@@ -46,16 +46,13 @@ namespace Lab4
         {
             if (checkBox1.Checked)
             {
-
-                drawPoint(e.Location);
+                isDrawing = true;
             }
-
-            if (checkBox2.Checked)
+            else if (checkBox2.Checked)
             {
 
                 isDrawing = true;
                 startPoint = e.Location;
-                endPoint = e.Location;
             }
             else if (checkBox3.Checked)
             {
@@ -86,15 +83,21 @@ namespace Lab4
 
         private void pictureBox1_MouseUp(object sender, MouseEventArgs e)
         {
-            if (isDrawing && checkBox2.Checked)
+
+            if (checkBox1.Checked)
+            {
+                isDrawing = false;
+                point = e.Location;
+
+            }
+
+            else if (isDrawing && checkBox2.Checked)
             {
                 isDrawing = false;
 
                 // текущий отрезок
-                Line line = new Line { StartPoint = startPoint, EndPoint = endPoint, Color = Color.Black };
-                lines.Add(line);
-
-                pictureBox1.Invalidate();
+                Line line = new Line { StartPoint = startPoint, EndPoint = endPoint };
+                lines.Add(line);  
 
             }
 
@@ -113,15 +116,17 @@ namespace Lab4
                     maxPolyCoordinates.Y = endPoint.Y;
                 startPoint = endPoint;
 
-                pictureBox1.Invalidate();
+                
             }
 
-
+            pictureBox1.Invalidate();
         }
 
 
         private void pictureBox1_Paint(object sender, PaintEventArgs e)
         {
+
+            e.Graphics.FillEllipse(brush, point.X - 3, point.Y - 3, 5, 5);
 
             foreach (var line in lines)
             {
@@ -130,7 +135,7 @@ namespace Lab4
 
             if (isDrawing && checkBox2.Checked)
             {
-                e.Graphics.DrawLine(Pens.Black, startPoint, endPoint);
+                e.Graphics.DrawLine(Pens.BlueViolet, startPoint, endPoint);
             }
 
 
@@ -152,7 +157,6 @@ namespace Lab4
                 e.Graphics.DrawLine(Pens.DeepPink, startPoint, endPoint);
             }
 
-
         }
 
 
@@ -167,6 +171,7 @@ namespace Lab4
                 if (checkBox == checkBox1)
                 {
                     line_box.Visible = false;
+                    rotate_box.Visible = false;
                     checkBox2.Checked = false;
                     checkBox3.Checked = false;
                 }
@@ -180,6 +185,7 @@ namespace Lab4
                 else if (checkBox == checkBox3)
                 {
                     line_box.Visible = false;
+                    rotate_box.Visible = false;
                     checkBox1.Checked = false;
                     checkBox2.Checked = false;
                 }
@@ -195,7 +201,7 @@ namespace Lab4
 
         private void button1_Click(object sender, EventArgs e)
         {
-            points.Clear();
+            point = Point.Empty;
             polygonPoints.Clear();
             lines.Clear();
             groupBox1.Visible = false;
@@ -209,12 +215,6 @@ namespace Lab4
         private void button2_Click(object sender, EventArgs e)
         {
 
-        }
-
-
-        void drawPoint(PointF location)
-        {
-            g.FillEllipse(brush, location.X - 3, location.Y - 3, 5, 5);
         }
 
         private void translatePolygon(List<PointF> polygon, int dx, int dy)
@@ -243,12 +243,44 @@ namespace Lab4
         {
             public PointF StartPoint { get; set; }
             public PointF EndPoint { get; set; }
-            public Color Color { get; set; }
+            public Color Color { get; set; } = Color.BlueViolet;
+
+            public Line() { }
+
+            public Line(PointF start, PointF end, Color color) 
+            {
+                StartPoint = start;
+                EndPoint = end;
+                Color = color;
+            }
+            public Line(PointF start, PointF end)
+            {
+                StartPoint = start;
+                EndPoint = end;
+                Color = Color.BlueViolet;
+            }
         }
 
         private void rotate_edge_Click(object sender, EventArgs e)
         {
+            double angle = 90;  
 
+       
+            for (int i = 0; i < lines.Count; i++)
+            {
+                PointF center = new PointF((lines[i].StartPoint.X + lines[i].EndPoint.X) / 2,
+                                           (lines[i].StartPoint.Y + lines[i].EndPoint.Y) / 2);
+
+                Matrix rotationMatrix = new Matrix();
+                rotationMatrix.RotateAt((float)angle, center);
+
+                PointF[] points = { lines[i].StartPoint, lines[i].EndPoint };
+                rotationMatrix.TransformPoints(points);
+
+                lines[i] = new Line(points[0], points[1], lines[i].Color);
+            }
+
+            pictureBox1.Invalidate();
         }
     }
 }
