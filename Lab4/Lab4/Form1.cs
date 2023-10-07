@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Linq;
 using System.Net;
 using System.Text;
@@ -136,7 +137,7 @@ namespace Lab4
 
             if (polygonPoints.Count >= 2)
             {
-                
+
 
                 for (int i = 0; i < polygonPoints.Count - 1; i++)
                     e.Graphics.DrawLine(Pens.DeepPink, polygonPoints[i], polygonPoints[i + 1]);
@@ -215,14 +216,34 @@ namespace Lab4
             g.FillEllipse(brush, location.X - 3, location.Y - 3, 5, 5);
         }
 
+        private void translatePolygon(List<PointF> polygon, int dx, int dy)
+        {
+            PointF[] polygonArray = polygon.ToArray();  // Преобразуем List<Point> в массив Point[]
+
+            Matrix translationMatrix = new Matrix();
+            translationMatrix.Translate(dx, -dy);
+            translationMatrix.TransformPoints(polygonArray);
+
+            // Обновляем List<Point> с преобразованными значениями
+            polygon.Clear();
+            polygon.AddRange(polygonArray);
+        }
+
+        private void move_button_Click(object sender, EventArgs e)
+        {
+            int dx = (int)numericUpDown1.Value;
+            int dy = (int)numericUpDown2.Value;
+
+            translatePolygon(polygonPoints, dx, dy);
+            pictureBox1.Invalidate();
+        }
+
+        public class Line
+        {
+            public PointF StartPoint { get; set; }
+            public PointF EndPoint { get; set; }
+            public Color Color { get; set; }
+        }
 
     }
-
-    public class Line
-    {
-        public PointF StartPoint { get; set; }
-        public PointF EndPoint { get; set; }
-        public Color Color { get; set; }
-    }
-
 }

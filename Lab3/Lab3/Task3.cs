@@ -376,5 +376,10 @@ namespace Lab3
             gr.Clear(Color.White);
             pictureBox1.Image = null;
         }
+
+        private void pictureBox1_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

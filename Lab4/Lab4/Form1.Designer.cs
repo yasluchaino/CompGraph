@@ -87,6 +87,7 @@ namespace Lab4
             this.move_button.TabIndex = 3;
             this.move_button.Text = "move";
             this.move_button.UseVisualStyleBackColor = true;
+            this.move_button.Click += new System.EventHandler(this.move_button_Click);
             // 
             // rotate_button
             // 
@@ -282,12 +283,10 @@ namespace Lab4
             this.pictureBox1.Size = new System.Drawing.Size(1075, 670);
             this.pictureBox1.TabIndex = 22;
             this.pictureBox1.TabStop = false;
-            this.pictureBox1.MouseDown += new MouseEventHandler(this.pictureBox1_MouseDown);
-            this.pictureBox1.MouseUp += new MouseEventHandler(this.pictureBox1_MouseUp);
-            this.pictureBox1.MouseMove += new MouseEventHandler(this.pictureBox1_MouseMove);
-            this.pictureBox1.Paint += new PaintEventHandler(this.pictureBox1_Paint);
-
-
+            this.pictureBox1.Paint += new System.Windows.Forms.PaintEventHandler(this.pictureBox1_Paint);
+            this.pictureBox1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.pictureBox1_MouseDown);
+            this.pictureBox1.MouseMove += new System.Windows.Forms.MouseEventHandler(this.pictureBox1_MouseMove);
+            this.pictureBox1.MouseUp += new System.Windows.Forms.MouseEventHandler(this.pictureBox1_MouseUp);
             // 
             // checkBox1
             // 
