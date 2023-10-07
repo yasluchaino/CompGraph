@@ -60,7 +60,7 @@ namespace Lab4
             this.label9 = new System.Windows.Forms.Label();
             this.textBox2 = new System.Windows.Forms.TextBox();
             this.textBox1 = new System.Windows.Forms.TextBox();
-            this.button2 = new System.Windows.Forms.Button();
+            this.intersect = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown3)).BeginInit();
@@ -378,7 +378,7 @@ namespace Lab4
             this.line_box.Controls.Add(this.label9);
             this.line_box.Controls.Add(this.textBox2);
             this.line_box.Controls.Add(this.textBox1);
-            this.line_box.Controls.Add(this.button2);
+            this.line_box.Controls.Add(this.intersect);
             this.line_box.Location = new System.Drawing.Point(6, 308);
             this.line_box.Name = "line_box";
             this.line_box.Size = new System.Drawing.Size(286, 119);
@@ -418,15 +418,15 @@ namespace Lab4
             this.textBox1.Size = new System.Drawing.Size(69, 22);
             this.textBox1.TabIndex = 1;
             // 
-            // button2
+            // intersect
             // 
-            this.button2.Location = new System.Drawing.Point(32, 64);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(221, 39);
-            this.button2.TabIndex = 0;
-            this.button2.Text = "Найти точку пересечения";
-            this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.button2_Click);
+            this.intersect.Location = new System.Drawing.Point(32, 64);
+            this.intersect.Name = "intersect";
+            this.intersect.Size = new System.Drawing.Size(221, 39);
+            this.intersect.TabIndex = 0;
+            this.intersect.Text = "Найти точку пересечения";
+            this.intersect.UseVisualStyleBackColor = true;
+            this.intersect.Click += new System.EventHandler(this.intersect_Click);
             // 
             // Form1
             // 
@@ -490,7 +490,7 @@ namespace Lab4
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.TextBox textBox2;
         private System.Windows.Forms.TextBox textBox1;
-        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.Button intersect;
         private GroupBox rotate_box;
         private Button rotate_edge;
     }
