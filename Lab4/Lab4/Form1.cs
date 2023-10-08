@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Linq;
 using System.Net;
+using System.Runtime.Remoting.Contexts;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -92,13 +93,13 @@ namespace Lab4
                 {
                     Right_Or_Left();
                 }
-                else if (checkBox5.Checked)
+                else if (checkBox5.Checked && Check_Convex())
                 {
                     Inside_Convex_Polygon();
                 }
-                else if (checkBox6.Checked)
+                else if (checkBox6.Checked && !Check_Convex())
                 {
-
+                    Inside_Non_Convex_Polygon();
                 }
             }
 
@@ -554,7 +555,7 @@ namespace Lab4
                 var B = -1 * (line.EndPoint.X - line.StartPoint.X);
                 var C = line.StartPoint.Y * line.EndPoint.X - line.StartPoint.X * line.EndPoint.Y;
                 var d = Math.Abs(A * Mx + B * My + C) / Math.Sqrt(Math.Pow(A, 2) + Math.Pow(B, 2));
-                Console.WriteLine(d);
+                //Console.WriteLine(d);
                 if (d < min_dist)
                 {
                     min_dist = d;
@@ -605,8 +606,67 @@ namespace Lab4
                 MessageBox.Show("Внутри!");
             else
                 MessageBox.Show("Снаружи!");
+        }
 
+        private bool Check_Convex() 
+        {
+            int tf = 0;
+            for (int i = 0; i < polygonPoints.Count; i++)
+            {
+                var j = (i + 1) % polygonPoints.Count;
+                var k = (i + 2) % polygonPoints.Count;
+                var z = (polygonPoints[j].X - polygonPoints[i].X) * (polygonPoints[k].Y - polygonPoints[j].Y);
+                z -= (polygonPoints[j].Y - polygonPoints[i].Y) * (polygonPoints[k].X - polygonPoints[j].X);
+                if (z < 0)
+                    tf |= 1;
+                else if (z > 0)
+                    tf |= 2;
+                if (tf == 3)
+                    return false;
+            }
+            if (tf != 0)
+                return true;
+            else
+                return false;
+        }
 
+        private void Inside_Non_Convex_Polygon() 
+        {
+            int count = 0;
+            bool flag = true;
+            PointF end_point = new PointF(pictureBox1.Size.Width, point.Y);
+            for (int i = 1; i < polygonPoints.Count; i++) 
+            {
+                var tt = intersect_point(point, end_point, polygonPoints[i - 1], polygonPoints[i]);
+                if (tt != PointF.Empty) 
+                {
+                    if (polygonPoints[i - 1].Y == point.Y || polygonPoints[i].Y == point.Y)
+                    {
+                        if (flag)
+                        {
+                            count++;
+                            flag = false;
+                            continue;
+                        }
+                        else 
+                        {
+                            flag = true;
+                            continue;
+                        }
+                    }
+                    count++;
+                }
+            }
+            var t = intersect_point(point, end_point, polygonPoints[polygonPoints.Count-1], polygonPoints[0]);
+            if (t != PointF.Empty)
+            {
+                count++;
+            }
+
+            if (count % 2 == 0)
+                MessageBox.Show("Снаружи!");
+            else
+                MessageBox.Show("Внутри");
         }
 
     }
