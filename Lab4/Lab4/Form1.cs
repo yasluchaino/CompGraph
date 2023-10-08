@@ -88,7 +88,18 @@ namespace Lab4
             {
                 isDrawing = false;
                 point = e.Location;
+                if (checkBox4.Checked)
+                {
+                    Right_Or_Left();
+                }
+                else if (checkBox5.Checked)
+                {
+                    Inside_Convex_Polygon();
+                }
+                else if (checkBox6.Checked)
+                {
 
+                }
             }
 
             else if (isDrawing && checkBox2.Checked)
@@ -174,6 +185,9 @@ namespace Lab4
                     rotate_box.Visible = false;
                     checkBox2.Checked = false;
                     checkBox3.Checked = false;
+                    checkBox4.Visible = true;
+                    checkBox5.Visible = true;
+                    checkBox6.Visible = true;
                 }
                 else if (checkBox == checkBox2)
                 {
@@ -181,6 +195,9 @@ namespace Lab4
                     rotate_box.Visible = true;
                     checkBox1.Checked = false;
                     checkBox3.Checked = false;
+                    checkBox4.Visible = false;
+                    checkBox5.Visible = false;
+                    checkBox6.Visible = false;
                 }
                 else if (checkBox == checkBox3)
                 {
@@ -188,6 +205,9 @@ namespace Lab4
                     rotate_box.Visible = false;
                     checkBox1.Checked = false;
                     checkBox2.Checked = false;
+                    checkBox4.Visible = false;
+                    checkBox5.Visible = false;
+                    checkBox6.Visible = false;
                 }
             }
         }
@@ -208,6 +228,9 @@ namespace Lab4
             checkBox1.Checked = false;
             checkBox2.Checked = false;
             checkBox3.Checked = false;
+            checkBox5.Checked = false;
+            checkBox6.Checked = false;
+            checkBox4.Checked = false;
             g.Clear(Color.White);
 
         }
@@ -495,6 +518,96 @@ namespace Lab4
             pictureBox1.Invalidate();
         }
 
+        private void Inner_checkBoxes_CheckedChanged(object sender, EventArgs e)
+        {
+            CheckBox checkBox = sender as CheckBox;
+            if (checkBox.Checked)
+            {
+                if (checkBox == checkBox4)
+                {
+                    checkBox5.Checked = false;
+                    checkBox6.Checked = false;
+                }
+                else if (checkBox == checkBox5)
+                {
+                    checkBox4.Checked = false;
+                    checkBox6.Checked = false;
+                }
+                else if (checkBox == checkBox6)
+                {
+                    checkBox4.Checked = false;
+                    checkBox5.Checked = false;
+                }
+            }
+        }
+
+        private void Right_Or_Left()
+        {
+            double min_dist = double.MaxValue;
+            var Mx = point.X;
+            var My = point.Y;
+            int ind = 0;
+            int end_ind = 0;
+            foreach (Line line in lines)
+            {
+                var A = line.EndPoint.Y - line.StartPoint.Y;
+                var B = -1 * (line.EndPoint.X - line.StartPoint.X);
+                var C = line.StartPoint.Y * line.EndPoint.X - line.StartPoint.X * line.EndPoint.Y;
+                var d = Math.Abs(A * Mx + B * My + C) / Math.Sqrt(Math.Pow(A, 2) + Math.Pow(B, 2));
+                Console.WriteLine(d);
+                if (d < min_dist)
+                {
+                    min_dist = d;
+                    end_ind = ind;
+                }
+                ind++;
+            }
+            //Console.WriteLine(end_ind);
+            PointF[] pf = new PointF[3];
+            pf[0] = lines[end_ind].StartPoint;
+            pf[1] = lines[end_ind].EndPoint;
+            pf[2] = point;
+
+            pf[1].X -= pf[0].X;
+            pf[1].Y -= pf[0].Y;
+            pf[2].X -= pf[0].X;
+            pf[2].Y -= pf[0].Y;
+            //Console.WriteLine(pf[2].Y * pf[1].X - pf[2].X * pf[1].Y);
+            if (pf[2].Y * pf[1].X - pf[2].X * pf[1].Y > 0)
+            {
+                MessageBox.Show("Справа!");
+            }
+            else if (pf[2].Y * pf[1].X - pf[2].X * pf[1].Y < 0)
+            {
+                MessageBox.Show("Слева!");
+            }
+        }
+
+        private void Inside_Convex_Polygon()
+        {
+            bool flag = true;
+            for (int i = 1; i < polygonPoints.Count; i++)
+            {
+                PointF[] pf = new PointF[3];
+                pf[0] = polygonPoints[i - 1];
+                pf[1] = polygonPoints[i];
+                pf[2] = point;
+                pf[1].X -= pf[0].X;
+                pf[1].Y -= pf[0].Y;
+                pf[2].X -= pf[0].X;
+                pf[2].Y -= pf[0].Y;
+                if (pf[2].Y * pf[1].X - pf[2].X * pf[1].Y < 0)
+                {
+                    flag = false;
+                }
+            }
+            if (flag)
+                MessageBox.Show("Внутри!");
+            else
+                MessageBox.Show("Снаружи!");
+
+
+        }
 
     }
 }
