@@ -212,9 +212,74 @@ namespace Lab4
 
         }
 
-        private void button2_Click(object sender, EventArgs e)
+        private PointF intersect_point(PointF p0, PointF p1, PointF p2, PointF p3)
         {
+            
 
+            float a1 = p1.Y - p0.Y;
+            float b1 = p0.X - p1.X;
+            float c1 = a1 * p0.X + b1 * p0.Y;
+
+            float a2 = p3.Y - p2.Y;
+            float b2 = p2.X - p3.X;
+            float c2 = a2 * p2.X + b2 * p2.Y;
+
+            float d = a1 * b2 - a2 * b1;
+
+            if (d== 0)//условие, что прямые параллельны
+            {
+
+                return Point.Empty;
+            }
+
+            float X = (b2 * c1 - b1 * c2) / d;
+            float Y = (a1 * c2 - a2 * c1) / d;
+
+            float minX1 = Math.Min(p0.X, p1.X);
+            float maxX1 = Math.Max(p0.X, p1.X);
+            float minY1 = Math.Min(p0.Y, p1.Y);
+            float maxY1 = Math.Max(p0.Y, p1.Y);
+
+            float minX2 = Math.Min(p2.X, p3.X);
+            float maxX2 = Math.Max(p2.X, p3.X);
+            float minY2 = Math.Min(p2.Y, p3.Y);
+            float maxY2 = Math.Max(p2.Y, p3.Y);
+          
+
+            if (X >= minX1 && X <= maxX1 && Y >= minY1 && Y <= maxY1
+                && X >= minX2 && X <= maxX2 && Y >= minY2 && Y <= maxY2)
+            {
+         
+                return new PointF(X, Y);
+            }
+
+            return PointF.Empty;
+
+
+        }
+
+
+        //ищет пересеччение между только что нарисованным отрезком и предыдущим(главное не забыть какой был предыдущий)
+        private void intersect_Click(object sender, EventArgs e)
+        {
+            PointF intersection = intersect_point(lines[lines.Count - 2].StartPoint, lines[lines.Count - 2].EndPoint, lines[lines.Count - 1].StartPoint, lines[lines.Count - 1].EndPoint);
+
+            if (!intersection.IsEmpty)
+            {
+                g.FillEllipse(Brushes.YellowGreen, intersection.X - 3, intersection.Y - 3, 5, 5);
+                //pictureBox1.Invalidate();
+                pictureBox1.Update();
+                textBox1.Text = intersection.Y.ToString();
+                textBox2.Text = intersection.X.ToString();
+                 
+            }
+            else
+            {
+                MessageBox.Show("Не пересекаются");
+                textBox1.Text = "";
+                textBox2.Text = "";
+            }
+           
         }
        
         //поворот многоугольника относительно начала координат (точки (0, 0)) на заданный угол.
@@ -262,23 +327,23 @@ namespace Lab4
         }
         private void scalePolygon(List<PointF> polygon, float scaleX, float scaleY, Point pivot)
         {
-            /*PointF[] polygonArray = polygon.ToArray();
+            PointF[] polygonArray = polygon.ToArray();
             Matrix scalingMatrix = new Matrix();
             scalingMatrix.Scale(scaleX, scaleY);
             scalingMatrix.Translate(pivot.X * (1 - scaleX), pivot.Y * (1 - scaleY), MatrixOrder.Append);
             scalingMatrix.TransformPoints(polygonArray);
             polygon.Clear();
-            polygon.AddRange(polygonArray);*/
+            polygon.AddRange(polygonArray);
 
-            // Перенос к началу координат
-            translatePolygon(polygon, -pivot.X, -pivot.Y);
-            // Масштабирование относительно начала координат
-            float[,] scalingMatrix = AffineTransformations.ScaleMatrix(scaleX, scaleY);
-            List<PointF> transformedPoints = AffineTransformations.ApplyTransformationToPoints(scalingMatrix, polygon);
-            polygon.Clear();
-            polygon.AddRange(transformedPoints);
-            // Возврат к исходной позиции
-            translatePolygon(polygon, pivot.X, pivot.Y);
+            //// Перенос к началу координат
+            //translatePolygon(polygon, -pivot.X, -pivot.Y);
+            //// Масштабирование относительно начала координат
+            //float[,] scalingMatrix = AffineTransformations.ScaleMatrix(scaleX, scaleY);
+            //List<PointF> transformedPoints = AffineTransformations.ApplyTransformationToPoints(scalingMatrix, polygon);
+            //polygon.Clear();
+            //polygon.AddRange(transformedPoints);
+            //// Возврат к исходной позиции
+            //translatePolygon(polygon, pivot.X, pivot.Y);  
 
         }
 
