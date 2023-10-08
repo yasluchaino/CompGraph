@@ -226,10 +226,10 @@ namespace Lab4
             0,
             0});
             this.numericUpDown4.Minimum = new decimal(new int[] {
-            1,
+            300,
             0,
             0,
-            0});
+            -2147483648});
             this.numericUpDown4.Name = "numericUpDown4";
             this.numericUpDown4.Size = new System.Drawing.Size(56, 22);
             this.numericUpDown4.TabIndex = 18;
@@ -248,10 +248,10 @@ namespace Lab4
             0,
             0});
             this.numericUpDown5.Minimum = new decimal(new int[] {
-            1,
+            300,
             0,
             0,
-            0});
+            -2147483648});
             this.numericUpDown5.Name = "numericUpDown5";
             this.numericUpDown5.Size = new System.Drawing.Size(58, 22);
             this.numericUpDown5.TabIndex = 19;
