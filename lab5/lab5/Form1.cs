@@ -28,5 +28,11 @@ namespace lab5
             Task1 task1 = new Task1();
             task1.Show();
         }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            Task2 task2 = new Task2(); 
+            task2.Show();
+        }
     }
 }
