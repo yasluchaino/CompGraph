@@ -31,7 +31,7 @@ namespace lab5
 
 
 
-        }
+        
 
 
             pictureBox1.Image = new Bitmap(pictureBox1.Width, pictureBox1.Height);
@@ -254,3 +254,4 @@ namespace lab5
 
     }
 }
+
