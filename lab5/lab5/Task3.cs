@@ -7,14 +7,21 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.Button;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace lab5
 {
     public partial class Task3 : Form
     {
+
+
         public Task3()
         {
             InitializeComponent();
+
+
         }
+
     }
 }
