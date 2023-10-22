@@ -19,17 +19,17 @@ namespace lab5
    
     public partial class Task1 : Form
     { 
-        const int MAX_IT = 5;
+        const int MAX_IT = 4;
         private class LineSegment
         {
             public float  CurrentX{ get; }
             public float CurrentY { get; }
             public float NewX { get; }
-            public float NewY { get; }
-
+public float NewY { get; }
             public LineSegment(float startX, float startY, float EndX, float EndY)
             {
                 CurrentX = startX;
+            
                 CurrentY = startY;
                 NewX = EndX;
                 NewY = EndY;
@@ -47,12 +47,11 @@ namespace lab5
         private double maxw;
         private double minh;
         private double minw;
-        private int maxlevel = 0;
         private double scale;
         private bool randomize;
         private Graphics graphics;
         private Pen pen;
-  
+        private int MaxLevel = 0;
         private List<LineSegment> lines = new List<LineSegment>();
         private int level = 0;
         private List<int> levels = new List<int>();
@@ -77,22 +76,7 @@ namespace lab5
             randomize = false;
         }
 
-        private void buttonGenerate_Click(object sender, EventArgs e)
-        {
-            OpenFileDialog openFileDialog = new OpenFileDialog();
-            openFileDialog.Filter = "Text files (*.txt)|*.txt";
-
-            if (openFileDialog.ShowDialog() == DialogResult.OK)
-            {
-                string filePath = openFileDialog.FileName;
-                string[] fileLines = File.ReadAllLines(filePath);
-
-                ParseLSystem(fileLines);
-                SetRules();
-                DrawFractal();
-
-            }
-        }
+        
         private void SetRules()
         {
             rulesDict.Clear();
@@ -141,7 +125,7 @@ namespace lab5
             StringBuilder fractalBuilder = new StringBuilder();
             fractalBuilder.Append(atom);
 
-            for (int i = 1; i < MAX_IT; i++)
+            for (int i = 0; i < MAX_IT; i++)
             {
                 fractalBuilder = ApplyRules(fractalBuilder);
             }
@@ -170,6 +154,10 @@ namespace lab5
         }
         private void DrawFractal()
         {
+            maxh = startY;
+            maxw = startX;
+            minh = startY;
+            minw = startX;
             graphics.Clear(Color.White);
             var positionStack = new Stack<double>();
             var angleStack = new Stack<double>();
@@ -189,23 +177,32 @@ namespace lab5
                     UpdateMinMaxValues(newX, newY);
                     currentX = newX;
                     currentY = newY;
+                  
                 }
                 else if (character == '+') currentAngle += angle;
-                else if (character == '@') randomDouble = currentAngle + (random.NextDouble() - 0.5) * (angle + 40);
+                else if (character == '@')
+                {
+                    randomize = true;
+                    randomDouble = currentAngle + (random.NextDouble() - 0.5) * (angle + 40);
+                }
                 else if (character == '-') currentAngle -= angle;
                 else if (character == '[')
+
                 {
+                    level++;
+                    if(MaxLevel>level) MaxLevel = level;
                     positionStack.Push(currentX);
                     positionStack.Push(currentY);
                     angleStack.Push(currentAngle);
                 }
                 else if (character == ']')
                 {
-                    RestoreState(positionStack, angleStack, ref currentX, ref currentY, ref currentAngle);
+                  RestoreState(positionStack, angleStack, ref currentX, ref currentY, ref currentAngle);
                 }
             }
-
-            DrawLines(lines);
+            if (isTree)
+            DrawLinesTree(lines);
+            else DrawLines(lines);
         }
 
         private (double, double) UpdatePosition(double currentX, double currentY, double currentAngle, double randomd, List<LineSegment> lines, List<int> levels)
@@ -235,43 +232,89 @@ namespace lab5
             currentX = positionStack.Pop();
         }
 
-        private void DrawLines(List<LineSegment> lines)
+        private Color InterpolateColor(Color start, Color end, double progress)
         {
-            var cnt = 0;//
-          
+            var r = Math.Min(255,(int)Math.Max(0, start.R + (end.R - start.R) * progress));
+            var g = Math.Min(255, (int)Math.Max(0, start.G + (end.G - start.G) * progress));
+            var b = Math.Min(255, (int)Math.Max(0, start.B + (end.B - start.B) * progress));
+            return Color.FromArgb(r, g, b);
+        }
+
+        private void DrawLines(List<LineSegment> lines)
+        {               
             foreach (var line in lines)
             {
                 var xStep = (float)(pictureBox1.Width / (maxw - minw));
-                if (checkBox1.Checked)
-                {
-                    cnt++;
-                    var progress = (double)cnt / lines.Count;
-                    var blendedColor = InterpolateColor(Color.Brown, Color.Green, progress);
-                    var width = 10f * (float)Math.Pow(0.5f, cnt) * 0.5f + 5f;
-                    pen.Color = blendedColor; pen.Width = width; 
+                
+                    pen.Color = Color.Black;
+                    pen.Width = 0.2f;
                     graphics.DrawLine(pen, (line.CurrentX - (float)minw) * xStep, pictureBox1.Height * (float)((line.CurrentY - minh) / (maxh - minh)),
-                        (line.NewX - (float)minw) * xStep, pictureBox1.Height * (float)((line.NewY - minh) / (maxh - minh)));
-                }
-                else
-                {
-                    graphics.DrawLine(pen, (line.CurrentX - (float)minw) * xStep, pictureBox1.Height * (float)((line.CurrentY - minh) / (maxh - minh)),
-                        (line.NewX - (float)minw) * xStep, pictureBox1.Height * (float)((line.NewY - minh) / (maxh - minh)));
-                }
+                        (line.NewX - (float)minw) * xStep, pictureBox1.Height * (float)((line.NewY - minh) / (maxh - minh)));            
+            }
+        }
+        private void DrawLinesTree(List<LineSegment> lines)
+        {
+            var cnt = 0;
+            MaxLevel = 1;
+            foreach (var line in lines)
+            {
+                var xStep = (float)(pictureBox1.Width / (maxw - minw)); 
+                var progress = (double)levels[cnt] / MaxLevel;              
+                pen.Color = InterpolateColor(Color.Brown, Color.Green, progress);
+                pen.Width = (float)(MaxLevel - levels[cnt] + 1);
+
+                cnt++;
+                graphics.DrawLine(pen, (line.CurrentX - (float)minw) * xStep, pictureBox1.Height * (float)((line.CurrentY - minh) / (maxh - minh)),
+                    (line.NewX - (float)minw) * xStep, pictureBox1.Height * (float)((line.NewY - minh) / (maxh - minh)));
             }
         }
 
-        private Color InterpolateColor(Color start, Color end, double progress)
+        private bool isTree = false;
+        private void treeBtn_Click(object sender, EventArgs e)
         {
-            int r = (int)(start.R + (end.R - start.R) * progress);
-            int g = (int)(start.G + (end.G - start.G) * progress);
-            int b = (int)(start.B + (end.B - start.B) * progress);
-            return Color.FromArgb(r, g, b);
-        }
-        private void checkBox1_CheckedChanged(object sender, EventArgs e)
+            isTree = true;
+            label1.Text = string.Empty;
+            string[] fileLines = File.ReadAllLines("../../Resources/tree.txt");
+            foreach (var f in fileLines)
+            {
+                label1.Text += f + "\n";
+            }
+            label1.Refresh();
+
+            ParseLSystem(fileLines);
+            SetRules();
+            DrawFractal();
+           
+         }
+        private void buttonGenerate_Click(object sender, EventArgs e)
         {
-            DrawFractal();  // Перерисовать при изменении чекбокса
+            isTree = false;
+            label1.Text = string.Empty;
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Filter = "Text files (*.txt)|*.txt";
+
+            if (openFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                string filePath = openFileDialog.FileName;
+                string[] fileLines = File.ReadAllLines(filePath);
+                foreach (var f in fileLines)
+                {
+                    label1.Text += f + "\n";
+                }
+                label1.Refresh();
+                ParseLSystem(fileLines);
+                SetRules();
+                DrawFractal();
+
+            }
         }
-        private void panel1_Paint(object sender, PaintEventArgs e)
+
+        private void label1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void pictureBox1_Click(object sender, EventArgs e)
         {
 
         }

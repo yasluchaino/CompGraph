@@ -28,73 +28,72 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.checkBox1 = new System.Windows.Forms.CheckBox();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.buttonGenerate = new System.Windows.Forms.Button();
-            this.panel1 = new System.Windows.Forms.Panel();
+            this.treeBtn = new System.Windows.Forms.Button();
+            this.label1 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
-            // 
-            // checkBox1
-            // 
-            this.checkBox1.AutoSize = true;
-            this.checkBox1.Location = new System.Drawing.Point(926, 55);
-            this.checkBox1.Name = "checkBox1";
-            this.checkBox1.Size = new System.Drawing.Size(95, 20);
-            this.checkBox1.TabIndex = 0;
-            this.checkBox1.Text = "checkBox1";
-            this.checkBox1.UseVisualStyleBackColor = true;
-            this.checkBox1.CheckedChanged += new System.EventHandler(this.checkBox1_CheckedChanged);
             // 
             // pictureBox1
             // 
             this.pictureBox1.Location = new System.Drawing.Point(12, 24);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(853, 692);
+            this.pictureBox1.Size = new System.Drawing.Size(758, 651);
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pictureBox1.TabIndex = 1;
             this.pictureBox1.TabStop = false;
+            this.pictureBox1.Click += new System.EventHandler(this.pictureBox1_Click);
             // 
             // buttonGenerate
             // 
-            this.buttonGenerate.Location = new System.Drawing.Point(892, 159);
+            this.buttonGenerate.Location = new System.Drawing.Point(801, 24);
             this.buttonGenerate.Name = "buttonGenerate";
             this.buttonGenerate.Size = new System.Drawing.Size(253, 54);
             this.buttonGenerate.TabIndex = 2;
-            this.buttonGenerate.Text = "Draw";
+            this.buttonGenerate.Text = "Нарисовать";
             this.buttonGenerate.UseVisualStyleBackColor = true;
             this.buttonGenerate.Click += new System.EventHandler(this.buttonGenerate_Click);
             // 
-            // panel1
+            // treeBtn
             // 
-            this.panel1.Location = new System.Drawing.Point(892, 328);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(253, 227);
-            this.panel1.TabIndex = 3;
-            this.panel1.Paint += new System.Windows.Forms.PaintEventHandler(this.panel1_Paint);
+            this.treeBtn.Location = new System.Drawing.Point(801, 128);
+            this.treeBtn.Name = "treeBtn";
+            this.treeBtn.Size = new System.Drawing.Size(253, 54);
+            this.treeBtn.TabIndex = 3;
+            this.treeBtn.Text = "Нарисовать дерево";
+            this.treeBtn.UseVisualStyleBackColor = true;
+            this.treeBtn.Click += new System.EventHandler(this.treeBtn_Click);
+            // 
+            // label1
+            // 
+            this.label1.Font = new System.Drawing.Font("Copperplate Gothic Bold", 13F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.label1.Location = new System.Drawing.Point(776, 238);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(349, 346);
+            this.label1.TabIndex = 0;
+            this.label1.Click += new System.EventHandler(this.label1_Click);
             // 
             // Task1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1157, 728);
-            this.Controls.Add(this.panel1);
+            this.ClientSize = new System.Drawing.Size(1140, 687);
+            this.Controls.Add(this.label1);
+            this.Controls.Add(this.treeBtn);
             this.Controls.Add(this.buttonGenerate);
             this.Controls.Add(this.pictureBox1);
-            this.Controls.Add(this.checkBox1);
             this.Name = "Task1";
             this.Text = "Task1";
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
         #endregion
-
-        private System.Windows.Forms.CheckBox checkBox1;
         private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.Button buttonGenerate;
-        private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.Button treeBtn;
+        private System.Windows.Forms.Label label1;
     }
 }

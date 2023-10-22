@@ -27,13 +27,7 @@ namespace lab5
 
         public Task3()
         {
-            InitializeComponent();
-
-
-
-        
-
-
+            InitializeComponent();    
             pictureBox1.Image = new Bitmap(pictureBox1.Width, pictureBox1.Height);
             g = Graphics.FromImage(pictureBox1.Image);
 
