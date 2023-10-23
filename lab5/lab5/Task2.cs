@@ -53,8 +53,6 @@ namespace lab5
         {
             InitializeComponent();
             g = pictureBox1.CreateGraphics();
-            //g.Clear(Color.White);
-            //checkBox1.Checked = false;
             trackBar1.Minimum = 0;
             trackBar1.Maximum = 40;
             trackBar1.TickFrequency = 1;
@@ -93,7 +91,6 @@ namespace lab5
         {
             Cur_Rough_Value = trackBar1.Value * 0.1;
             Recalculate_Lines();
-            //Console.WriteLine(Cur_Rough_Value);
         }
 
         void Recalculate_Lines() 
@@ -151,34 +148,6 @@ namespace lab5
             Cur_Point_Count = (Cur_Point_Count - 2) * 2 + 1 + 2;
             Cur_Line_Count *= 2;
             Recalculate_Lines();
-
-            
-            /*
-            var rand = new Random();
-            List<PointF> nmountPoints = new List<PointF>(Cur_Point_Count);
-            List<Line> nLines = new List<Line>(Cur_Line_Count);
-
-            if (mountPoints.Count == 2) 
-            {
-                PointF tp = new PointF((mountPoints[0].X + mountPoints[1].X) / 2, (mountPoints[0].Y + mountPoints[1].Y) / 2);
-                float l = (float)Math.Sqrt(Math.Pow(mountPoints[1].Y - mountPoints[0].Y, 2) + Math.Pow(mountPoints[1].X - mountPoints[0].X, 2));
-                tp.Y += (float)(rand.NextDouble() * ((Cur_Rough_Value * l - (-1 * Cur_Rough_Value * l)) + -1 * Cur_Rough_Value * l)); //rand.NextDouble(-1 * Cur_Rough_Value * l, Cur_Rough_Value * l);
-                nmountPoints.Add(mountPoints[0]);
-                nmountPoints.Add(tp);
-                nmountPoints.Add(mountPoints[1]);
-                Line fnl = new Line(mountPoints[0], tp);
-                Line snl = new Line(tp, mountPoints[1]);
-                nLines.Add(fnl);
-                nLines.Add(snl);
-
-                mountPoints = nmountPoints;
-                lines = nLines;
-            }
-            else 
-            {
-
-            }
-            */
         }
 
 
@@ -192,20 +161,16 @@ namespace lab5
             }
             pictureBox1.Invalidate();
         }
-        
 
-        private void button1_Click(object sender, EventArgs e)
+        private void button4_Click(object sender, EventArgs e)
         {
-            //pictureBox1.Paint += new System.Windows.Forms.PaintEventHandler(this.pictureBox1_Paint);
-            //Graphics g = Graphics.FromImage(pictureBox1.Image);
-            /*
-            for (int i = 0; i < lines.Count; i++)
+            if (count >= 1)
             {
-                g.DrawLine(new Pen(lines[i].Color), lines[i].StartPoint, lines[i].EndPoint);
+                count--;
+                Cur_Point_Count = (Cur_Point_Count - 2 - 1) / 2 + 2; //(Cur_Point_Count - 2) * 2 + 1 + 2;
+                Cur_Line_Count /= 2;
+                Recalculate_Lines();
             }
-            pictureBox1.Invalidate();
-            pictureBox1.Refresh();
-            */
         }
     }
 }
