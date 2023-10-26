@@ -20,16 +20,16 @@ namespace lab5
     public partial class Task1 : Form
     { 
         const int MAX_IT = 4;
+        //отрезок линии от тек поз к новой
         private class LineSegment
         {
             public float  CurrentX{ get; }
             public float CurrentY { get; }
             public float NewX { get; }
-public float NewY { get; }
+            public float NewY { get; }
             public LineSegment(float startX, float startY, float EndX, float EndY)
             {
                 CurrentX = startX;
-            
                 CurrentY = startY;
                 NewX = EndX;
                 NewY = EndY;
@@ -67,16 +67,26 @@ public float NewY { get; }
             rules = new List<string>();
             rulesDict = new Dictionary<string, List<string>>();
             startX = pictureBox1.Width / 2;
-            startY = pictureBox1.Height;
-            maxh = startY;
-            maxw = startX;
-            minh = startY;
-            minw = startX;
-            scale = 50;
+            startY = pictureBox1.Height;      
+            scale = 1;
             randomize = false;
+            graphics.Clear(Color.White);
         }
 
-        
+        private void ParseLSystem(string[] lines)
+        {
+            //из первой строки информация об о атоме, угле и направлении
+            atom = lines[0].Split(' ')[0];
+            angle = Convert.ToDouble(lines[0].Split(' ')[1]);
+            direction = Convert.ToInt32(lines[0].Split(' ')[2]);
+            
+            rules.Clear();
+            for (int i = 1; i < lines.Length; i++)
+            {
+                rules.Add(lines[i]);
+            }
+
+        }
         private void SetRules()
         {
             rulesDict.Clear();
@@ -100,31 +110,18 @@ public float NewY { get; }
                 }
             }
         }
-
-
-        private void ParseLSystem(string[] lines)
-        {
-            atom = lines[0].Split(' ')[0];
-            angle = Convert.ToDouble(lines[0].Split(' ')[1]);
-            direction = Convert.ToInt32(lines[0].Split(' ')[2]);
-            
-            rules.Clear();
-            for (int i = 1; i < lines.Length; i++)
-            {
-                rules.Add(lines[i]);
-            }
-
-        }
+      
         private string GenerateFractalString()
         {
             if (rules.Count == 0)
             {
-                return string.Empty;
+                return string.Empty; //если нет правил для генерации 
             }
 
             StringBuilder fractalBuilder = new StringBuilder();
-            fractalBuilder.Append(atom);
+            fractalBuilder.Append(atom); //начальное состояние фрактала
 
+            //применение правил к строке 
             for (int i = 0; i < MAX_IT; i++)
             {
                 fractalBuilder = ApplyRules(fractalBuilder);
@@ -135,6 +132,7 @@ public float NewY { get; }
 
         private StringBuilder ApplyRules(StringBuilder fractal)
         {
+            //для каждого првила заменяет вхождения ключа на соответствующее значение 
             foreach (var rule in rulesDict)
             {
                 var key = rule.Key;
@@ -159,10 +157,11 @@ public float NewY { get; }
             minh = startY;
             minw = startX;
             graphics.Clear(Color.White);
+
             var positionStack = new Stack<double>();
             var angleStack = new Stack<double>();
             var lines = new List<LineSegment>();
-            levels = new List<int>();
+            levels = new List<int>();//для задания 1б чтобы отслеживать уровни фрактала
             var random = new Random();
             var randomDouble = random.NextDouble() * angle;
             double currentAngle = direction;
@@ -173,7 +172,7 @@ public float NewY { get; }
             {
                 if (character == 'F')
                 {
-                    var (newX, newY) = UpdatePosition(currentX, currentY, currentAngle, randomDouble, lines, levels);
+                    var (newX, newY) = UpdatePosition(currentX, currentY, currentAngle, randomDouble, lines);
                     UpdateMinMaxValues(newX, newY);
                     currentX = newX;
                     currentY = newY;
@@ -183,9 +182,10 @@ public float NewY { get; }
                 else if (character == '@')
                 {
                     randomize = true;
-                    randomDouble = currentAngle + (random.NextDouble() - 0.5) * (angle + 40);
+                    randomDouble = currentAngle + (random.NextDouble() - 0.5) * (angle + 20);
                 }
                 else if (character == '-') currentAngle -= angle;
+                //ветвление (начало нового уровня)
                 else if (character == '[')
 
                 {
@@ -195,17 +195,22 @@ public float NewY { get; }
                     positionStack.Push(currentY);
                     angleStack.Push(currentAngle);
                 }
+                //конец уровня 
                 else if (character == ']')
                 {
-                  RestoreState(positionStack, angleStack, ref currentX, ref currentY, ref currentAngle);
+                    level--;
+                    randomize = false;
+                    currentAngle = angleStack.Pop();
+                    currentY = positionStack.Pop();
+                    currentX = positionStack.Pop();
                 }
             }
             if (isTree)
-            DrawLinesTree(lines);
+            DrawLinesTree(lines); //для задания 1б
             else DrawLines(lines);
         }
 
-        private (double, double) UpdatePosition(double currentX, double currentY, double currentAngle, double randomd, List<LineSegment> lines, List<int> levels)
+        private (double, double) UpdatePosition(double currentX, double currentY, double currentAngle, double randomd, List<LineSegment> lines)
         {
             double newX, newY;
             if (randomize)
@@ -222,19 +227,10 @@ public float NewY { get; }
             lines.Add(new LineSegment((float)currentX, (float)currentY, (float)newX, (float)newY));
             return (newX, newY);
         }
-
-        private void RestoreState(Stack<double> positionStack, Stack<double> angleStack, ref double currentX, ref double currentY, ref double currentAngle)
-        {
-            level--;
-            randomize = false;
-            currentAngle = angleStack.Pop();
-            currentY = positionStack.Pop();
-            currentX = positionStack.Pop();
-        }
-
+    
         private Color InterpolateColor(Color start, Color end, double progress)
-        {
-            var r = Math.Min(255,(int)Math.Max(0, start.R + (end.R - start.R) * progress));
+        { 
+            var r = Math.Min(255,(int)Math.Max(0, start.R + (end.R - start.R) * progress));//прогресс - насколько близко к конечному цвету энд должен быть интерполированный цвет старт
             var g = Math.Min(255, (int)Math.Max(0, start.G + (end.G - start.G) * progress));
             var b = Math.Min(255, (int)Math.Max(0, start.B + (end.B - start.B) * progress));
             return Color.FromArgb(r, g, b);
@@ -244,18 +240,19 @@ public float NewY { get; }
         {               
             foreach (var line in lines)
             {
-                var xStep = (float)(pictureBox1.Width / (maxw - minw));
-                
+                var xStep = (float)(pictureBox1.Width / (maxw - minw));                
                     pen.Color = Color.Black;
                     pen.Width = 0.2f;
                     graphics.DrawLine(pen, (line.CurrentX - (float)minw) * xStep, pictureBox1.Height * (float)((line.CurrentY - minh) / (maxh - minh)),
                         (line.NewX - (float)minw) * xStep, pictureBox1.Height * (float)((line.NewY - minh) / (maxh - minh)));            
             }
         }
+
         private void DrawLinesTree(List<LineSegment> lines)
         {
             var cnt = 0;
-            MaxLevel = 1;
+          
+            MaxLevel = levels.Max();
             foreach (var line in lines)
             {
                 var xStep = (float)(pictureBox1.Width / (maxw - minw)); 
@@ -309,15 +306,6 @@ public float NewY { get; }
             }
         }
 
-        private void label1_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void pictureBox1_Click(object sender, EventArgs e)
-        {
-
-        }
     }
 }
 
