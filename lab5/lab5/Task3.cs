@@ -117,6 +117,7 @@ namespace lab5
         }
 
 
+        //Матр запись куб кривой безье
         private void Bezier_Сurve(Point p0, Point p1, Point p2, Point p3)
         {
             List<Point> V = new List<Point> { p0, p1, p2, p3 };
@@ -125,7 +126,7 @@ namespace lab5
                             new List<int> { 0, 3, -6, 3 },
                             new List<int> { 0, 0, 3, -3 },
                             new List<int> { 0, 0, 0, 1 }};
-            List<float> T = new List<float> { 1.0f, 0.0f, 0.0f, 0.0f };
+            List<float> T = new List<float> { 1.0f, 0.0f, 0.0f, 0.0f };//(t^0, t^1,t^2,t^3)
             List<PointF> VM = new List<PointF>();
             for (int i = 0; i < 4; ++i)
             {

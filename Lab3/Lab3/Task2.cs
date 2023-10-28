@@ -211,11 +211,44 @@ namespace Lab3
             float dy = y1 - y0;
             float gradient = dx != 0.0f ? dy / dx : 1;
 
-            int xpxl1 = x0;
-            int xpxl2 = x1;
-            float intersectY = y0;
+            //int xpxl1 = x0;
+            //int xpxl2 = x1;
+            //float intersectY = y0;
+
+            int xend = Round(x0);
+            float yend = y0 + gradient * (xend - x0);
+            float xgap = RFPart(x0 + 0.5f);
+            int xpxl1 = xend; // this will be used in the main loop
+            int ypxl1 = IPart(yend);
+            if (steep)
+            {
+                Plot(ypxl1, xpxl1, RFPart(yend) * xgap);
+                Plot(ypxl1 + 1, xpxl1, FPart(yend) * xgap);
+            }
+            else
+            {
+                Plot(xpxl1, ypxl1, RFPart(yend) * xgap);
+                Plot(xpxl1, ypxl1 + 1, FPart(yend) * xgap);
+            }
+
+            float intersectY = yend + gradient; // first y-intersection for the main loop
 
 
+            xend = Round(x1);
+            yend = y1 + gradient * (xend - x1);
+            xgap = FPart(x1 + 0.5f);
+            int xpxl2 = xend; //this will be used in the main loop
+            int ypxl2 = IPart(yend);
+            if (steep)
+            {
+                Plot(ypxl2, xpxl2, RFPart(yend) * xgap);
+                Plot(ypxl2 + 1, xpxl2, FPart(yend) * xgap);
+            }
+            else
+            {
+                Plot(xpxl2, ypxl2, RFPart(yend) * xgap);
+                Plot(xpxl2, ypxl2 + 1, FPart(yend) * xgap);
+            }
 
             if (steep)
             {
@@ -245,37 +278,3 @@ namespace Lab3
 
 
 //для последних точек в алгоритме ву
-//int xend = Round(x0);
-//float yend = y0 + gradient * (xend - x0);
-//float xgap = RFPart(x0 + 0.5f);
-//int xpxl1 = xend; // this will be used in the main loop
-//int ypxl1 = IPart(yend);
-//if (steep)
-//{
-//    Plot(ypxl1, xpxl1, RFPart(yend) * xgap);
-//    Plot(ypxl1 + 1, xpxl1, FPart(yend) * xgap);
-//}
-//else
-//{
-//    Plot(xpxl1, ypxl1, RFPart(yend) * xgap);
-//    Plot(xpxl1, ypxl1 + 1, FPart(yend) * xgap);
-//}
-
-//float intersectY = yend + gradient; // first y-intersection for the main loop
-
-
-//xend = Round(x1);
-//yend = y1 + gradient * (xend - x1);
-//xgap = FPart(x1 + 0.5f);
-//int xpxl2 = xend; //this will be used in the main loop
-//int ypxl2 = IPart(yend);
-//if (steep)
-//{
-//    Plot(ypxl2, xpxl2, RFPart(yend) * xgap);
-//    Plot(ypxl2 + 1, xpxl2, FPart(yend) * xgap);
-//}
-//else
-//{
-//    Plot(xpxl2, ypxl2, RFPart(yend) * xgap);
-//    Plot(xpxl2, ypxl2 + 1, FPart(yend) * xgap);
-//}

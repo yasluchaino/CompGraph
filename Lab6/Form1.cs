@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -66,79 +67,146 @@ namespace Lab6
         }
         public class Tetrahedron
         {
-            public Point3D[] Vertices { get; set; }
-            public List<Edge> Edges { get; set; }
+            public List<Polygon> Faces { get; set; }
 
             public Tetrahedron()
             {
                 // Задайте координаты вершин тетраэдра
-                Vertices = new Point3D[4];
-                Vertices[0] = new Point3D(0, 0, 0);
-                Vertices[1] = new Point3D(1, 0, 0);
-                Vertices[2] = new Point3D(0.5, Math.Sqrt(3) / 2, 0);
-                Vertices[3] = new Point3D(0.5, Math.Sqrt(3) / 6, Math.Sqrt(6) / 3);
+                Point3D vertexA = new Point3D(0, 0, 0);
+                Point3D vertexB = new Point3D(1, 0, 0);
+                Point3D vertexC = new Point3D(0.5, Math.Sqrt(3) / 2, 0);
+                Point3D vertexD = new Point3D(0.5, Math.Sqrt(3) / 6, Math.Sqrt(6) / 3);
 
-                // Создайте рёбра тетраэдра
-                Edges = new List<Edge>();
-                Edges.Add(new Edge(Vertices[0], Vertices[1]));
-                Edges.Add(new Edge(Vertices[0], Vertices[2]));
-                Edges.Add(new Edge(Vertices[0], Vertices[3]));
-                Edges.Add(new Edge(Vertices[1], Vertices[2]));
-                Edges.Add(new Edge(Vertices[1], Vertices[3]));
-                Edges.Add(new Edge(Vertices[2], Vertices[3]));
+                // Создайте грани тетраэдра
+                List<Polygon> faces = new List<Polygon>();
+                faces.Add(new Polygon(new List<Point3D> { vertexA, vertexB, vertexC }));
+                faces.Add(new Polygon(new List<Point3D> { vertexA, vertexC, vertexD }));
+                faces.Add(new Polygon(new List<Point3D> { vertexA, vertexD, vertexB }));
+                faces.Add(new Polygon(new List<Point3D> { vertexB, vertexC, vertexD }));
+
+                Faces = faces;
             }
         }
+
         public class Hexahedron
         {
-            public Point3D[] Vertices { get; set; }
-            public List<Edge> Edges { get; set; }
+            public List<Polygon> Faces { get; set; }
 
             public Hexahedron()
             {
-                Vertices = new Point3D[8];
-
                 // Задайте координаты вершин гексаэдра
-                Vertices[0] = new Point3D(0, 0, 0);
-                Vertices[1] = new Point3D(1, 0, 0);
-                Vertices[2] = new Point3D(1, 1, 0);
-                Vertices[3] = new Point3D(0, 1, 0);
-                Vertices[4] = new Point3D(0, 0, 1);
-                Vertices[5] = new Point3D(1, 0, 1);
-                Vertices[6] = new Point3D(1, 1, 1);
-                Vertices[7] = new Point3D(0, 1, 1);
+                Point3D[] vertices = new Point3D[8];
+                vertices[0] = new Point3D(0, 0, 0);
+                vertices[1] = new Point3D(1, 0, 0);
+                vertices[2] = new Point3D(1, 1, 0);
+                vertices[3] = new Point3D(0, 1, 0);
+                vertices[4] = new Point3D(0, 0, 1);
+                vertices[5] = new Point3D(1, 0, 1);
+                vertices[6] = new Point3D(1, 1, 1);
+                vertices[7] = new Point3D(0, 1, 1);
 
-                Edges = new List<Edge>();
+                // Определите грани гексаэдра
+                List<Polygon> faces = new List<Polygon>();
 
-                // Создайте рёбра гексаэдра, соединяющие вершины
-                Edges.Add(new Edge(Vertices[0], Vertices[1]));
-                Edges.Add(new Edge(Vertices[1], Vertices[2]));
-                Edges.Add(new Edge(Vertices[2], Vertices[3]));
-                Edges.Add(new Edge(Vertices[3], Vertices[0]));
+                // Основание
+                List<Point3D> baseVertices = new List<Point3D> { vertices[0], vertices[1], vertices[2], vertices[3] };
+                faces.Add(new Polygon(baseVertices));
 
-                Edges.Add(new Edge(Vertices[4], Vertices[5]));
-                Edges.Add(new Edge(Vertices[5], Vertices[6]));
-                Edges.Add(new Edge(Vertices[6], Vertices[7]));
-                Edges.Add(new Edge(Vertices[7], Vertices[4]));
+                // Верхняя грань
+                List<Point3D> topVertices = new List<Point3D> { vertices[4], vertices[5], vertices[6], vertices[7] };
+                faces.Add(new Polygon(topVertices));
 
-                Edges.Add(new Edge(Vertices[0], Vertices[4]));
-                Edges.Add(new Edge(Vertices[1], Vertices[5]));
-                Edges.Add(new Edge(Vertices[2], Vertices[6]));
-                Edges.Add(new Edge(Vertices[3], Vertices[7]));
+                // Боковые грани
+                List<Point3D> side1Vertices = new List<Point3D> { vertices[0], vertices[4], vertices[7], vertices[3] };
+                faces.Add(new Polygon(side1Vertices));
+
+                List<Point3D> side2Vertices = new List<Point3D> { vertices[1], vertices[5], vertices[6], vertices[2] };
+                faces.Add(new Polygon(side2Vertices));
+
+                List<Point3D> side3Vertices = new List<Point3D> { vertices[0], vertices[1], vertices[5], vertices[4] };
+                faces.Add(new Polygon(side3Vertices));
+
+                List<Point3D> side4Vertices = new List<Point3D> { vertices[2], vertices[6], vertices[7], vertices[3] };
+                faces.Add(new Polygon(side4Vertices));
+
+                Faces = faces;
+            }
+        
+        }
+        public class Octahedron
+        {
+            public List<Polygon> Faces { get; set; }
+
+            public Octahedron()
+            {
+                // Задайте координаты вершин октаэдра
+                Point3D[] vertices = new Point3D[6];
+                double a = 1.0; // Длина ребра октаэдра
+
+                vertices[0] = new Point3D(0, 0, -a);
+                vertices[1] = new Point3D(a, 0, 0);
+                vertices[2] = new Point3D(0, 0, a);
+                vertices[3] = new Point3D(-a, 0, 0);
+                vertices[4] = new Point3D(0, -a, 0);
+                vertices[5] = new Point3D(0, a, 0);
+
+                // Определите грани октаэдра
+                List<Polygon> faces = new List<Polygon>();
+
+                // Грань 1 (нижний треугольник)
+                List<Point3D> face1Vertices = new List<Point3D> { vertices[0], vertices[1], vertices[5] };
+                faces.Add(new Polygon(face1Vertices));
+
+                // Грань 2 (нижний треугольник)
+                List<Point3D> face2Vertices = new List<Point3D> { vertices[1], vertices[2], vertices[5] };
+                faces.Add(new Polygon(face2Vertices));
+
+                // Грань 3 (нижний треугольник)
+                List<Point3D> face3Vertices = new List<Point3D> { vertices[2], vertices[3], vertices[5] };
+                faces.Add(new Polygon(face3Vertices));
+
+                // Грань 4 (нижний треугольник)
+                List<Point3D> face4Vertices = new List<Point3D> { vertices[3], vertices[0], vertices[5] };
+                faces.Add(new Polygon(face4Vertices));
+
+                // Грань 5 (верхний треугольник)
+                List<Point3D> face5Vertices = new List<Point3D> { vertices[0], vertices[1], vertices[4] };
+                faces.Add(new Polygon(face5Vertices));
+
+                // Грань 6 (верхний треугольник)
+                List<Point3D> face6Vertices = new List<Point3D> { vertices[1], vertices[2], vertices[4] };
+                faces.Add(new Polygon(face6Vertices));
+
+                // Грань 7 (верхний треугольник)
+                List<Point3D> face7Vertices = new List<Point3D> { vertices[2], vertices[3], vertices[4] };
+                faces.Add(new Polygon(face7Vertices));
+
+                // Грань 8 (верхний треугольник)
+                List<Point3D> face8Vertices = new List<Point3D> { vertices[3], vertices[0], vertices[4] };
+                faces.Add(new Polygon(face8Vertices));
+
+                Faces = faces;
             }
         }
-        private Tetrahedron tetrahedron;
+            private Tetrahedron tetrahedron;
         private bool drawTetrahedron = false;
         private Hexahedron hexahedron;
         private bool drawHexahedron = false;
+        private Octahedron octahedron;
+        private bool drawOctahedron = false;
         private void pictureBox1_Paint(object sender, PaintEventArgs e)
         {
             if (drawTetrahedron)
             {
                 DrawTetrahedron(e.Graphics, tetrahedron);
             }
-            if (checkBox2.Checked)
+            if (drawHexahedron)
             {
                 DrawHexahedron(e.Graphics, hexahedron);
+            }
+            if (drawOctahedron)
+            {
+                DrawOctahedron(e.Graphics, octahedron);
             }
         }
 
@@ -151,18 +219,25 @@ namespace Lab6
             float scale = 100;
             float offsetX = pictureBox1.Width / 2;
             float offsetY = pictureBox1.Height / 2;
+
             float perspective = 100.0f; // Расстояние от камеры до экрана
-            foreach (Edge edge in tetrahedron.Edges)
+
+            foreach (Polygon face in tetrahedron.Faces)
             {
-                // Применение перспективной проекции к каждой вершине
-                Point3D start = PerspectiveProjection(edge.Start, perspective);
-                Point3D end = PerspectiveProjection(edge.End, perspective);
-                Point startPoint = new Point((int)(edge.Start.X * scale + offsetX), (int)(edge.Start.Y * scale + offsetY));
-                Point endPoint = new Point((int)(edge.End.X * scale + offsetX), (int)(edge.End.Y * scale + offsetY));
-                g.DrawLine(pen, startPoint, endPoint);
+                // Применение аксонометрической проекции к каждой вершине в грани
+                List<Point> points = new List<Point>();
+                foreach (Point3D vertex in face.Vertices)
+                {
+                    Point3D projectedVertex = PerspectiveProjection(vertex, perspective);
+                    Point point = new Point((int)(projectedVertex.X * scale + offsetX), (int)(projectedVertex.Y * scale + offsetY));
+                    points.Add(point);
+                }
+
+                g.DrawPolygon(pen, points.ToArray());
             }
         }
-        private void DrawHexahedron(Graphics g, Hexahedron hexahedronm)
+
+        private void DrawHexahedron(Graphics g, Hexahedron hexahedron)
         {
             g.Clear(Color.White);
             Pen pen = new Pen(Color.Black);
@@ -171,16 +246,51 @@ namespace Lab6
             float scale = 100;
             float offsetX = pictureBox1.Width / 2;
             float offsetY = pictureBox1.Height / 2;
-            float perspective = 100.0f; // Расстояние от камеры до экрана
-            foreach (Edge edge in hexahedron.Edges)
+
+            foreach (Polygon face in hexahedron.Faces)
             {
-                // Применение аксонометрической проекции к каждой вершине
-                Point3D start = axonometricProjection.Project(edge.Start);
-                Point3D end = axonometricProjection.Project(edge.End);
-                pictureBox1.Invalidate();
-                Point startPoint = new Point((int)(edge.Start.X * scale + offsetX), (int)(edge.Start.Y * scale + offsetY));
-                Point endPoint = new Point((int)(edge.End.X * scale + offsetX), (int)(edge.End.Y * scale + offsetY));
-                g.DrawLine(pen, startPoint, endPoint);
+                List<Point> points = new List<Point>();
+                foreach (Point3D vertex in face.Vertices)
+                {
+                    // Примените перспективную проекцию (или аксонометрическую) к каждой вершине
+                    Point3D projectedVertex = PerspectiveProjection(vertex, 100.0f);
+
+                    // Отмасштабируйте и сместите вершину
+                    int x = (int)(projectedVertex.X * scale + offsetX);
+                    int y = (int)(projectedVertex.Y * scale + offsetY);
+                    points.Add(new Point(x, y));
+                }
+
+                // Нарисуйте грань
+                g.DrawPolygon(pen, points.ToArray());
+            }
+        }
+        private void DrawOctahedron(Graphics g, Octahedron octahedron)
+        {
+            g.Clear(Color.White);
+            Pen pen = new Pen(Color.Black);
+
+            // Масштабирование и смещение для отображения на форме
+            float scale = 100;
+            float offsetX = pictureBox1.Width / 2;
+            float offsetY = pictureBox1.Height / 2;
+
+            foreach (Polygon face in octahedron.Faces)
+            {
+                List<Point> points = new List<Point>();
+                foreach (Point3D vertex in face.Vertices)
+                {
+                    // Примените перспективную проекцию (или аксонометрическую) к каждой вершине
+                    Point3D projectedVertex = PerspectiveProjection(vertex, 100.0f);
+
+                    // Отмасштабируйте и сместите вершину
+                    int x = (int)(projectedVertex.X * scale + offsetX);
+                    int y = (int)(projectedVertex.Y * scale + offsetY);
+                    points.Add(new Point(x, y));
+                }
+
+                // Нарисуйте грань
+                g.DrawPolygon(pen, points.ToArray());
             }
         }
         private void CheckBoxInGroup_CheckedChanged(object sender, EventArgs e)
@@ -204,11 +314,20 @@ namespace Lab6
                 {
                     drawTetrahedron = true;
                     drawHexahedron = false;
+                    drawOctahedron = false;
                 }
                 else if (clickedCheckBox == checkBox2)
                 {
                     drawHexahedron = true;
                     drawTetrahedron = false;
+                    drawOctahedron = false;
+                }
+                else if (clickedCheckBox == checkBox3)
+                {
+                    drawTetrahedron = false;
+                    drawHexahedron = false;
+                    drawOctahedron = true;
+
                 }
                 pictureBox1.Invalidate();
             }
@@ -222,6 +341,7 @@ namespace Lab6
             InitializeComponent();
             tetrahedron = new Tetrahedron();
             hexahedron = new Hexahedron();
+            octahedron = new Octahedron();
             pictureBox1.Paint += new PaintEventHandler(pictureBox1_Paint);
              foreach (Control control in groupBox1.Controls)
             {
