@@ -280,8 +280,8 @@ namespace Lab6
                 List<Point> points = new List<Point>();
                 foreach (Point3D vertex in face.Vertices)
                 {
-                    // Примените перспективную проекцию (или аксонометрическую) к каждой вершине
-                    Point3D projectedVertex = PerspectiveProjection(vertex, 100.0f);
+                    // Примените аксонометрическую проекцию к каждой вершине
+                    Point3D projectedVertex = axonometricProjection.Project(vertex);
 
                     // Отмасштабируйте и сместите вершину
                     int x = (int)(projectedVertex.X * scale + offsetX);
@@ -413,6 +413,21 @@ namespace Lab6
         }
 
         private void checkBox3_CheckedChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void Form1_Load_1(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label5_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void listBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
 
         }
