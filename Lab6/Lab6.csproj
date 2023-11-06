@@ -4,7 +4,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{C76CB861-3EE2-4AFA-ABC0-2A007A812EE4}</ProjectGuid>
+    <ProjectGuid>{BB194F9C-DF0B-41EB-9CCE-61458A100836}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <RootNamespace>Lab6</RootNamespace>
     <AssemblyName>Lab6</AssemblyName>
@@ -65,6 +65,7 @@
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
     </Compile>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
