@@ -5,11 +5,13 @@ using System.Data;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
-namespace lab6_a
+namespace Lab6
 {
     public partial class Form1 : Form
     {
@@ -23,8 +25,11 @@ namespace lab6_a
             list_points = new List<PointD>();
             list_lines = new List<Line>();
             list_pols = new List<Polygon>();
-            Hexahedron();
+            
             InitializeMatrices();
+            axonometric_button.Checked = true;
+            redraw();
+           
         }
 
 
@@ -163,14 +168,15 @@ namespace lab6_a
         { 0, 0, 0, 1 }
             };
 
-            // Инициализация матрицы перспективной проекции
+       
             matrixPerspective = new double[4, 4]
             {
-        { 1, 0, 0, 0 },
-        { 0, 1, 0, 0 },
-        { 0, 0, 0, -0.1 },
-        { 0, 0, 0, 1 }
+    { 0, 0, 0, 0 },
+    { 0, 0, 0, 0 },
+    { 0, 0, 0,0 },
+    { 0, 0, 0, 0 }
             };
+
 
             // Инициализация матрицы отражения (зеркальной проекции)
             matrixMirror = new double[4, 4]
@@ -197,235 +203,245 @@ namespace lab6_a
             }
             return r;
         }
-        private void comboBoxTypePolyhedra_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            switch (comboBoxTypePolyhedra.SelectedIndex)
-            {
-                case 0:
-                    {
-                        Hexahedron();
-                        break;
-                    }
-                case 1:
-                    {
-                        Tetrahedron();
-                        break;
-                    }
-                case 2:
-                    {
-                        Octahedron();
-                        break;
-                    }                    
-            }
 
-        }
         private void DrawLines(List<Line> lines, List<PointD> points, Graphics g)
         {
             for (int i = 0; i < lines.Count; i++)
             {
-                Point a = new Point((int)(points[lines[i].a].x), (int)(points[lines[i].a].y));
-                Point b = new Point((int)(points[lines[i].b].x), (int)(points[lines[i].b].y));
+                Point a = new Point(pictureBox1.Width/2+(int)(points[lines[i].a].x), pictureBox1.Height / 2 + (int)(points[lines[i].a].y));
+                Point b = new Point(pictureBox1.Width / 2 + (int)(points[lines[i].b].x), pictureBox1.Height / 2 + (int)(points[lines[i].b].y));
                 g.DrawLine(new Pen(Color.Black, 2.0f), a, b);
             }
         }
 
         void Hexahedron()
         {
-            pictureBox1.Refresh();
-            List<PointD> curPoints = new List<PointD>();
-            curPoints.AddRange(new List<PointD>()
+
+            pictureBox1.Refresh(); // Очистка рисунка
+
+            List<PointD> cubePoints = new List<PointD>();
+            cubePoints.AddRange(new List<PointD>()
     {
-        new PointD(0, 0, 0), new PointD(0, 0, 1), new PointD(0, 1, 0),
-        new PointD(0, 1, 1), new PointD(1, 0, 0), new PointD(1, 0, 1), new PointD(1, 1, 0), new PointD(1, 1, 1)
+        new PointD(1, 1, 1),
+        new PointD(1, 1, -1),
+        new PointD(1, -1, 1),
+        new PointD(1, -1, -1),
+        new PointD(-1, 1, 1),
+        new PointD(-1, 1, -1),
+        new PointD(-1, -1, 1),
+        new PointD(-1, -1, -1)
     });
 
-            list_points = curPoints;
+            list_points = cubePoints; // Сохранение вершин куба
 
-            List<Line> curLines = new List<Line>()
+            List<Line> cubeLines = new List<Line>()
     {
-        new Line(0, 1), new Line(0, 2), new Line(0, 4),
-        new Line(6, 7), new Line(6, 4), new Line(6, 2),
-        new Line(3, 1), new Line(3, 2), new Line(3, 7),
-        new Line(5, 7), new Line(5, 1), new Line(5, 4)
+        new Line(0, 1),
+        new Line(0, 2),
+        new Line(0, 4),
+        new Line(1, 3),
+        new Line(1, 5),
+        new Line(2, 3),
+        new Line(2, 6),
+        new Line(3, 7),
+        new Line(4, 5),
+        new Line(4, 6),
+        new Line(5, 7),
+        new Line(6, 7)
     };
 
             list_lines.Clear();
-            list_lines = curLines;
+            list_lines = cubeLines; // Сохранение рёбер куба
 
-            list_pols.Clear();
+            list_pols.Clear(); // Очистка списка полигонов
 
-            Polygon curPolygon = new Polygon(new List<Line>() { curLines[1], curLines[5], curLines[4], curLines[2] });
-            list_pols.Add(curPolygon);
+            // Определение граней куба (полигонов)
+            Polygon cubePolygon = new Polygon(new List<Line>() { cubeLines[0], cubeLines[1], cubeLines[2], cubeLines[3] });
+            list_pols.Add(cubePolygon);
 
-            curPolygon = new Polygon(new List<Line>() { curLines[6], curLines[8], curLines[9], curLines[10] });
-            list_pols.Add(curPolygon);
+            cubePolygon = new Polygon(new List<Line>() { cubeLines[4], cubeLines[5], cubeLines[6], cubeLines[7] });
+            list_pols.Add(cubePolygon);
 
-            curPolygon = new Polygon(new List<Line>() { curLines[2], curLines[11], curLines[10], curLines[0] });
-            list_pols.Add(curPolygon); 
-            curPolygon = new Polygon(new List<Line>() { curLines[8], curLines[7], curLines[5], curLines[3] });
-            list_pols.Add(curPolygon);
-
-            curPolygon = new Polygon(new List<Line>() { curLines[11], curLines[9], curLines[3], curLines[4] });
-            list_pols.Add(curPolygon);
-
-            curPolygon = new Polygon(new List<Line>() { curLines[0], curLines[6], curLines[7], curLines[1] });
-            list_pols.Add(curPolygon);
+            cubePolygon = new Polygon(new List<Line>() { cubeLines[8], cubeLines[9], cubeLines[10], cubeLines[11] });
+            list_pols.Add(cubePolygon);
 
             var g = Graphics.FromHwnd(pictureBox1.Handle);
 
             for (int i = 0; i < list_points.Count(); i++)
             {
-                list_points[i].x *= 200;
-                list_points[i].y *= 200;
-                list_points[i].z *= 200;
+                list_points[i].x *= 50; // Масштабирование координат
+                list_points[i].y *= 50;
+                list_points[i].z *= 50;
             }
 
-            DrawLines(list_lines, list_points, g);
-        
+            DrawLines(list_lines, list_points, g); // Отрисовка куба
 
         }
         void Tetrahedron()
         {
-            pictureBox1.Refresh();
+            pictureBox1.Refresh(); // Очистка рисунка
 
-            var templist = new List<PointD> { list_points[4], list_points[1], list_points[2], list_points[7], };
-            list_points.Clear();
-            list_points = templist;
+            List<PointD> tetraPoints = new List<PointD>();
+            tetraPoints.AddRange(new List<PointD>()
+    {
+        new PointD(1, 1, 1),
+        new PointD(1, -1, -1),
+        new PointD(-1, 1, -1),
+        new PointD(-1, -2, 1)
+    });
 
-            var cur_lines = new List<Line>() {new Line(0,  1), new Line(0, 2), new Line(0, 3), 
-                                          new Line(1,  2), new Line(2, 3), new Line(3, 1) };
+            list_points = tetraPoints; // Сохранение вершин тетраэдра
+
+            List<Line> tetraLines = new List<Line>()
+    {
+        new Line(0, 1),
+        new Line(0, 2),
+        new Line(0, 3),
+        new Line(1, 2),
+        new Line(1, 3),
+        new Line(2, 3)
+    };
+
             list_lines.Clear();
-            list_lines = cur_lines;
+            list_lines = tetraLines; // Сохранение рёбер тетраэдра
 
-            list_pols.Clear();
+            list_pols.Clear(); // Очистка списка полигонов
 
-            Polygon cur_pol = new Polygon(new List<Line>() { cur_lines[0], cur_lines[5], cur_lines[2] });
-            list_pols.Add(cur_pol); 
-            cur_pol = new Polygon(new List<Line>() { cur_lines[2], cur_lines[4], cur_lines[1] });
-            list_pols.Add(cur_pol); 
-            cur_pol = new Polygon(new List<Line>() { cur_lines[0], cur_lines[1], cur_lines[3] });
-            list_pols.Add(cur_pol); 
-            cur_pol = new Polygon(new List<Line>() { cur_lines[4], cur_lines[5], cur_lines[3] });
-            list_pols.Add(cur_pol); 
+            // Определение граней тетраэдра (полигонов)
+            Polygon tetraPolygon = new Polygon(new List<Line>() { tetraLines[0], tetraLines[1], tetraLines[2] });
+            list_pols.Add(tetraPolygon);
+
+            tetraPolygon = new Polygon(new List<Line>() { tetraLines[0], tetraLines[3], tetraLines[4] });
+            list_pols.Add(tetraPolygon);
+
+            tetraPolygon = new Polygon(new List<Line>() { tetraLines[1], tetraLines[3], tetraLines[5] });
+            list_pols.Add(tetraPolygon);
+
+            tetraPolygon = new Polygon(new List<Line>() { tetraLines[2], tetraLines[4], tetraLines[5] });
+            list_pols.Add(tetraPolygon);
 
             var g = Graphics.FromHwnd(pictureBox1.Handle);
 
-            DrawLines(list_lines, list_points, g);
-
-        }
-        void Octahedron()
-        {
-            pictureBox1.Refresh();
-
-            List<PointD> new_points = new List<PointD>();
-
-            for (int i = 0; i < 6; i++)
-            {
-                Polygon cur = list_pols[i];
-                double sum_x = 0;
-                double sum_y = 0;
-                double sum_z = 0;
-
-                for (int j = 0; j < cur.lines.Count(); j++)
-                {
-                    sum_x += list_points[cur.lines[j].a].x;
-                    sum_y += list_points[cur.lines[j].a].y;
-                    sum_z += list_points[cur.lines[j].a].z;
-                    
-                    sum_x += list_points[cur.lines[j].b].x;
-                    sum_y += list_points[cur.lines[j].b].y;
-                    sum_z += list_points[cur.lines[j].b].z;
-
-                }
-
-                PointD new_p = new PointD(sum_x / 16.0, sum_y / 16.0, sum_z / 16.0);
-                new_points.Add(new_p);
-            }
-
-            list_points = new_points;
-
-            List<Line> cur_lines = new List<Line>()
-               {new Line(0,  2), new Line(0, 4), new Line(0, 3), new Line(0, 5), 
-                new Line(1,  2), new Line(1, 4), new Line(1, 3), new Line(1, 5), 
-                new Line(4,  2), new Line(2, 5), new Line(5, 3), new Line(3, 4), 
-               };
-
-            list_lines.Clear();
-            list_lines = cur_lines;
-            list_pols.Clear();
-            Polygon cur_pol = new Polygon(new List<Line>() { cur_lines[0], cur_lines[1], cur_lines[8] });
-            list_pols.Add(cur_pol); 
-            cur_pol = new Polygon(new List<Line>() { cur_lines[11], cur_lines[2], cur_lines[1] });
-            list_pols.Add(cur_pol); 
-            cur_pol = new Polygon(new List<Line>() { cur_lines[10], cur_lines[3], cur_lines[2] });
-            list_pols.Add(cur_pol); 
-            cur_pol = new Polygon(new List<Line>() { cur_lines[9], cur_lines[0], cur_lines[3] });
-            list_pols.Add(cur_pol); 
-
-            cur_pol = new Polygon(new List<Line>() { cur_lines[4], cur_lines[5], cur_lines[8] });
-            list_pols.Add(cur_pol); 
-            cur_pol = new Polygon(new List<Line>() { cur_lines[5], cur_lines[6], cur_lines[11] });
-            list_pols.Add(cur_pol); 
-            cur_pol = new Polygon(new List<Line>() { cur_lines[6], cur_lines[7], cur_lines[10] });
-            list_pols.Add(cur_pol); 
-            cur_pol = new Polygon(new List<Line>() { cur_lines[7], cur_lines[4], cur_lines[9] });
-            list_pols.Add(cur_pol); 
-
-            var g = Graphics.FromHwnd(pictureBox1.Handle);
             for (int i = 0; i < list_points.Count(); i++)
             {
-                list_points[i].x *= 2;
-                list_points[i].y *= 2;
-                list_points[i].z *= 2;
+                list_points[i].x *= 50; // Масштабирование координат
+                list_points[i].y *= 50;
+                list_points[i].z *= 50;
             }
-            DrawLines(list_lines, list_points, g);
 
+            DrawLines(list_lines, list_points, g); // Отрисовка тетраэдра
         }
-        
-        private void redraw()
-        {
-            if (comboBoxTypePolyhedra.SelectedIndex == -1)
-                return;
 
-            if (comboBoxTypeProection.SelectedIndex == -1)
-                return;
+
+        void Octahedron()
+        {
+            pictureBox1.Refresh(); // Очистка рисунка
+
+            List<PointD> octaPoints = new List<PointD>();
+            octaPoints.AddRange(new List<PointD>()
+    {
+        new PointD(1, 0, 0),
+        new PointD(-1, 0, 0),
+        new PointD(0, 1, 0),
+        new PointD(0, -1, 0),
+        new PointD(0, 0, 1),
+        new PointD(0, 0, -1)
+    });
+
+            list_points = octaPoints; // Сохранение вершин октаэдра
+
+            List<Line> octaLines = new List<Line>()
+    {
+        new Line(0, 2),
+        new Line(2, 1),
+        new Line(1, 3),
+        new Line(3, 0),
+        new Line(0, 4),
+        new Line(2, 4),
+        new Line(1, 4),
+        new Line(3, 4),
+        new Line(0, 5),
+        new Line(2, 5),
+        new Line(1, 5),
+        new Line(3, 5)
+    };
+
+            list_lines.Clear();
+            list_lines = octaLines; // Сохранение рёбер октаэдра
+
+            list_pols.Clear(); // Очистка списка полигонов
+
+            // Определение граней октаэдра (полигонов)
+            Polygon octaPolygon = new Polygon(new List<Line>() { octaLines[0], octaLines[1], octaLines[2], octaLines[3] });
+            list_pols.Add(octaPolygon);
+
+            octaPolygon = new Polygon(new List<Line>() { octaLines[4], octaLines[5], octaLines[6], octaLines[7] });
+            list_pols.Add(octaPolygon);
+
+            octaPolygon = new Polygon(new List<Line>() { octaLines[8], octaLines[9], octaLines[10], octaLines[11] });
+            list_pols.Add(octaPolygon);
 
             var g = Graphics.FromHwnd(pictureBox1.Handle);
 
-            switch (comboBoxTypeProection.SelectedIndex)
+            for (int i = 0; i < list_points.Count(); i++)
             {
-              
-                case 0:
-                    {
-                        pictureBox1.Refresh();
-                        for (int i = 0; i < list_lines.Count(); i++)
-                        {
-                            Point a = new Point((int)(list_points[list_lines[i].a].x), (int)(list_points[list_lines[i].a].y));
-                            Point b = new Point((int)(list_points[list_lines[i].b].x), (int)(list_points[list_lines[i].b].y));
-
-                            g.DrawLine(new Pen(Color.Black, 2.0f), a, b);
-
-                        }
-
-                        break; 
-                    }
-               
-                case 1:
-                    {
-                        pictureBox1.Refresh();
-                        axonometric();
-                        break; 
-                    }
-                case 2:
-                    {
-                        pictureBox1.Refresh();
-                        parallperpective();
-                        break; 
-                    }                     
-           
+                list_points[i].x *= 100; // Масштабирование координат
+                list_points[i].y *= 100;
+                list_points[i].z *= 100;
             }
-                     
+
+            DrawLines(list_lines, list_points, g); // Отрисовка октаэдра
         }
+
+
+        private void axonometric()
+        {
+            var sf = (float)Math.Sqrt(1.0 / 3.0);
+            var cf = (float)Math.Sqrt(2.0 / 3.0);
+            var sp = (float)Math.Sqrt(1.0 / 2.0);
+            var cp = (float)Math.Sqrt(1.0 / 2.0);
+
+          
+            matrixAxonometric[0, 0] = cp;
+            matrixAxonometric[0, 1] = sf * sp;
+            matrixAxonometric[1, 1] = cf;
+            matrixAxonometric[2, 0] = sp;
+            matrixAxonometric[2, 1] = -sf * cp;
+            matrixAxonometric[3, 3] = 1;
+
+
+            int cathet = (int)Math.Sqrt(Math.Pow(pictureBox1.Width / 2, 2) / 3);
+            Point xyz = new Point(pictureBox1.Width / 2, pictureBox1.Height / 2);
+            Point x = new Point(pictureBox1.Width, pictureBox1.Height / 2 + cathet);
+            Point y = new Point(pictureBox1.Width / 2, 0);
+            Point z = new Point(0, pictureBox1.Height / 2 + cathet);
+
+            var g = Graphics.FromHwnd(pictureBox1.Handle);
+            g.DrawLine(new Pen(Color.Red, 1), xyz, x);
+            g.DrawLine(new Pen(Color.Green, 1), xyz, y);
+            g.DrawLine(new Pen(Color.Blue, 1), xyz, z);
+
+            ApplyTransformationAndDrawLines(matrixAxonometric);
+        }   
+        public void parallperpective()
+        {
+    
+            matrixPerspective[0, 0] = 1;
+            matrixPerspective[1, 1] = 1;
+            matrixPerspective[3, 2] = 1/-2000;
+            matrixPerspective[3, 3] = 1;
+
+            Point xy = new Point(pictureBox1.Width / 2, pictureBox1.Height / 2);
+            Point x = new Point(pictureBox1.Width, pictureBox1.Height / 2);
+            Point y = new Point(pictureBox1.Width / 2, 0);
+            Pen axes = new Pen(Color.Black, 1);
+            var g = Graphics.FromHwnd(pictureBox1.Handle);
+            g.DrawLine(axes, xy, x);
+            g.DrawLine(axes, xy, y);
+           
+            ApplyTransformationAndDrawLines(matrixPerspective);
+        }
+
         private void ApplyTransformationAndDrawLines(double[,] transformationMatrix)
         {
             var newImage = new List<PointD>();
@@ -438,46 +454,28 @@ namespace lab6_a
             }
 
             var g = Graphics.FromHwnd(pictureBox1.Handle);
+            int centerX = pictureBox1.Width / 2;
+            int centerY = pictureBox1.Height / 2;
+
             for (int i = 0; i < list_lines.Count(); i++)
             {
-                Point a = new Point((int)(newImage[list_lines[i].a].x) + pictureBox1.Width / 3, (int)(newImage[list_lines[i].a].y) + pictureBox1.Height / 3);
-                Point b = new Point((int)(newImage[list_lines[i].b].x) + pictureBox1.Width / 3, (int)(newImage[list_lines[i].b].y) + pictureBox1.Height / 3);
+                Point a = new Point((int)(newImage[list_lines[i].a].x) + centerX, (int)(newImage[list_lines[i].a].y) + centerY);
+                Point b = new Point((int)(newImage[list_lines[i].b].x) + centerX, (int)(newImage[list_lines[i].b].y) + centerY);
 
                 g.DrawLine(new Pen(Color.Black, 2.0f), a, b);
             }
         }
 
-        public void parallperpective()
-        {
-            double c = 10.0;
-            matrixPerspective[0, 0] = 1.0;
-            matrixPerspective[1, 1] = 1.0;
-            matrixPerspective[2, 2] = 0.0;
-            matrixPerspective[2, 3] = -1.0 / c;
+      
 
-            ApplyTransformationAndDrawLines(matrixPerspective);
-        }
-
-        private void axonometric()
-        {
-            double anglePhi = -45.0 * Math.PI / 180.0;
-            double anglePsi = 35.26 * Math.PI / 180.0;
-            matrixAxonometric[0, 0] = Math.Cos(anglePsi);
-            matrixAxonometric[0, 1] = Math.Sin(anglePhi) * Math.Sin(anglePsi);
-            matrixAxonometric[1, 1] = Math.Cos(anglePhi);
-            matrixAxonometric[2, 0] = Math.Sin(anglePsi);
-            matrixAxonometric[2, 1] = -Math.Cos(anglePsi) * Math.Sin(anglePhi);
-
-            ApplyTransformationAndDrawLines(matrixAxonometric);
-        }
+     
+        
         private void buttonTranslite_Click(object sender, EventArgs e)
         {
-            if (comboBoxTypePolyhedra.SelectedIndex == -1)
-                return;
+           
 
             var g = Graphics.FromHwnd(pictureBox1.Handle);
-            //                                                                                                   x  y  z
-            //double[,] matrixTranslation = new double[4, 4] { { 1, 0, 0, 0 }, { 0, 1, 0, 0 }, { 0, 0, 1, 0 }, { 1, 1, 1, 1 } };
+  
             matrixTranslation[3, 0] = Convert.ToDouble(textBox1.Text);
             matrixTranslation[3, 1] = Convert.ToDouble(textBox2.Text);
             matrixTranslation[3, 2] = Convert.ToDouble(textBox3.Text);
@@ -491,11 +489,6 @@ namespace lab6_a
                 list_points[i] = new PointD(res[0, 0], res[0, 1], res[0, 2]);
             }
 
-            redraw();
-        }
-
-        private void comboBoxTypeProection_SelectedIndexChanged(object sender, EventArgs e)
-        {
             redraw();
         }
 
@@ -541,8 +534,92 @@ namespace lab6_a
             redraw();
         }
 
-   
-        private void label5_Click(object sender, EventArgs e)
+
+        private void radioButtons_CheckedChanged(object sender, EventArgs e)
+        {
+            redraw();
+        }
+
+        private void redraw()
+        {
+            var g = Graphics.FromHwnd(pictureBox1.Handle);
+
+          if (axonometric_button.Checked)
+            {
+                pictureBox1.Refresh();
+                axonometric();                
+            }
+            else if (perpective_button.Checked)
+            {
+                pictureBox1.Refresh();
+                parallperpective();
+            }
+        }
+
+        private void radioButton2_CheckedChanged(object sender, EventArgs e)
+        {   
+            
+            if (radioButton1.Checked)
+            {
+                pictureBox1.Refresh();
+                Hexahedron();
+                redraw();
+            }
+            else if (radioButton2.Checked)
+            {
+                pictureBox1.Refresh();
+                Tetrahedron();
+                redraw();
+            }
+            else if (radioButton3.Checked)
+            {
+                pictureBox1.Refresh();
+                Octahedron();
+                redraw();
+            }
+          
+        }
+        private void button1_Click(object sender, EventArgs e)
+        {           
+            if (angleRotate.Text.Length < 1)
+                return;
+            double teta = Convert.ToDouble(angleRotate.Text);
+            if (xRotate.Checked)
+            {
+                currentRotate = matrixRotateX;
+                currentRotate[1, 1] = Math.Cos(teta * Math.PI / 180.0);
+                currentRotate[1, 2] = Math.Sin(teta * Math.PI / 180.0);
+                currentRotate[2, 1] = -Math.Sin(teta * Math.PI / 180.0);
+                currentRotate[2, 2] = Math.Cos(teta * Math.PI / 180.0);
+            }
+             if(yRotate.Checked) { 
+                    currentRotate = matrixRotateY;
+                    currentRotate[0, 0] = Math.Cos(teta * Math.PI / 180.0);
+                    currentRotate[0, 2] = -Math.Sin(teta * Math.PI / 180.0);
+                    currentRotate[2, 0] = Math.Sin(teta * Math.PI / 180.0);
+                    currentRotate[2, 2] = Math.Cos(teta * Math.PI / 180.0);
+                   }
+             if(zRotate.Checked) { 
+                    currentRotate = matrixRotateZ;
+                    currentRotate[0, 0] = Math.Cos(teta * Math.PI / 180.0);
+                    currentRotate[0, 1] = Math.Sin(teta * Math.PI / 180.0);
+                    currentRotate[1, 0] = -Math.Sin(teta * Math.PI / 180.0);
+                    currentRotate[1, 1] = Math.Cos(teta * Math.PI / 180.0);
+                
+            }
+            for (int i = 0; i < list_points.Count; i++)
+            {
+                double[,] matrixPoint = new double[1, 4] { { list_points[i].x, list_points[i].y, list_points[i].z, 1.0 } };
+
+                var res = (multipleMatrix(matrixPoint, currentRotate));
+
+                list_points[i] = new PointD(res[0, 0], res[0, 1], res[0, 2]);
+            }
+
+          redraw();
+        }
+
+        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
 
         }

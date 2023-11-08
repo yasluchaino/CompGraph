@@ -1,5 +1,5 @@
 ﻿
-namespace lab6_a
+namespace Lab6
 {
     partial class Form1
     {
@@ -29,7 +29,6 @@ namespace lab6_a
         /// </summary>
         private void InitializeComponent()
         {
-            this.comboBoxTypePolyhedra = new System.Windows.Forms.ComboBox();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.buttonTranslite = new System.Windows.Forms.Button();
             this.textBox1 = new System.Windows.Forms.TextBox();
@@ -38,56 +37,25 @@ namespace lab6_a
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
-            this.buttonRotate = new System.Windows.Forms.Button();
-            this.comboBoxPlane = new System.Windows.Forms.ComboBox();
-            this.textBox4 = new System.Windows.Forms.TextBox();
-            this.buttonScale = new System.Windows.Forms.Button();
-            this.textBox11 = new System.Windows.Forms.TextBox();
-            this.textBox12 = new System.Windows.Forms.TextBox();
-            this.textBox13 = new System.Windows.Forms.TextBox();
-            this.label5 = new System.Windows.Forms.Label();
-            this.label6 = new System.Windows.Forms.Label();
-            this.label7 = new System.Windows.Forms.Label();
             this.buttonMirror = new System.Windows.Forms.Button();
-            this.buttonRotateRound = new System.Windows.Forms.Button();
-            this.textBox5 = new System.Windows.Forms.TextBox();
-            this.textBox6 = new System.Windows.Forms.TextBox();
-            this.label11 = new System.Windows.Forms.Label();
-            this.label12 = new System.Windows.Forms.Label();
-            this.label13 = new System.Windows.Forms.Label();
-            this.label14 = new System.Windows.Forms.Label();
-            this.textBox7 = new System.Windows.Forms.TextBox();
-            this.label15 = new System.Windows.Forms.Label();
-            this.comboBoxTypeProection = new System.Windows.Forms.ComboBox();
-            this.label19 = new System.Windows.Forms.Label();
             this.label20 = new System.Windows.Forms.Label();
-            this.label21 = new System.Windows.Forms.Label();
             this.comboBoxAxis = new System.Windows.Forms.ComboBox();
-            this.textBox8 = new System.Windows.Forms.TextBox();
-            this.textBox9 = new System.Windows.Forms.TextBox();
-            this.textBox10 = new System.Windows.Forms.TextBox();
-            this.label8 = new System.Windows.Forms.Label();
-            this.label9 = new System.Windows.Forms.Label();
-            this.label10 = new System.Windows.Forms.Label();
-            this.label16 = new System.Windows.Forms.Label();
-            this.textBox14 = new System.Windows.Forms.TextBox();
+            this.axonometric_button = new System.Windows.Forms.RadioButton();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.perpective_button = new System.Windows.Forms.RadioButton();
+            this.radioButton1 = new System.Windows.Forms.RadioButton();
+            this.radioButton2 = new System.Windows.Forms.RadioButton();
+            this.radioButton3 = new System.Windows.Forms.RadioButton();
+            this.button1 = new System.Windows.Forms.Button();
+            this.angleRotate = new System.Windows.Forms.TextBox();
+            this.xRotate = new System.Windows.Forms.RadioButton();
+            this.zRotate = new System.Windows.Forms.RadioButton();
+            this.yRotate = new System.Windows.Forms.RadioButton();
+            this.groupBox2 = new System.Windows.Forms.GroupBox();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            this.groupBox1.SuspendLayout();
+            this.groupBox2.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // comboBoxTypePolyhedra
-            // 
-            this.comboBoxTypePolyhedra.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboBoxTypePolyhedra.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.comboBoxTypePolyhedra.FormattingEnabled = true;
-            this.comboBoxTypePolyhedra.Items.AddRange(new object[] {
-            "куб ",
-            "тетраэдр",
-            "октаэдрт"});
-            this.comboBoxTypePolyhedra.Location = new System.Drawing.Point(820, 47);
-            this.comboBoxTypePolyhedra.Name = "comboBoxTypePolyhedra";
-            this.comboBoxTypePolyhedra.Size = new System.Drawing.Size(217, 33);
-            this.comboBoxTypePolyhedra.TabIndex = 0;
-            this.comboBoxTypePolyhedra.SelectedIndexChanged += new System.EventHandler(this.comboBoxTypePolyhedra_SelectedIndexChanged);
             // 
             // pictureBox1
             // 
@@ -100,9 +68,9 @@ namespace lab6_a
             // buttonTranslite
             // 
             this.buttonTranslite.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.buttonTranslite.Location = new System.Drawing.Point(837, 126);
+            this.buttonTranslite.Location = new System.Drawing.Point(824, 179);
             this.buttonTranslite.Name = "buttonTranslite";
-            this.buttonTranslite.Size = new System.Drawing.Size(138, 67);
+            this.buttonTranslite.Size = new System.Drawing.Size(138, 48);
             this.buttonTranslite.TabIndex = 2;
             this.buttonTranslite.Text = "Сместить";
             this.buttonTranslite.UseVisualStyleBackColor = true;
@@ -111,7 +79,7 @@ namespace lab6_a
             // textBox1
             // 
             this.textBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.textBox1.Location = new System.Drawing.Point(990, 154);
+            this.textBox1.Location = new System.Drawing.Point(973, 188);
             this.textBox1.Name = "textBox1";
             this.textBox1.Size = new System.Drawing.Size(75, 30);
             this.textBox1.TabIndex = 3;
@@ -120,7 +88,7 @@ namespace lab6_a
             // textBox2
             // 
             this.textBox2.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.textBox2.Location = new System.Drawing.Point(1071, 154);
+            this.textBox2.Location = new System.Drawing.Point(1054, 188);
             this.textBox2.Name = "textBox2";
             this.textBox2.Size = new System.Drawing.Size(75, 30);
             this.textBox2.TabIndex = 4;
@@ -129,7 +97,7 @@ namespace lab6_a
             // textBox3
             // 
             this.textBox3.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.textBox3.Location = new System.Drawing.Point(1152, 154);
+            this.textBox3.Location = new System.Drawing.Point(1135, 188);
             this.textBox3.Name = "textBox3";
             this.textBox3.Size = new System.Drawing.Size(75, 30);
             this.textBox3.TabIndex = 5;
@@ -139,7 +107,7 @@ namespace lab6_a
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label1.Location = new System.Drawing.Point(999, 126);
+            this.label1.Location = new System.Drawing.Point(968, 160);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(22, 25);
             this.label1.TabIndex = 6;
@@ -149,7 +117,7 @@ namespace lab6_a
             // 
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label2.Location = new System.Drawing.Point(1082, 126);
+            this.label2.Location = new System.Drawing.Point(1049, 160);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(22, 25);
             this.label2.TabIndex = 6;
@@ -159,234 +127,22 @@ namespace lab6_a
             // 
             this.label3.AutoSize = true;
             this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label3.Location = new System.Drawing.Point(1162, 126);
+            this.label3.Location = new System.Drawing.Point(1130, 160);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(22, 25);
             this.label3.TabIndex = 6;
             this.label3.Text = "z";
             // 
-            // buttonRotate
-            // 
-            this.buttonRotate.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.buttonRotate.Location = new System.Drawing.Point(837, 210);
-            this.buttonRotate.Name = "buttonRotate";
-            this.buttonRotate.Size = new System.Drawing.Size(138, 67);
-            this.buttonRotate.TabIndex = 7;
-            this.buttonRotate.Text = "Повернуть";
-            // 
-            // comboBoxPlane
-            // 
-            this.comboBoxPlane.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboBoxPlane.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.comboBoxPlane.FormattingEnabled = true;
-            this.comboBoxPlane.Items.AddRange(new object[] {
-            "по OX",
-            "по OY",
-            "по OZ"});
-            this.comboBoxPlane.Location = new System.Drawing.Point(1004, 228);
-            this.comboBoxPlane.Name = "comboBoxPlane";
-            this.comboBoxPlane.Size = new System.Drawing.Size(106, 33);
-            this.comboBoxPlane.TabIndex = 8;
-            // 
-            // textBox4
-            // 
-            this.textBox4.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.textBox4.Location = new System.Drawing.Point(1129, 228);
-            this.textBox4.Name = "textBox4";
-            this.textBox4.Size = new System.Drawing.Size(88, 30);
-            this.textBox4.TabIndex = 9;
-            this.textBox4.Text = "0";
-            // 
-            // buttonScale
-            // 
-            this.buttonScale.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.buttonScale.Location = new System.Drawing.Point(837, 434);
-            this.buttonScale.Name = "buttonScale";
-            this.buttonScale.Size = new System.Drawing.Size(138, 67);
-            this.buttonScale.TabIndex = 11;
-            this.buttonScale.Text = "Масштабировать";
-            this.buttonScale.UseVisualStyleBackColor = true;
-            // 
-            // textBox11
-            // 
-            this.textBox11.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.textBox11.Location = new System.Drawing.Point(990, 469);
-            this.textBox11.Name = "textBox11";
-            this.textBox11.Size = new System.Drawing.Size(75, 30);
-            this.textBox11.TabIndex = 3;
-            this.textBox11.Text = "1";
-            // 
-            // textBox12
-            // 
-            this.textBox12.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.textBox12.Location = new System.Drawing.Point(1087, 469);
-            this.textBox12.Name = "textBox12";
-            this.textBox12.Size = new System.Drawing.Size(75, 30);
-            this.textBox12.TabIndex = 4;
-            this.textBox12.Text = "1";
-            // 
-            // textBox13
-            // 
-            this.textBox13.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.textBox13.Location = new System.Drawing.Point(1183, 469);
-            this.textBox13.Name = "textBox13";
-            this.textBox13.Size = new System.Drawing.Size(75, 30);
-            this.textBox13.TabIndex = 5;
-            this.textBox13.Text = "1";
-            // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label5.Location = new System.Drawing.Point(981, 441);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(26, 25);
-            this.label5.TabIndex = 6;
-            this.label5.Text = "X";
-            this.label5.Click += new System.EventHandler(this.label5_Click);
-            // 
-            // label6
-            // 
-            this.label6.AutoSize = true;
-            this.label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label6.Location = new System.Drawing.Point(1078, 441);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(25, 25);
-            this.label6.TabIndex = 6;
-            this.label6.Text = "Y";
-            // 
-            // label7
-            // 
-            this.label7.AutoSize = true;
-            this.label7.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label7.Location = new System.Drawing.Point(1178, 441);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(24, 25);
-            this.label7.TabIndex = 6;
-            this.label7.Text = "Z";
-            // 
             // buttonMirror
             // 
             this.buttonMirror.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.buttonMirror.Location = new System.Drawing.Point(837, 527);
+            this.buttonMirror.Location = new System.Drawing.Point(837, 554);
             this.buttonMirror.Name = "buttonMirror";
             this.buttonMirror.Size = new System.Drawing.Size(138, 67);
             this.buttonMirror.TabIndex = 12;
             this.buttonMirror.Text = "Отразить";
             this.buttonMirror.UseVisualStyleBackColor = true;
             this.buttonMirror.Click += new System.EventHandler(this.buttonMirror_Click);
-            // 
-            // buttonRotateRound
-            // 
-            this.buttonRotateRound.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.buttonRotateRound.Location = new System.Drawing.Point(825, 293);
-            this.buttonRotateRound.Name = "buttonRotateRound";
-            this.buttonRotateRound.Size = new System.Drawing.Size(156, 78);
-            this.buttonRotateRound.TabIndex = 19;
-            this.buttonRotateRound.Text = "Повернуть вокруг прямой";
-            this.buttonRotateRound.UseVisualStyleBackColor = true;
-            // 
-            // textBox5
-            // 
-            this.textBox5.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.textBox5.Location = new System.Drawing.Point(1044, 321);
-            this.textBox5.Name = "textBox5";
-            this.textBox5.Size = new System.Drawing.Size(75, 30);
-            this.textBox5.TabIndex = 3;
-            this.textBox5.Text = "0";
-            // 
-            // textBox6
-            // 
-            this.textBox6.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.textBox6.Location = new System.Drawing.Point(1044, 353);
-            this.textBox6.Name = "textBox6";
-            this.textBox6.Size = new System.Drawing.Size(75, 30);
-            this.textBox6.TabIndex = 3;
-            this.textBox6.Text = "0";
-            // 
-            // label11
-            // 
-            this.label11.AutoSize = true;
-            this.label11.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label11.Location = new System.Drawing.Point(1039, 293);
-            this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(82, 25);
-            this.label11.TabIndex = 6;
-            this.label11.Text = "точка 1";
-            // 
-            // label12
-            // 
-            this.label12.AutoSize = true;
-            this.label12.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label12.Location = new System.Drawing.Point(983, 326);
-            this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(55, 25);
-            this.label12.TabIndex = 6;
-            this.label12.Text = "по x:";
-            // 
-            // label13
-            // 
-            this.label13.AutoSize = true;
-            this.label13.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label13.Location = new System.Drawing.Point(982, 356);
-            this.label13.Name = "label13";
-            this.label13.Size = new System.Drawing.Size(55, 25);
-            this.label13.TabIndex = 6;
-            this.label13.Text = "по y:";
-            // 
-            // label14
-            // 
-            this.label14.AutoSize = true;
-            this.label14.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label14.Location = new System.Drawing.Point(983, 389);
-            this.label14.Name = "label14";
-            this.label14.Size = new System.Drawing.Size(55, 25);
-            this.label14.TabIndex = 6;
-            this.label14.Text = "по z:";
-            // 
-            // textBox7
-            // 
-            this.textBox7.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.textBox7.Location = new System.Drawing.Point(1044, 386);
-            this.textBox7.Name = "textBox7";
-            this.textBox7.Size = new System.Drawing.Size(75, 30);
-            this.textBox7.TabIndex = 3;
-            this.textBox7.Text = "0";
-            // 
-            // label15
-            // 
-            this.label15.AutoSize = true;
-            this.label15.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label15.Location = new System.Drawing.Point(1189, 293);
-            this.label15.Name = "label15";
-            this.label15.Size = new System.Drawing.Size(82, 25);
-            this.label15.TabIndex = 6;
-            this.label15.Text = "точка 2";
-            // 
-            // comboBoxTypeProection
-            // 
-            this.comboBoxTypeProection.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboBoxTypeProection.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.comboBoxTypeProection.FormattingEnabled = true;
-            this.comboBoxTypeProection.Items.AddRange(new object[] {
-            "XY",
-            "аксонометрическая",
-            "перспективная"});
-            this.comboBoxTypeProection.Location = new System.Drawing.Point(1053, 47);
-            this.comboBoxTypeProection.Name = "comboBoxTypeProection";
-            this.comboBoxTypeProection.Size = new System.Drawing.Size(214, 33);
-            this.comboBoxTypeProection.TabIndex = 20;
-            this.comboBoxTypeProection.SelectedIndexChanged += new System.EventHandler(this.comboBoxTypeProection_SelectedIndexChanged);
-            // 
-            // label19
-            // 
-            this.label19.AutoSize = true;
-            this.label19.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label19.Location = new System.Drawing.Point(820, 19);
-            this.label19.Name = "label19";
-            this.label19.Size = new System.Drawing.Size(80, 25);
-            this.label19.TabIndex = 21;
-            this.label19.Text = "Фигура";
             // 
             // label20
             // 
@@ -397,16 +153,6 @@ namespace lab6_a
             this.label20.Size = new System.Drawing.Size(0, 25);
             this.label20.TabIndex = 21;
             // 
-            // label21
-            // 
-            this.label21.AutoSize = true;
-            this.label21.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label21.Location = new System.Drawing.Point(1074, 19);
-            this.label21.Name = "label21";
-            this.label21.Size = new System.Drawing.Size(103, 25);
-            this.label21.TabIndex = 22;
-            this.label21.Text = "Проекция";
-            // 
             // comboBoxAxis
             // 
             this.comboBoxAxis.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
@@ -416,146 +162,184 @@ namespace lab6_a
             "по XY",
             "по XZ",
             "по YZ"});
-            this.comboBoxAxis.Location = new System.Drawing.Point(1008, 545);
+            this.comboBoxAxis.Location = new System.Drawing.Point(1004, 588);
             this.comboBoxAxis.Name = "comboBoxAxis";
             this.comboBoxAxis.Size = new System.Drawing.Size(154, 33);
             this.comboBoxAxis.TabIndex = 23;
             this.comboBoxAxis.SelectedIndexChanged += new System.EventHandler(this.comboBox3_SelectedIndexChanged);
             // 
-            // textBox8
+            // axonometric_button
             // 
-            this.textBox8.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.textBox8.Location = new System.Drawing.Point(1192, 321);
-            this.textBox8.Name = "textBox8";
-            this.textBox8.Size = new System.Drawing.Size(75, 30);
-            this.textBox8.TabIndex = 3;
-            this.textBox8.Text = "0";
+            this.axonometric_button.AutoSize = true;
+            this.axonometric_button.Location = new System.Drawing.Point(16, 12);
+            this.axonometric_button.Name = "axonometric_button";
+            this.axonometric_button.Size = new System.Drawing.Size(160, 20);
+            this.axonometric_button.TabIndex = 0;
+            this.axonometric_button.TabStop = true;
+            this.axonometric_button.Text = "Аксонометрическая";
+            this.axonometric_button.UseVisualStyleBackColor = true;
+            this.axonometric_button.CheckedChanged += new System.EventHandler(this.radioButtons_CheckedChanged);
             // 
-            // textBox9
+            // groupBox1
             // 
-            this.textBox9.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.textBox9.Location = new System.Drawing.Point(1192, 353);
-            this.textBox9.Name = "textBox9";
-            this.textBox9.Size = new System.Drawing.Size(75, 30);
-            this.textBox9.TabIndex = 3;
-            this.textBox9.Text = "0";
+            this.groupBox1.Controls.Add(this.perpective_button);
+            this.groupBox1.Controls.Add(this.axonometric_button);
+            this.groupBox1.Location = new System.Drawing.Point(1071, 48);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(187, 75);
+            this.groupBox1.TabIndex = 26;
+            this.groupBox1.TabStop = false;
             // 
-            // textBox10
+            // perpective_button
             // 
-            this.textBox10.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.textBox10.Location = new System.Drawing.Point(1192, 386);
-            this.textBox10.Name = "textBox10";
-            this.textBox10.Size = new System.Drawing.Size(75, 30);
-            this.textBox10.TabIndex = 3;
-            this.textBox10.Text = "0";
+            this.perpective_button.AutoSize = true;
+            this.perpective_button.Location = new System.Drawing.Point(16, 39);
+            this.perpective_button.Name = "perpective_button";
+            this.perpective_button.Size = new System.Drawing.Size(130, 20);
+            this.perpective_button.TabIndex = 1;
+            this.perpective_button.TabStop = true;
+            this.perpective_button.Text = "Перспективная";
+            this.perpective_button.UseVisualStyleBackColor = true;
+            this.perpective_button.CheckedChanged += new System.EventHandler(this.radioButtons_CheckedChanged);
             // 
-            // label8
+            // radioButton1
             // 
-            this.label8.AutoSize = true;
-            this.label8.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label8.Location = new System.Drawing.Point(1131, 326);
-            this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(55, 25);
-            this.label8.TabIndex = 6;
-            this.label8.Text = "по x:";
+            this.radioButton1.AutoSize = true;
+            this.radioButton1.Location = new System.Drawing.Point(837, 37);
+            this.radioButton1.Name = "radioButton1";
+            this.radioButton1.Size = new System.Drawing.Size(52, 20);
+            this.radioButton1.TabIndex = 0;
+            this.radioButton1.TabStop = true;
+            this.radioButton1.Text = "Куб";
+            this.radioButton1.UseVisualStyleBackColor = true;
+            this.radioButton1.CheckedChanged += new System.EventHandler(this.radioButton2_CheckedChanged);
             // 
-            // label9
+            // radioButton2
             // 
-            this.label9.AutoSize = true;
-            this.label9.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label9.Location = new System.Drawing.Point(1130, 356);
-            this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(55, 25);
-            this.label9.TabIndex = 6;
-            this.label9.Text = "по y:";
+            this.radioButton2.AutoSize = true;
+            this.radioButton2.Location = new System.Drawing.Point(837, 63);
+            this.radioButton2.Name = "radioButton2";
+            this.radioButton2.Size = new System.Drawing.Size(92, 20);
+            this.radioButton2.TabIndex = 1;
+            this.radioButton2.TabStop = true;
+            this.radioButton2.Text = "Тетраэдр";
+            this.radioButton2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.radioButton2.UseVisualStyleBackColor = true;
+            this.radioButton2.CheckedChanged += new System.EventHandler(this.radioButton2_CheckedChanged);
             // 
-            // label10
+            // radioButton3
             // 
-            this.label10.AutoSize = true;
-            this.label10.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label10.Location = new System.Drawing.Point(1131, 389);
-            this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(55, 25);
-            this.label10.TabIndex = 6;
-            this.label10.Text = "по z:";
+            this.radioButton3.AutoSize = true;
+            this.radioButton3.Location = new System.Drawing.Point(837, 89);
+            this.radioButton3.Name = "radioButton3";
+            this.radioButton3.Size = new System.Drawing.Size(84, 20);
+            this.radioButton3.TabIndex = 2;
+            this.radioButton3.TabStop = true;
+            this.radioButton3.Text = "Октаэдр";
+            this.radioButton3.UseVisualStyleBackColor = true;
+            this.radioButton3.CheckedChanged += new System.EventHandler(this.radioButton2_CheckedChanged);
             // 
-            // label16
+            // button1
             // 
-            this.label16.AutoSize = true;
-            this.label16.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label16.Location = new System.Drawing.Point(820, 374);
-            this.label16.Name = "label16";
-            this.label16.Size = new System.Drawing.Size(86, 25);
-            this.label16.TabIndex = 24;
-            this.label16.Text = "градусы";
+            this.button1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.button1.Location = new System.Drawing.Point(824, 248);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(138, 45);
+            this.button1.TabIndex = 27;
+            this.button1.Text = "Повернуть";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
-            // textBox14
+            // angleRotate
             // 
-            this.textBox14.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.textBox14.Location = new System.Drawing.Point(825, 398);
-            this.textBox14.Name = "textBox14";
-            this.textBox14.Size = new System.Drawing.Size(75, 30);
-            this.textBox14.TabIndex = 25;
-            this.textBox14.Text = "0";
+            this.angleRotate.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.angleRotate.Location = new System.Drawing.Point(1135, 255);
+            this.angleRotate.Name = "angleRotate";
+            this.angleRotate.Size = new System.Drawing.Size(75, 30);
+            this.angleRotate.TabIndex = 31;
+            this.angleRotate.Text = "0";
+            // 
+            // xRotate
+            // 
+            this.xRotate.AutoSize = true;
+            this.xRotate.Location = new System.Drawing.Point(13, 14);
+            this.xRotate.Name = "xRotate";
+            this.xRotate.Size = new System.Drawing.Size(36, 20);
+            this.xRotate.TabIndex = 28;
+            this.xRotate.TabStop = true;
+            this.xRotate.Text = "X";
+            this.xRotate.UseVisualStyleBackColor = true;
+            // 
+            // zRotate
+            // 
+            this.zRotate.AutoSize = true;
+            this.zRotate.Location = new System.Drawing.Point(117, 14);
+            this.zRotate.Name = "zRotate";
+            this.zRotate.Size = new System.Drawing.Size(36, 20);
+            this.zRotate.TabIndex = 29;
+            this.zRotate.TabStop = true;
+            this.zRotate.Text = "Z";
+            this.zRotate.UseVisualStyleBackColor = true;
+            // 
+            // yRotate
+            // 
+            this.yRotate.AutoSize = true;
+            this.yRotate.Location = new System.Drawing.Point(65, 14);
+            this.yRotate.Name = "yRotate";
+            this.yRotate.Size = new System.Drawing.Size(37, 20);
+            this.yRotate.TabIndex = 30;
+            this.yRotate.TabStop = true;
+            this.yRotate.Text = "Y";
+            this.yRotate.UseVisualStyleBackColor = true;
+            // 
+            // groupBox2
+            // 
+            this.groupBox2.Controls.Add(this.yRotate);
+            this.groupBox2.Controls.Add(this.zRotate);
+            this.groupBox2.Controls.Add(this.xRotate);
+            this.groupBox2.Location = new System.Drawing.Point(968, 250);
+            this.groupBox2.Name = "groupBox2";
+            this.groupBox2.Size = new System.Drawing.Size(159, 43);
+            this.groupBox2.TabIndex = 32;
+            this.groupBox2.TabStop = false;
+            this.groupBox2.Enter += new System.EventHandler(this.radioButton2_CheckedChanged);
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1279, 633);
-            this.Controls.Add(this.textBox14);
-            this.Controls.Add(this.label16);
+            this.Controls.Add(this.groupBox2);
+            this.Controls.Add(this.angleRotate);
+            this.Controls.Add(this.button1);
+            this.Controls.Add(this.radioButton3);
+            this.Controls.Add(this.radioButton2);
+            this.Controls.Add(this.groupBox1);
+            this.Controls.Add(this.radioButton1);
             this.Controls.Add(this.comboBoxAxis);
-            this.Controls.Add(this.label21);
             this.Controls.Add(this.label20);
-            this.Controls.Add(this.label19);
-            this.Controls.Add(this.comboBoxTypeProection);
-            this.Controls.Add(this.buttonRotateRound);
             this.Controls.Add(this.buttonMirror);
-            this.Controls.Add(this.buttonScale);
-            this.Controls.Add(this.textBox4);
-            this.Controls.Add(this.comboBoxPlane);
-            this.Controls.Add(this.buttonRotate);
-            this.Controls.Add(this.label7);
             this.Controls.Add(this.label3);
-            this.Controls.Add(this.label6);
             this.Controls.Add(this.label2);
-            this.Controls.Add(this.label5);
-            this.Controls.Add(this.label10);
-            this.Controls.Add(this.label14);
-            this.Controls.Add(this.label9);
-            this.Controls.Add(this.label13);
-            this.Controls.Add(this.label8);
-            this.Controls.Add(this.label12);
-            this.Controls.Add(this.label15);
-            this.Controls.Add(this.label11);
             this.Controls.Add(this.label1);
-            this.Controls.Add(this.textBox13);
-            this.Controls.Add(this.textBox12);
             this.Controls.Add(this.textBox3);
-            this.Controls.Add(this.textBox11);
-            this.Controls.Add(this.textBox10);
             this.Controls.Add(this.textBox2);
-            this.Controls.Add(this.textBox9);
-            this.Controls.Add(this.textBox7);
-            this.Controls.Add(this.textBox8);
-            this.Controls.Add(this.textBox6);
-            this.Controls.Add(this.textBox5);
             this.Controls.Add(this.textBox1);
             this.Controls.Add(this.buttonTranslite);
             this.Controls.Add(this.pictureBox1);
-            this.Controls.Add(this.comboBoxTypePolyhedra);
             this.Name = "Form1";
             this.Text = "Form1";
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            this.groupBox1.ResumeLayout(false);
+            this.groupBox1.PerformLayout();
+            this.groupBox2.ResumeLayout(false);
+            this.groupBox2.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
         }
 
         #endregion
-
-        private System.Windows.Forms.ComboBox comboBoxTypePolyhedra;
         private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.Button buttonTranslite;
         private System.Windows.Forms.TextBox textBox1;
@@ -564,39 +348,21 @@ namespace lab6_a
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.Button buttonRotate;
-        private System.Windows.Forms.ComboBox comboBoxPlane;
-        private System.Windows.Forms.TextBox textBox4;
-        private System.Windows.Forms.Button buttonScale;
-        private System.Windows.Forms.TextBox textBox11;
-        private System.Windows.Forms.TextBox textBox12;
-        private System.Windows.Forms.TextBox textBox13;
-        private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.Label label6;
-        private System.Windows.Forms.Label label7;
         private System.Windows.Forms.Button buttonMirror;
-        private System.Windows.Forms.Button buttonRotateRound;
-        private System.Windows.Forms.TextBox textBox5;
-        private System.Windows.Forms.TextBox textBox6;
-        private System.Windows.Forms.Label label11;
-        private System.Windows.Forms.Label label12;
-        private System.Windows.Forms.Label label13;
-        private System.Windows.Forms.Label label14;
-        private System.Windows.Forms.TextBox textBox7;
-        private System.Windows.Forms.Label label15;
-        private System.Windows.Forms.ComboBox comboBoxTypeProection;
-        private System.Windows.Forms.Label label19;
         private System.Windows.Forms.Label label20;
-        private System.Windows.Forms.Label label21;
         private System.Windows.Forms.ComboBox comboBoxAxis;
-        private System.Windows.Forms.TextBox textBox8;
-        private System.Windows.Forms.TextBox textBox9;
-        private System.Windows.Forms.TextBox textBox10;
-        private System.Windows.Forms.Label label8;
-        private System.Windows.Forms.Label label9;
-        private System.Windows.Forms.Label label10;
-        private System.Windows.Forms.Label label16;
-        private System.Windows.Forms.TextBox textBox14;
+        private System.Windows.Forms.RadioButton axonometric_button;
+        private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.RadioButton perpective_button;
+        private System.Windows.Forms.RadioButton radioButton3;
+        private System.Windows.Forms.RadioButton radioButton2;
+        private System.Windows.Forms.RadioButton radioButton1;
+        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.TextBox angleRotate;
+        private System.Windows.Forms.RadioButton xRotate;
+        private System.Windows.Forms.RadioButton zRotate;
+        private System.Windows.Forms.RadioButton yRotate;
+        private System.Windows.Forms.GroupBox groupBox2;
     }
 }
 
