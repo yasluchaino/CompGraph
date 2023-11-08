@@ -11,6 +11,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using static Lab6.Form1;
+using static System.Windows.Forms.AxHost;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace Lab6
@@ -684,8 +685,28 @@ namespace Lab6
 
         }
 
+        private void button1_Click_1(object sender, EventArgs e)
+        {
+            double x_scale = Convert.ToDouble(xScale.Text);
+            double y_scale = Convert.ToDouble(yScale.Text);
+            double z_scale = Convert.ToDouble(zScale.Text);
+
+            matrixScale[0, 0] = x_scale;
+            matrixScale[1, 1] = y_scale;
+            matrixScale[2, 2] = z_scale;
+
+            for (int i = 0; i < list_points.Count; i++)
+            {
+                double[,] matrixPoint = new double[1, 4] { { list_points[i].x, list_points[i].y, list_points[i].z, 1.0 } };
+
+                var res = (multipleMatrix(matrixPoint, matrixScale));
+
+                list_points[i] = new PointD(res[0, 0], res[0, 1], res[0, 2]);
+            }
+
+            redraw();
 
 
-
+        }
     }
 }

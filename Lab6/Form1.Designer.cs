@@ -66,6 +66,13 @@ namespace Lab6
             this.y2_text = new System.Windows.Forms.TextBox();
             this.x2_text = new System.Windows.Forms.TextBox();
             this.angle_text = new System.Windows.Forms.TextBox();
+            this.button1 = new System.Windows.Forms.Button();
+            this.label10 = new System.Windows.Forms.Label();
+            this.label11 = new System.Windows.Forms.Label();
+            this.label12 = new System.Windows.Forms.Label();
+            this.zScale = new System.Windows.Forms.TextBox();
+            this.yScale = new System.Windows.Forms.TextBox();
+            this.xScale = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -452,11 +459,86 @@ namespace Lab6
             this.angle_text.TabIndex = 46;
             this.angle_text.Text = "0";
             // 
+            // button1
+            // 
+            this.button1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.button1.Location = new System.Drawing.Point(824, 443);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(138, 60);
+            this.button1.TabIndex = 47;
+            this.button1.Text = "Масштабировать ";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click_1);
+            // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.label10.Location = new System.Drawing.Point(1137, 445);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(22, 25);
+            this.label10.TabIndex = 51;
+            this.label10.Text = "z";
+            // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.label11.Location = new System.Drawing.Point(1056, 445);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(22, 25);
+            this.label11.TabIndex = 52;
+            this.label11.Text = "y";
+            // 
+            // label12
+            // 
+            this.label12.AutoSize = true;
+            this.label12.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.label12.Location = new System.Drawing.Point(975, 445);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(22, 25);
+            this.label12.TabIndex = 53;
+            this.label12.Text = "x";
+            // 
+            // zScale
+            // 
+            this.zScale.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.zScale.Location = new System.Drawing.Point(1142, 473);
+            this.zScale.Name = "zScale";
+            this.zScale.Size = new System.Drawing.Size(75, 30);
+            this.zScale.TabIndex = 50;
+            this.zScale.Text = "0";
+            // 
+            // yScale
+            // 
+            this.yScale.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.yScale.Location = new System.Drawing.Point(1061, 473);
+            this.yScale.Name = "yScale";
+            this.yScale.Size = new System.Drawing.Size(75, 30);
+            this.yScale.TabIndex = 49;
+            this.yScale.Text = "0";
+            // 
+            // xScale
+            // 
+            this.xScale.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.xScale.Location = new System.Drawing.Point(980, 473);
+            this.xScale.Name = "xScale";
+            this.xScale.Size = new System.Drawing.Size(75, 30);
+            this.xScale.TabIndex = 48;
+            this.xScale.Text = "0";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1279, 633);
+            this.Controls.Add(this.label10);
+            this.Controls.Add(this.label11);
+            this.Controls.Add(this.label12);
+            this.Controls.Add(this.zScale);
+            this.Controls.Add(this.yScale);
+            this.Controls.Add(this.xScale);
+            this.Controls.Add(this.button1);
             this.Controls.Add(this.angle_text);
             this.Controls.Add(this.label7);
             this.Controls.Add(this.label8);
@@ -539,6 +621,13 @@ namespace Lab6
         private System.Windows.Forms.TextBox y2_text;
         private System.Windows.Forms.TextBox x2_text;
         private System.Windows.Forms.TextBox angle_text;
+        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Label label10;
+        private System.Windows.Forms.Label label11;
+        private System.Windows.Forms.Label label12;
+        private System.Windows.Forms.TextBox zScale;
+        private System.Windows.Forms.TextBox yScale;
+        private System.Windows.Forms.TextBox xScale;
     }
 }
 
