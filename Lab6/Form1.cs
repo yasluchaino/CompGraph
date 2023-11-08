@@ -5,10 +5,12 @@ using System.Data;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Linq;
+using System.Reflection;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static Lab6.Form1;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace Lab6
@@ -94,6 +96,7 @@ namespace Lab6
         double[,] matrixAxonometric;
         double[,] matrixPerspective;
         double[,] matrixMirror;
+        double[,] matrixRotateLine;
         private void InitializeMatrices()
         {
             // Инициализация матрицы смещения (переноса)
@@ -141,15 +144,6 @@ namespace Lab6
         { 0, 0, 0, 1 }
             };
 
-            // Инициализация матрицы текущего поворота (по умолчанию это матрица единичная)
-            currentRotate = new double[4, 4]
-            {
-        { 1, 0, 0, 0 },
-        { 0, 1, 0, 0 },
-        { 0, 0, 1, 0 },
-        { 0, 0, 0, 1 }
-            };
-
             // Инициализация матрицы результата (по умолчанию это матрица единичная)
             matrixResult = new double[4, 4]
             {
@@ -186,6 +180,13 @@ namespace Lab6
         { 0, 0, 1, 0 },
         { 0, 0, 0, 1 }
             };
+
+
+            matrixRotateLine = new double[4, 4] {  
+                { 0, 0, 0, 0 },
+                { 0, 0, 0, 0 },
+                { 0, 0, 0, 0 },
+                { 0, 0, 0, 0 } };
         }
         double[,] multipleMatrix(double[,] a, double[,] b)
         {
@@ -579,6 +580,8 @@ namespace Lab6
             }
           
         }
+
+        //поворот вокруг центра
         private void button1_Click(object sender, EventArgs e)
         {           
             if (angleRotate.Text.Length < 1)
@@ -592,20 +595,22 @@ namespace Lab6
                 currentRotate[2, 1] = -Math.Sin(teta * Math.PI / 180.0);
                 currentRotate[2, 2] = Math.Cos(teta * Math.PI / 180.0);
             }
-             if(yRotate.Checked) { 
-                    currentRotate = matrixRotateY;
-                    currentRotate[0, 0] = Math.Cos(teta * Math.PI / 180.0);
-                    currentRotate[0, 2] = -Math.Sin(teta * Math.PI / 180.0);
-                    currentRotate[2, 0] = Math.Sin(teta * Math.PI / 180.0);
-                    currentRotate[2, 2] = Math.Cos(teta * Math.PI / 180.0);
-                   }
-             if(zRotate.Checked) { 
-                    currentRotate = matrixRotateZ;
-                    currentRotate[0, 0] = Math.Cos(teta * Math.PI / 180.0);
-                    currentRotate[0, 1] = Math.Sin(teta * Math.PI / 180.0);
-                    currentRotate[1, 0] = -Math.Sin(teta * Math.PI / 180.0);
-                    currentRotate[1, 1] = Math.Cos(teta * Math.PI / 180.0);
-                
+            else if (yRotate.Checked)
+            {
+                currentRotate = matrixRotateY;
+                currentRotate[0, 0] = Math.Cos(teta * Math.PI / 180.0);
+                currentRotate[0, 2] = -Math.Sin(teta * Math.PI / 180.0);
+                currentRotate[2, 0] = Math.Sin(teta * Math.PI / 180.0);
+                currentRotate[2, 2] = Math.Cos(teta * Math.PI / 180.0);
+            }
+            else if (zRotate.Checked)
+            {
+                currentRotate = matrixRotateZ;
+                currentRotate[0, 0] = Math.Cos(teta * Math.PI / 180.0);
+                currentRotate[0, 1] = Math.Sin(teta * Math.PI / 180.0);
+                currentRotate[1, 0] = -Math.Sin(teta * Math.PI / 180.0);
+                currentRotate[1, 1] = Math.Cos(teta * Math.PI / 180.0);
+
             }
             for (int i = 0; i < list_points.Count; i++)
             {
@@ -623,5 +628,64 @@ namespace Lab6
         {
 
         }
+
+        private void rotate_around_line_Click(object sender, EventArgs e)
+        {
+
+            double angle = Convert.ToDouble(angle_text.Text);
+            double x1 = Convert.ToDouble(x1_text.Text);
+            double y1 = Convert.ToDouble(y1_text.Text);
+            double z1 = Convert.ToDouble(z1_text.Text);
+            double x2 = Convert.ToDouble(x2_text.Text);
+            double y2 = Convert.ToDouble(y2_text.Text);
+            double z2 = Convert.ToDouble(z2_text.Text);
+            double Sin = Math.Sin(angle);
+            double Cos = Math.Cos(angle);
+
+            PointD vector = new PointD(x2 - x1, y2-y1, z2-z1);
+            double length = Math.Sqrt((x2-x1) * (x2-x1) + (y2-y1) * (y2-y1) + (z2-z1) * (z2-z1));
+
+            double l = (double)(vector.x / length);
+            double m = (double)(vector.y / length);
+            double n = (double)(vector.z / length);
+
+            matrixRotateLine[0, 0] = (double)(l * l + Cos * (1 - l * l));
+            matrixRotateLine[0, 1] = (double)(l * (1 - Cos) * m + n * Sin);
+            matrixRotateLine[0, 2] = (double)(l * (1 - Cos) * n - m * Sin);
+            matrixRotateLine[0, 3] = 0;
+
+            matrixRotateLine[1, 0] = (double)(l * (1 - Cos) * m - n * Sin);
+            matrixRotateLine[1, 1] = (double)(m * m + Cos * (1 - m * m));
+            matrixRotateLine[1, 2] = (double)(m * (1 - Cos) * n + l * Sin);
+            matrixRotateLine[1, 3] = 0;
+
+            matrixRotateLine[2, 0] = (double)(l * (1 - Cos) * n + m * Sin);
+            matrixRotateLine[2, 1] = (double)(m * (1 - Cos) * n - l * Sin);
+            matrixRotateLine[2, 2] = (double)(n * n + Cos * (1 - n * n));
+            matrixRotateLine[2, 3] = 0;
+
+            matrixRotateLine[3, 0] = 0;
+            matrixRotateLine[3, 1] = 0;
+            matrixRotateLine[3, 2] = 0;
+            matrixRotateLine[3, 3] = 1;
+
+
+            for (int i = 0; i < list_points.Count; i++)
+            {
+                double[,] matrixPoint = new double[1, 4] { { list_points[i].x, list_points[i].y, list_points[i].z, 1.0 } };
+
+                var res = (multipleMatrix(matrixPoint, matrixRotateLine));
+
+                list_points[i] = new PointD(res[0, 0], res[0, 1], res[0, 2]);
+            }
+
+            redraw();
+
+
+        }
+
+
+
+
     }
 }
