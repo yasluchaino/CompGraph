@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Drawing.Drawing2D;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Security.Cryptography;
@@ -740,6 +741,99 @@ namespace Lab6
 
             redraw();
 
+
+        }
+
+        private void save_button_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void load_button_Click(object sender, EventArgs e)
+        {
+            list_lines.Clear();
+            list_points.Clear();
+            list_pols.Clear();
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Filter = "Text files (*.txt)|*.txt|All files (*.*)|*.*";
+
+            if (openFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                string filePath = openFileDialog.FileName;
+
+                try
+                {
+                    string fileContent = File.ReadAllText(filePath);
+                    string[] lines = fileContent.Split(new[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
+
+                    bool readingPoints = false;
+                    bool readingFaces = false;
+                    List<PointD> points = new List<PointD>();
+                    List<Line> liness = new List<Line>();
+                    List<Polygon> polygons = new List<Polygon>();
+
+                    foreach (string line in lines)
+                    {
+                        if (line == "POINTS")
+                        {
+                            readingPoints = true;
+                            readingFaces = false;
+                            continue;
+                        }
+                        else if (line == "FACES")
+                        {
+                            readingPoints = false;
+                            readingFaces = true;
+                            continue;
+                        }
+
+                        string[] values = line.Split(' ');
+                        textBox4.Text = values[0];
+                        if (readingPoints && values.Length >= 3)
+                        {
+                            double x, y, z;
+                            if (double.TryParse(values[0], out x) && double.TryParse(values[1], out y) && double.TryParse(values[2], out z))
+                            {
+                                list_points.Add(new PointD(50*x, 50*y, 50*z));
+                            }
+                        }
+                       
+
+                        
+                        else if (readingFaces && values.Length >= 2)
+                        {
+                            int a, b, c;
+                            if (int.TryParse(values[0], out a) && int.TryParse(values[1], out b) && int.TryParse(values[2], out c))
+                            {
+                                list_lines.Add(new Line(a, b));
+                                list_lines.Add(new Line(b, c));
+                                list_lines.Add(new Line(c, a));
+
+                                List<Line> faceLines = new List<Line>
+        {
+            new Line(a, b),
+            new Line(b, c),
+            new Line(c, a)
+        };
+                                list_pols.Add(new Polygon(faceLines));
+                            }
+                        }
+                    }
+                   
+                    list_lines.AddRange(liness);
+
+                    redraw();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error reading the file: " + ex.Message);
+                }
+            }
+
+        }
+
+        private void textBox4_TextChanged(object sender, EventArgs e)
+        {
 
         }
     }

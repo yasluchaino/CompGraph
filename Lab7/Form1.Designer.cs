@@ -74,6 +74,9 @@ namespace Lab6
             this.rotatez = new System.Windows.Forms.TextBox();
             this.rotatey = new System.Windows.Forms.TextBox();
             this.rotatex = new System.Windows.Forms.TextBox();
+            this.save_button = new System.Windows.Forms.Button();
+            this.load_button = new System.Windows.Forms.Button();
+            this.textBox4 = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
@@ -530,11 +533,44 @@ namespace Lab6
             this.rotatex.TabIndex = 54;
             this.rotatex.Text = "0";
             // 
+            // save_button
+            // 
+            this.save_button.Cursor = System.Windows.Forms.Cursors.Default;
+            this.save_button.Location = new System.Drawing.Point(1431, 47);
+            this.save_button.Name = "save_button";
+            this.save_button.Size = new System.Drawing.Size(125, 42);
+            this.save_button.TabIndex = 60;
+            this.save_button.Text = "Сохранить";
+            this.save_button.UseVisualStyleBackColor = true;
+            this.save_button.Click += new System.EventHandler(this.save_button_Click);
+            // 
+            // load_button
+            // 
+            this.load_button.Cursor = System.Windows.Forms.Cursors.Default;
+            this.load_button.Location = new System.Drawing.Point(1584, 47);
+            this.load_button.Name = "load_button";
+            this.load_button.Size = new System.Drawing.Size(125, 42);
+            this.load_button.TabIndex = 61;
+            this.load_button.Text = "Загрузить";
+            this.load_button.UseVisualStyleBackColor = true;
+            this.load_button.Click += new System.EventHandler(this.load_button_Click);
+            // 
+            // textBox4
+            // 
+            this.textBox4.Location = new System.Drawing.Point(1497, 147);
+            this.textBox4.Name = "textBox4";
+            this.textBox4.Size = new System.Drawing.Size(100, 22);
+            this.textBox4.TabIndex = 62;
+            this.textBox4.TextChanged += new System.EventHandler(this.textBox4_TextChanged);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1423, 747);
+            this.ClientSize = new System.Drawing.Size(1737, 747);
+            this.Controls.Add(this.textBox4);
+            this.Controls.Add(this.load_button);
+            this.Controls.Add(this.save_button);
             this.Controls.Add(this.label13);
             this.Controls.Add(this.label14);
             this.Controls.Add(this.label15);
@@ -634,6 +670,9 @@ namespace Lab6
         private System.Windows.Forms.TextBox rotatez;
         private System.Windows.Forms.TextBox rotatey;
         private System.Windows.Forms.TextBox rotatex;
+        private System.Windows.Forms.Button save_button;
+        private System.Windows.Forms.Button load_button;
+        private System.Windows.Forms.TextBox textBox4;
     }
 }
 
