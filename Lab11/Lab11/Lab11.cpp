@@ -11,7 +11,7 @@ GLuint Program;
 GLint Attrib_vertex;
 // ID Vertex Buffer Object
 GLuint VBO;
-
+// ID uniform
 GLuint location;
 
 struct Vertex {
@@ -175,13 +175,13 @@ void Draw() {
     glEnableVertexAttribArray(Attrib_vertex); // Включаем массив атрибутов
     glBindBuffer(GL_ARRAY_BUFFER, VBO); // Подключаем VBO
     glVertexAttribPointer(Attrib_vertex, 2, GL_FLOAT, GL_FALSE, 0, 0); // Указывая pointer 0 при подключенном буфере, мы указываем что данные в VBO
-    
+    glBindBuffer(GL_ARRAY_BUFFER, 0); // Отключаем VBO
+
     float color[4] = { 0.5f, 0.0f, 1.0f, 1.0f }; // Фиолетовый
     location = glGetUniformLocation(Program, "color");
     glUniform4f(location, color[0], color[1], color[2], color[3]);
     
-    glBindBuffer(GL_ARRAY_BUFFER, 0); // Отключаем VBO
-
+    
     glDrawArrays(GL_QUADS, 0, 4); // четырёхугольник
     //glDrawArrays(GL_POLYGON, 0, 5); // правильный пятиугольник
     //glDrawArrays(GL_TRIANGLE_FAN, 0, 9); // веер
