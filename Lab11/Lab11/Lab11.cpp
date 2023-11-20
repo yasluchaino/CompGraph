@@ -11,6 +11,8 @@ GLuint Program;
 GLint Attrib_vertex;
 // ID Vertex Buffer Object
 GLuint VBO;
+// ID uniform
+GLuint location;
 
 struct Vertex {
     GLfloat x;
@@ -25,7 +27,7 @@ void main() {
 gl_Position = vec4(coord, 0.0, 1.0);
 }
 )";
-
+// Исходный код фрагментного шейдера
 const char* FragShaderSource = R"(
 #version 330 core
 out vec4 color;
@@ -35,6 +37,13 @@ color = vec4(1.0, 0.75, 0.79,1);
 }
 )";
 
+const char* FragShaderSourceUnifColor = R"(
+#version 330 core
+uniform vec4 color;
+void main() {
+gl_FragColor = color;
+}
+)";
 
 
 
@@ -123,7 +132,7 @@ void InitShader() {
     // Создаем фрагментный шейдер
     GLuint fShader = glCreateShader(GL_FRAGMENT_SHADER);
     // Передаем исходный код
-    glShaderSource(fShader, 1, &FragShaderSource, NULL);
+    glShaderSource(fShader, 1, &FragShaderSourceUnifColor, NULL);
     // Компилируем шейдер
     glCompileShader(fShader);
     std::cout << "fragment shader \n";
@@ -168,6 +177,11 @@ void Draw() {
     glVertexAttribPointer(Attrib_vertex, 2, GL_FLOAT, GL_FALSE, 0, 0); // Указывая pointer 0 при подключенном буфере, мы указываем что данные в VBO
     glBindBuffer(GL_ARRAY_BUFFER, 0); // Отключаем VBO
 
+    float color[4] = { 0.5f, 0.0f, 1.0f, 1.0f }; // Фиолетовый
+    location = glGetUniformLocation(Program, "color");
+    glUniform4f(location, color[0], color[1], color[2], color[3]);
+    
+    
     glDrawArrays(GL_QUADS, 0, 4); // четырёхугольник
     //glDrawArrays(GL_POLYGON, 0, 5); // правильный пятиугольник
     //glDrawArrays(GL_TRIANGLE_FAN, 0, 9); // веер

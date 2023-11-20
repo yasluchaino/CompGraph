@@ -1,17 +1,17 @@
-п»ї
+
 namespace Lab6
 {
     partial class Form1
     {
         /// <summary>
-        /// РћР±СЏР·Р°С‚РµР»СЊРЅР°СЏ РїРµСЂРµРјРµРЅРЅР°СЏ РєРѕРЅСЃС‚СЂСѓРєС‚РѕСЂР°.
+        /// Обязательная переменная конструктора.
         /// </summary>
         private System.ComponentModel.IContainer components = null;
 
         /// <summary>
-        /// РћСЃРІРѕР±РѕРґРёС‚СЊ РІСЃРµ РёСЃРїРѕР»СЊР·СѓРµРјС‹Рµ СЂРµСЃСѓСЂСЃС‹.
+        /// Освободить все используемые ресурсы.
         /// </summary>
-        /// <param name="disposing">РёСЃС‚РёРЅРЅРѕ, РµСЃР»Рё СѓРїСЂР°РІР»СЏРµРјС‹Р№ СЂРµСЃСѓСЂСЃ РґРѕР»Р¶РµРЅ Р±С‹С‚СЊ СѓРґР°Р»РµРЅ; РёРЅР°С‡Рµ Р»РѕР¶РЅРѕ.</param>
+        /// <param name="disposing">истинно, если управляемый ресурс должен быть удален; иначе ложно.</param>
         protected override void Dispose(bool disposing)
         {
             if (disposing && (components != null))
@@ -21,11 +21,11 @@ namespace Lab6
             base.Dispose(disposing);
         }
 
-        #region РљРѕРґ, Р°РІС‚РѕРјР°С‚РёС‡РµСЃРєРё СЃРѕР·РґР°РЅРЅС‹Р№ РєРѕРЅСЃС‚СЂСѓРєС‚РѕСЂРѕРј С„РѕСЂРј Windows
+        #region Код, автоматически созданный конструктором форм Windows
 
         /// <summary>
-        /// РўСЂРµР±СѓРµРјС‹Р№ РјРµС‚РѕРґ РґР»СЏ РїРѕРґРґРµСЂР¶РєРё РєРѕРЅСЃС‚СЂСѓРєС‚РѕСЂР° вЂ” РЅРµ РёР·РјРµРЅСЏР№С‚Рµ 
-        /// СЃРѕРґРµСЂР¶РёРјРѕРµ СЌС‚РѕРіРѕ РјРµС‚РѕРґР° СЃ РїРѕРјРѕС‰СЊСЋ СЂРµРґР°РєС‚РѕСЂР° РєРѕРґР°.
+        /// Требуемый метод для поддержки конструктора — не изменяйте 
+        /// содержимое этого метода с помощью редактора кода.
         /// </summary>
         private void InitializeComponent()
         {
@@ -93,7 +93,7 @@ namespace Lab6
             this.buttonTranslite.Name = "buttonTranslite";
             this.buttonTranslite.Size = new System.Drawing.Size(138, 48);
             this.buttonTranslite.TabIndex = 2;
-            this.buttonTranslite.Text = "РЎРјРµСЃС‚РёС‚СЊ";
+            this.buttonTranslite.Text = "Сместить";
             this.buttonTranslite.UseVisualStyleBackColor = true;
             this.buttonTranslite.Click += new System.EventHandler(this.buttonTranslite_Click);
             // 
@@ -161,7 +161,7 @@ namespace Lab6
             this.buttonMirror.Name = "buttonMirror";
             this.buttonMirror.Size = new System.Drawing.Size(138, 67);
             this.buttonMirror.TabIndex = 12;
-            this.buttonMirror.Text = "РћС‚СЂР°Р·РёС‚СЊ";
+            this.buttonMirror.Text = "Отразить";
             this.buttonMirror.UseVisualStyleBackColor = true;
             this.buttonMirror.Click += new System.EventHandler(this.buttonMirror_Click);
             // 
@@ -180,9 +180,9 @@ namespace Lab6
             this.comboBoxAxis.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.comboBoxAxis.FormattingEnabled = true;
             this.comboBoxAxis.Items.AddRange(new object[] {
-            "РїРѕ XY",
-            "РїРѕ XZ",
-            "РїРѕ YZ"});
+            "по XY",
+            "по XZ",
+            "по YZ"});
             this.comboBoxAxis.Location = new System.Drawing.Point(196, 587);
             this.comboBoxAxis.Name = "comboBoxAxis";
             this.comboBoxAxis.Size = new System.Drawing.Size(154, 33);
@@ -197,7 +197,7 @@ namespace Lab6
             this.axonometric_button.Size = new System.Drawing.Size(160, 20);
             this.axonometric_button.TabIndex = 0;
             this.axonometric_button.TabStop = true;
-            this.axonometric_button.Text = "РђРєСЃРѕРЅРѕРјРµС‚СЂРёС‡РµСЃРєР°СЏ";
+            this.axonometric_button.Text = "Аксонометрическая";
             this.axonometric_button.UseVisualStyleBackColor = true;
             this.axonometric_button.CheckedChanged += new System.EventHandler(this.radioButtons_CheckedChanged);
             // 
@@ -205,71 +205,59 @@ namespace Lab6
             // 
             this.groupBox1.Controls.Add(this.perpective_button);
             this.groupBox1.Controls.Add(this.axonometric_button);
-            this.groupBox1.Location = new System.Drawing.Point(263, 47);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(187, 75);
-            this.groupBox1.TabIndex = 26;
-            this.groupBox1.TabStop = false;
+            // angleRotate
             // 
-            // perpective_button
+            this.angleRotate.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.angleRotate.Location = new System.Drawing.Point(1135, 255);
+            this.angleRotate.Name = "angleRotate";
+            this.angleRotate.Size = new System.Drawing.Size(75, 30);
+            this.angleRotate.TabIndex = 31;
+            this.angleRotate.Text = "0";
             // 
-            this.perpective_button.AutoSize = true;
-            this.perpective_button.Location = new System.Drawing.Point(16, 41);
-            this.perpective_button.Name = "perpective_button";
-            this.perpective_button.Size = new System.Drawing.Size(130, 20);
-            this.perpective_button.TabIndex = 1;
-            this.perpective_button.TabStop = true;
-            this.perpective_button.Text = "РџРµСЂСЃРїРµРєС‚РёРІРЅР°СЏ";
-            this.perpective_button.UseVisualStyleBackColor = true;
-            this.perpective_button.CheckedChanged += new System.EventHandler(this.radioButtons_CheckedChanged);
+            // xRotate
             // 
-            // radioButton1
+            this.xRotate.AutoSize = true;
+            this.xRotate.Location = new System.Drawing.Point(13, 14);
+            this.xRotate.Name = "xRotate";
+            this.xRotate.Size = new System.Drawing.Size(36, 20);
+            this.xRotate.TabIndex = 28;
+            this.xRotate.TabStop = true;
+            this.xRotate.Text = "X";
+            this.xRotate.UseVisualStyleBackColor = true;
             // 
-            this.radioButton1.AutoSize = true;
-            this.radioButton1.Location = new System.Drawing.Point(29, 36);
-            this.radioButton1.Name = "radioButton1";
-            this.radioButton1.Size = new System.Drawing.Size(52, 20);
-            this.radioButton1.TabIndex = 0;
-            this.radioButton1.TabStop = true;
-            this.radioButton1.Text = "РљСѓР±";
-            this.radioButton1.UseVisualStyleBackColor = true;
-            this.radioButton1.CheckedChanged += new System.EventHandler(this.radioButton2_CheckedChanged);
+            // zRotate
             // 
-            // radioButton2
+            this.zRotate.AutoSize = true;
+            this.zRotate.Location = new System.Drawing.Point(117, 14);
+            this.zRotate.Name = "zRotate";
+            this.zRotate.Size = new System.Drawing.Size(36, 20);
+            this.zRotate.TabIndex = 29;
+            this.zRotate.TabStop = true;
+            this.zRotate.Text = "Z";
+            this.zRotate.UseVisualStyleBackColor = true;
             // 
-            this.radioButton2.AutoSize = true;
-            this.radioButton2.Location = new System.Drawing.Point(29, 62);
-            this.radioButton2.Name = "radioButton2";
-            this.radioButton2.Size = new System.Drawing.Size(92, 20);
-            this.radioButton2.TabIndex = 1;
-            this.radioButton2.TabStop = true;
-            this.radioButton2.Text = "РўРµС‚СЂР°СЌРґСЂ";
-            this.radioButton2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.radioButton2.UseVisualStyleBackColor = true;
-            this.radioButton2.CheckedChanged += new System.EventHandler(this.radioButton2_CheckedChanged);
+            // yRotate
             // 
-            // radioButton3
+            this.yRotate.AutoSize = true;
+            this.yRotate.Location = new System.Drawing.Point(65, 14);
+            this.yRotate.Name = "yRotate";
+            this.yRotate.Size = new System.Drawing.Size(37, 20);
+            this.yRotate.TabIndex = 30;
+            this.yRotate.TabStop = true;
+            this.yRotate.Text = "Y";
+            this.yRotate.UseVisualStyleBackColor = true;
             // 
-            this.radioButton3.AutoSize = true;
-            this.radioButton3.Location = new System.Drawing.Point(29, 88);
-            this.radioButton3.Name = "radioButton3";
-            this.radioButton3.Size = new System.Drawing.Size(84, 20);
-            this.radioButton3.TabIndex = 2;
-            this.radioButton3.TabStop = true;
-            this.radioButton3.Text = "РћРєС‚Р°СЌРґСЂ";
-            this.radioButton3.UseVisualStyleBackColor = true;
-            this.radioButton3.CheckedChanged += new System.EventHandler(this.radioButton2_CheckedChanged);
+            // groupBox2
             // 
-            // rotate
-            // 
-            this.rotate.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.rotate.Location = new System.Drawing.Point(12, 232);
-            this.rotate.Name = "rotate";
-            this.rotate.Size = new System.Drawing.Size(138, 45);
-            this.rotate.TabIndex = 27;
-            this.rotate.Text = "РџРѕРІРµСЂРЅСѓС‚СЊ";
-            this.rotate.UseVisualStyleBackColor = true;
-            this.rotate.Click += new System.EventHandler(this.button1_Click);
+            this.groupBox2.Controls.Add(this.yRotate);
+            this.groupBox2.Controls.Add(this.zRotate);
+            this.groupBox2.Controls.Add(this.xRotate);
+            this.groupBox2.Location = new System.Drawing.Point(968, 248);
+            this.groupBox2.Name = "groupBox2";
+            this.groupBox2.Size = new System.Drawing.Size(159, 43);
+            this.groupBox2.TabIndex = 32;
+            this.groupBox2.TabStop = false;
+            this.groupBox2.Enter += new System.EventHandler(this.radioButton2_CheckedChanged);
             // 
             // rotate_around_line
             // 
@@ -278,7 +266,7 @@ namespace Lab6
             this.rotate_around_line.Name = "rotate_around_line";
             this.rotate_around_line.Size = new System.Drawing.Size(138, 45);
             this.rotate_around_line.TabIndex = 33;
-            this.rotate_around_line.Text = "РџРѕРІРµСЂРЅСѓС‚СЊ";
+            this.rotate_around_line.Text = "Повернуть";
             this.rotate_around_line.UseVisualStyleBackColor = true;
             this.rotate_around_line.Click += new System.EventHandler(this.rotate_around_line_Click);
             // 
@@ -412,7 +400,7 @@ namespace Lab6
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(138, 60);
             this.button1.TabIndex = 47;
-            this.button1.Text = "РњР°СЃС€С‚Р°Р±РёСЂРѕРІР°С‚СЊ ";
+            this.button1.Text = "Масштабировать ";
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click_1);
             // 
