@@ -29,11 +29,11 @@ namespace Lab6
             list_points = new List<PointD>();
             list_lines = new List<Line>();
             list_pols = new List<Polygon>();
-            
+
             InitializeMatrices();
             axonometric_button.Checked = true;
             redraw();
-           
+
         }
 
 
@@ -54,6 +54,7 @@ namespace Lab6
 
         public class Line
         {
+
             public int a;
             public int b;
 
@@ -63,9 +64,10 @@ namespace Lab6
                 b = bb;
             }
         }
-        
+
         public class Polygon
         {
+
             public List<Line> lines;
 
             public Polygon(List<Line> l)
@@ -76,6 +78,7 @@ namespace Lab6
 
         public class Polyhedra
         {
+
             public List<Polygon> polygons;
 
             public Polyhedra(List<Polygon> l)
@@ -84,18 +87,18 @@ namespace Lab6
             }
         }
 
-                                                                                      
+
         double[,] matrixTranslation;
-        double[,] matrixScale ;
+        double[,] matrixScale;
         double[,] matrixRotateX;
         double[,] matrixRotateZ;
-        double[,] matrixRotateY ;
+        double[,] matrixRotateY;
         double[,] currentRotate;
+        double[,] matrixResult;
         double[,] matrixAxonometric;
         double[,] matrixPerspective;
         double[,] matrixMirror;
         double[,] matrixRotateLine;
-
         private void InitializeMatrices()
         {
             // Инициализация матрицы смещения (переноса)
@@ -143,6 +146,15 @@ namespace Lab6
         { 0, 0, 0, 1 }
             };
 
+            // Инициализация матрицы результата (по умолчанию это матрица единичная)
+            matrixResult = new double[4, 4]
+            {
+        { 1, 0, 0, 0 },
+        { 0, 1, 0, 0 },
+        { 0, 0, 1, 0 },
+        { 0, 0, 0, 1 }
+            };
+
             // Инициализация матрицы аксонометрической проекции
             matrixAxonometric = new double[4, 4]
             {
@@ -151,16 +163,18 @@ namespace Lab6
         { 0, 0, 0, 0 },
         { 0, 0, 0, 1 }
             };
-       
+
+
             matrixPerspective = new double[4, 4]
             {
-    { 0, 0, 0, 0 },
-    { 0, 0, 0, 0 },
-    { 0, 0, 0,0 },
-    { 0, 0, 0, 0 }
+    { 1, 0, 0, 0 },
+    { 0, 1, 0, 0 },
+    { 0, 0, 0,-0.1},
+    { 0, 0, 0, 1 }
             };
 
-            // Инициализация матрицы отражения
+
+            // Инициализация матрицы отражения (зеркальной проекции)
             matrixMirror = new double[4, 4]
             {
         { 1, 0, 0, 0 },
@@ -169,7 +183,8 @@ namespace Lab6
         { 0, 0, 0, 1 }
             };
 
-            matrixRotateLine = new double[4, 4] {  
+
+            matrixRotateLine = new double[4, 4] {
                 { 0, 0, 0, 0 },
                 { 0, 0, 0, 0 },
                 { 0, 0, 0, 0 },
@@ -194,20 +209,19 @@ namespace Lab6
 
         private void DrawLines(List<Line> lines, List<PointD> points, Graphics g)
         {
-
             for (int i = 0; i < lines.Count; i++)
             {
-                Point pointA = new Point(pictureBox1.Width / 2 + (int)(points[lines[i].a].x), pictureBox1.Height / 2 + (int)(points[lines[i].a].y));
-                Point pointB = new Point(pictureBox1.Width / 2 + (int)(points[lines[i].b].x), pictureBox1.Height / 2 + (int)(points[lines[i].b].y));               
-
-                // Для соединения точек линией
-                g.DrawLine(new Pen(Color.Black, 2.0f), pointA, pointB);
+                Point a = new Point(pictureBox1.Width / 2 + (int)(points[lines[i].a].x), pictureBox1.Height / 2 + (int)(points[lines[i].a].y));
+                Point b = new Point(pictureBox1.Width / 2 + (int)(points[lines[i].b].x), pictureBox1.Height / 2 + (int)(points[lines[i].b].y));
+                g.DrawLine(new Pen(Color.Black, 2.0f), a, b);
             }
         }
 
         void Hexahedron()
         {
-            pictureBox1.Refresh(); 
+
+            pictureBox1.Refresh(); // Очистка рисунка
+
             List<PointD> cubePoints = new List<PointD>();
             cubePoints.AddRange(new List<PointD>()
     {
@@ -221,7 +235,7 @@ namespace Lab6
         new PointD(-1, -1, -1)
     });
 
-            list_points = cubePoints; 
+            list_points = cubePoints; // Сохранение вершин куба
 
             List<Line> cubeLines = new List<Line>()
     {
@@ -240,11 +254,11 @@ namespace Lab6
     };
 
             list_lines.Clear();
-            list_lines = cubeLines; 
+            list_lines = cubeLines; // Сохранение рёбер куба
 
-            list_pols.Clear();
+            list_pols.Clear(); // Очистка списка полигонов
 
-            
+            // Определение граней куба (полигонов)
             Polygon cubePolygon = new Polygon(new List<Line>() { cubeLines[0], cubeLines[1], cubeLines[2], cubeLines[3] });
             list_pols.Add(cubePolygon);
 
@@ -258,17 +272,17 @@ namespace Lab6
 
             for (int i = 0; i < list_points.Count(); i++)
             {
-                list_points[i].x *= 50; 
+                list_points[i].x *= 50; // Масштабирование координат
                 list_points[i].y *= 50;
                 list_points[i].z *= 50;
             }
 
-            DrawLines(list_lines, list_points, g); 
+            DrawLines(list_lines, list_points, g); // Отрисовка куба
 
         }
         void Tetrahedron()
         {
-            pictureBox1.Refresh(); 
+            pictureBox1.Refresh(); // Очистка рисунка
 
             List<PointD> tetraPoints = new List<PointD>();
             tetraPoints.AddRange(new List<PointD>()
@@ -278,7 +292,8 @@ namespace Lab6
         new PointD(-1, 1, -1),
         new PointD(-1, -1, 1)
     });
-            list_points = tetraPoints;
+
+            list_points = tetraPoints; // Сохранение вершин тетраэдра
 
             List<Line> tetraLines = new List<Line>()
     {
@@ -291,9 +306,10 @@ namespace Lab6
     };
 
             list_lines.Clear();
-            list_lines = tetraLines; 
+            list_lines = tetraLines; // Сохранение рёбер тетраэдра
 
-            list_pols.Clear(); 
+            list_pols.Clear(); // Очистка списка полигонов
+
             // Определение граней тетраэдра (полигонов)
             Polygon tetraPolygon = new Polygon(new List<Line>() { tetraLines[0], tetraLines[1], tetraLines[2] });
             list_pols.Add(tetraPolygon);
@@ -380,13 +396,15 @@ namespace Lab6
             DrawLines(list_lines, list_points, g); // Отрисовка октаэдра
         }
 
+
         private void axonometric()
         {
             var sf = (float)Math.Sqrt(1.0 / 3.0);
             var cf = (float)Math.Sqrt(2.0 / 3.0);
             var sp = (float)Math.Sqrt(1.0 / 2.0);
             var cp = (float)Math.Sqrt(1.0 / 2.0);
-          
+
+
             matrixAxonometric[0, 0] = cp;
             matrixAxonometric[0, 1] = sf * sp;
             matrixAxonometric[1, 1] = cf;
@@ -394,16 +412,22 @@ namespace Lab6
             matrixAxonometric[2, 1] = -sf * cp;
             matrixAxonometric[3, 3] = 1;
 
+
+            int cathet = (int)Math.Sqrt(Math.Pow(pictureBox1.Width / 2, 2) / 3);
+            Point xyz = new Point(pictureBox1.Width / 2, pictureBox1.Height / 2);
+            Point x = new Point(pictureBox1.Width, pictureBox1.Height / 2 + cathet);
+            Point y = new Point(pictureBox1.Width / 2, 0);
+            Point z = new Point(0, pictureBox1.Height / 2 + cathet);
+
+            var g = Graphics.FromHwnd(pictureBox1.Handle);
+            g.DrawLine(new Pen(Color.Red, 1), xyz, x);
+            g.DrawLine(new Pen(Color.Green, 1), xyz, y);
+            g.DrawLine(new Pen(Color.Blue, 1), xyz, z);
+
             ApplyTransformationAndDrawLines(matrixAxonometric);
-        }   
+        }
         public void parallperpective()
         {
-    
-            matrixPerspective[0, 0] = 1;
-            matrixPerspective[1, 1] = 1;
-            matrixPerspective[3, 2] = 1/-2000;
-            matrixPerspective[3, 3] = 1;
-
             Point xy = new Point(pictureBox1.Width / 2, pictureBox1.Height / 2);
             Point x = new Point(pictureBox1.Width, pictureBox1.Height / 2);
             Point y = new Point(pictureBox1.Width / 2, 0);
@@ -411,8 +435,36 @@ namespace Lab6
             var g = Graphics.FromHwnd(pictureBox1.Handle);
             g.DrawLine(axes, xy, x);
             g.DrawLine(axes, xy, y);
-           
-            ApplyTransformationAndDrawLines(matrixPerspective);
+
+            var points = new List<PointD>();
+            double c = 20.0; // Параметр перспективы
+
+            // Применение матрицы перспективной проекции к каждой точке
+            for (int i = 0; i < list_points.Count; i++)
+            {
+                double[,] matrixPoint = new double[1, 4] { { list_points[i].x, list_points[i].y, list_points[i].z, 1.0 } };
+
+                var res = multipleMatrix(matrixPoint, matrixPerspective);
+
+                // Коррекция перспективы
+                res[0, 0] /= 1.0 - res[0, 3] / c;
+                res[0, 1] /= 1.0 - res[0, 3] / c;
+
+                points.Add(new PointD(res[0, 0], res[0, 1], res[0, 2]));
+            }
+
+
+            g = Graphics.FromHwnd(pictureBox1.Handle);
+            int centerX = pictureBox1.Width / 2;
+            int centerY = pictureBox1.Height / 2;
+            for (int i = 0; i < list_lines.Count(); i++)
+            {
+                Point a = new Point((int)(points[list_lines[i].a].x) + centerX, (int)(points[list_lines[i].a].y) + centerY);
+                Point b = new Point((int)(points[list_lines[i].b].x) + centerX, (int)(points[list_lines[i].b].y) + centerY);
+
+                g.DrawLine(new Pen(Color.Black, 2.0f), a, b);
+            }
+
         }
 
 
@@ -436,12 +488,21 @@ namespace Lab6
             {
                 Point a = new Point((int)(newImage[list_lines[i].a].x) + centerX, (int)(newImage[list_lines[i].a].y) + centerY);
                 Point b = new Point((int)(newImage[list_lines[i].b].x) + centerX, (int)(newImage[list_lines[i].b].y) + centerY);
-               
+
                 g.DrawLine(new Pen(Color.Black, 2.0f), a, b);
             }
-        }        
+        }
+
+
+
+
+
         private void buttonTranslite_Click(object sender, EventArgs e)
-        {           
+        {
+
+
+            var g = Graphics.FromHwnd(pictureBox1.Handle);
+
             matrixTranslation[3, 0] = Convert.ToDouble(textBox1.Text);
             matrixTranslation[3, 1] = Convert.ToDouble(textBox2.Text);
             matrixTranslation[3, 2] = Convert.ToDouble(textBox3.Text);
@@ -454,39 +515,41 @@ namespace Lab6
 
                 list_points[i] = new PointD(res[0, 0], res[0, 1], res[0, 2]);
             }
+
             redraw();
         }
 
         private void comboBox3_SelectedIndexChanged(object sender, EventArgs e)
-        {           
-            switch(comboBoxAxis.SelectedIndex){
+        {
+
+            switch (comboBoxAxis.SelectedIndex)
+            {
                 case 0://z
+
                     matrixMirror[0, 0] = 1;
                     matrixMirror[1, 1] = 1;
                     matrixMirror[2, 2] = -1;
                     break;
                 case 1://y
+
                     matrixMirror[0, 0] = 1;
                     matrixMirror[1, 1] = -1;
                     matrixMirror[2, 2] = 1;
-                    break; 
-                case 2://yz x
-                    matrixMirror = new double[4, 4]
-          {
-        { -1, 0, 0, 0 },
-        { 0, 1, 0, 0 },
-        { 0, 0, 1, 0 },
-        { 0, 0, 0, 1 }
-          };
-                    break; 
+                    break;
+                case 2://x
+                    matrixMirror[0, 0] = -1;
+                    matrixMirror[1, 1] = 1;
+                    matrixMirror[2, 2] = 1;
+                    break;
             }
+
         }
 
         private void buttonMirror_Click(object sender, EventArgs e)
         {
-            if (comboBoxAxis.SelectedIndex == -1) 
-            { 
-                return; 
+            if (comboBoxAxis.SelectedIndex == -1)
+            {
+                return;
             }
 
             for (int i = 0; i < list_points.Count; i++)
@@ -509,11 +572,12 @@ namespace Lab6
 
         private void redraw()
         {
-            
-          if (axonometric_button.Checked)
+            var g = Graphics.FromHwnd(pictureBox1.Handle);
+
+            if (axonometric_button.Checked)
             {
                 pictureBox1.Refresh();
-                axonometric();                
+                axonometric();
             }
             else if (perpective_button.Checked)
             {
@@ -523,8 +587,8 @@ namespace Lab6
         }
 
         private void radioButton2_CheckedChanged(object sender, EventArgs e)
-        {   
-            
+        {
+
             if (radioButton1.Checked)
             {
                 pictureBox1.Refresh();
@@ -544,13 +608,11 @@ namespace Lab6
                 redraw();
             }
 
-            //redraw();
-          
         }
 
         //поворот вокруг центра
         private void button1_Click(object sender, EventArgs e)
-        {           
+        {
             if (rotatex.Text.Length < 1 || rotatey.Text.Length < 1 || rotatez.Text.Length < 1)
                 return;
 
@@ -596,7 +658,7 @@ namespace Lab6
                 list_points[i] = new PointD(res[0, 0], res[0, 1], res[0, 2]);
             }
 
-          redraw();
+            redraw();
         }
 
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
@@ -606,6 +668,7 @@ namespace Lab6
 
         private void rotate_around_line_Click(object sender, EventArgs e)
         {
+
             double angle = Convert.ToDouble(angle_text.Text);
             double x1 = Convert.ToDouble(x1_text.Text);
             double y1 = Convert.ToDouble(y1_text.Text);
@@ -616,8 +679,8 @@ namespace Lab6
             double Sin = Math.Sin(angle);
             double Cos = Math.Cos(angle);
 
-            PointD vector = new PointD(x2 - x1, y2-y1, z2-z1);
-            double length = Math.Sqrt((x2-x1) * (x2-x1) + (y2-y1) * (y2-y1) + (z2-z1) * (z2-z1));
+            PointD vector = new PointD(x2 - x1, y2 - y1, z2 - z1);
+            double length = Math.Sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1) + (z2 - z1) * (z2 - z1));
 
             double l = (double)(vector.x / length);
             double m = (double)(vector.y / length);
@@ -643,6 +706,7 @@ namespace Lab6
             matrixRotateLine[3, 2] = 0;
             matrixRotateLine[3, 3] = 1;
 
+
             for (int i = 0; i < list_points.Count; i++)
             {
                 double[,] matrixPoint = new double[1, 4] { { list_points[i].x, list_points[i].y, list_points[i].z, 1.0 } };
@@ -653,6 +717,8 @@ namespace Lab6
             }
 
             redraw();
+
+
         }
 
         private void button1_Click_1(object sender, EventArgs e)
@@ -675,6 +741,8 @@ namespace Lab6
             }
 
             redraw();
-        }     
+
+
+        }
     }
 }
