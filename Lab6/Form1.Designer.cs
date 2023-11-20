@@ -205,7 +205,7 @@ namespace Lab6
             // 
             this.groupBox1.Controls.Add(this.perpective_button);
             this.groupBox1.Controls.Add(this.axonometric_button);
-            this.groupBox1.Location = new System.Drawing.Point(1071, 48);
+            this.groupBox1.Location = new System.Drawing.Point(1080, 19);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(187, 75);
             this.groupBox1.TabIndex = 26;
@@ -318,7 +318,7 @@ namespace Lab6
             this.groupBox2.Controls.Add(this.yRotate);
             this.groupBox2.Controls.Add(this.zRotate);
             this.groupBox2.Controls.Add(this.xRotate);
-            this.groupBox2.Location = new System.Drawing.Point(968, 250);
+            this.groupBox2.Location = new System.Drawing.Point(968, 248);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Size = new System.Drawing.Size(159, 43);
             this.groupBox2.TabIndex = 32;
