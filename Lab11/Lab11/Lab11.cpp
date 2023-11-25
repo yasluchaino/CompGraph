@@ -154,8 +154,8 @@ void InitVBO() {
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
 
     //glBufferData(GL_ARRAY_BUFFER, sizeof(quad), quad, GL_STATIC_DRAW); // четырёхугольник
-    glBufferData(GL_ARRAY_BUFFER, sizeof(penta), penta, GL_STATIC_DRAW); // правильный пятиугольник
-    //glBufferData(GL_ARRAY_BUFFER, sizeof(ffan), ffan, GL_STATIC_DRAW); // веер
+    //glBufferData(GL_ARRAY_BUFFER, sizeof(penta), penta, GL_STATIC_DRAW); // правильный пятиугольник
+    glBufferData(GL_ARRAY_BUFFER, sizeof(ffan), ffan, GL_STATIC_DRAW); // веер
 
     checkOpenGLerror(); // Проверка ошибок OpenGL, если есть то вывод в консоль тип ошибки
 }
@@ -177,7 +177,7 @@ void InitShader() {
     // Создаем вершинный шейдер
     GLuint vShader = glCreateShader(GL_VERTEX_SHADER);
     // Передаем исходный код
-    glShaderSource(vShader, 1, &VertexShaderSource, NULL); //GradVertexShaderSource  VertexShaderSource
+    glShaderSource(vShader, 1, &GradVertexShaderSource, NULL); //VertexShaderSource  GradVertexShaderSource
     // Компилируем шейдер
     glCompileShader(vShader);
     std::cout << "vertex shader \n";
@@ -187,7 +187,7 @@ void InitShader() {
     // Создаем фрагментный шейдер
     GLuint fShader = glCreateShader(GL_FRAGMENT_SHADER);
     // Передаем исходный код
-    glShaderSource(fShader, 1, &FragShaderSourceUnifColor, NULL); //GradFragShaderSource FragShaderSourceUnifColor  
+    glShaderSource(fShader, 1, &GradFragShaderSource, NULL); //FragShaderSource  FragShaderSourceUnifColor
     // Компилируем шейдер
     glCompileShader(fShader);
     std::cout << "fragment shader \n";
@@ -218,35 +218,31 @@ void Init() {
     // Вершинный буфер
     InitVBO();
 }
-
+bool Uniform = 1;
 void Draw() {
 
     glUseProgram(Program); // Устанавливаем шейдерную программу текущей
-
-    //glEnableVertexAttribArray(Attrib_vertex); // Включаем массив атрибутов
 
     glBindBuffer(GL_ARRAY_BUFFER, VBO); // Подключаем VBO
 
     glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0); //
     glEnableVertexAttribArray(0); //
 
-    //glBindBuffer(GL_ARRAY_BUFFER, VBO); // Подключаем VBO
-
-    //glVertexAttribPointer(Attrib_vertex, 2, GL_FLOAT, GL_FALSE, 0, 0); // Указывая pointer 0 при подключенном буфере, мы указываем что данные в VBO
-    
     glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(2 * sizeof(float))); //
     glEnableVertexAttribArray(1); //
     
     glBindBuffer(GL_ARRAY_BUFFER, 0); // Отключаем VBO
-
+    
+    if (Uniform)
+    { 
     float color[4] = { 0.5f, 0.0f, 1.0f, 1.0f }; // Фиолетовый
     location = glGetUniformLocation(Program, "color");
     glUniform4f(location, color[0], color[1], color[2], color[3]);
-    
+    }
     
     //glDrawArrays(GL_QUADS, 0, 4); // четырёхугольник
-    glDrawArrays(GL_POLYGON, 0, 5); // правильный пятиугольник
-    //glDrawArrays(GL_TRIANGLE_FAN, 0, 9); // веер
+    //glDrawArrays(GL_POLYGON, 0, 5); // правильный пятиугольник
+    glDrawArrays(GL_TRIANGLE_FAN, 0, 9); // веер
     //glDisableVertexAttribArray(Attrib_vertex); // Отключаем массив атрибутов //----
     glUseProgram(0); // Отключаем шейдерную программу
     checkOpenGLerror();
