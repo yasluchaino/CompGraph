@@ -57,11 +57,19 @@ namespace Lab6
 
             public int a;
             public int b;
+            public PointD pointD1;
+            public PointD pointD2;
 
             public Line(int aa, int bb)
             {
                 a = aa;
                 b = bb;
+            }
+
+            public Line(PointD pointD1, PointD pointD2)
+            {
+                this.pointD1 = pointD1;
+                this.pointD2 = pointD2;
             }
         }
         
@@ -69,12 +77,20 @@ namespace Lab6
         {
 
             public List<Line> lines;
-
+            public List<PointD> points;
             public Polygon(List<Line> l)
             {
                 lines = l;
             }
+            public Polygon(List<PointD> p)
+            {
+
+                points = p;
+            }
+
+
         }
+    
 
         public class Polyhedra
         {
@@ -234,40 +250,29 @@ namespace Lab6
         new PointD(-1, -1, 1),
         new PointD(-1, -1, -1)
     });
-
+           
             list_points = cubePoints; // Сохранение вершин куба
-
             List<Line> cubeLines = new List<Line>()
-    {
-        new Line(0, 1),
-        new Line(0, 2),
-        new Line(0, 4),
-        new Line(1, 3),
-        new Line(1, 5),
-        new Line(2, 3),
-        new Line(2, 6),
-        new Line(3, 7),
-        new Line(4, 5),
-        new Line(4, 6),
-        new Line(5, 7),
-        new Line(6, 7)
-    };
+{
+    new Line(0, 1), new Line(1, 3), new Line(3, 2), new Line(2, 0),
+    new Line(6, 7), new Line(7, 3), new Line(3, 2), new Line(2, 6),
+    new Line(3, 7), new Line(7, 5), new Line(5, 1), new Line(1, 3),
+    new Line(5, 7), new Line(7, 6), new Line(6, 4), new Line(4, 5),
+    new Line(5, 4), new Line(4, 0), new Line(0, 1), new Line(1, 5),
+    new Line(0, 2), new Line(2, 6), new Line(6, 4), new Line(4, 0)
+};
 
             list_lines.Clear();
-            list_lines = cubeLines; // Сохранение рёбер куба
+            list_lines.AddRange(cubeLines);
 
-            list_pols.Clear(); // Очистка списка полигонов
+            list_pols.Clear();
 
-            // Определение граней куба (полигонов)
-            Polygon cubePolygon = new Polygon(new List<Line>() { cubeLines[0], cubeLines[1], cubeLines[2], cubeLines[3] });
-            list_pols.Add(cubePolygon);
-
-            cubePolygon = new Polygon(new List<Line>() { cubeLines[4], cubeLines[5], cubeLines[6], cubeLines[7] });
-            list_pols.Add(cubePolygon);
-
-            cubePolygon = new Polygon(new List<Line>() { cubeLines[8], cubeLines[9], cubeLines[10], cubeLines[11] });
-            list_pols.Add(cubePolygon);
-
+            list_pols.Add(new Polygon(new List<Line>() { cubeLines[0], cubeLines[1], cubeLines[2], cubeLines[3] }));
+            list_pols.Add(new Polygon(new List<Line>() { cubeLines[4], cubeLines[5], cubeLines[6], cubeLines[7] }));
+            list_pols.Add(new Polygon(new List<Line>() { cubeLines[8], cubeLines[9], cubeLines[10], cubeLines[11] }));
+            list_pols.Add(new Polygon(new List<Line>() { cubeLines[12], cubeLines[13], cubeLines[14], cubeLines[15] }));
+            list_pols.Add(new Polygon(new List<Line>() { cubeLines[16], cubeLines[17], cubeLines[18], cubeLines[19] }));
+            list_pols.Add(new Polygon(new List<Line>() { cubeLines[20], cubeLines[21], cubeLines[22], cubeLines[23] }));
             var g = Graphics.FromHwnd(pictureBox1.Handle);
 
             for (int i = 0; i < list_points.Count(); i++)
@@ -277,40 +282,66 @@ namespace Lab6
                 list_points[i].z *= 50;
             }
 
+            for (int i = 0; i < list_lines.Count; i++)
+            {
+                int a = list_lines[i].a;
+                int b = list_lines[i].b;
+
+
+                list_lines[i] = new Line(a, b);
+            }
+
+            for (int i = 0; i < list_pols.Count; i++)
+            {
+                List<Line> updatedLines = new List<Line>();
+                foreach (var line in list_pols[i].lines)
+                {
+                    int a = line.a;
+                    int b = line.b;
+
+                    updatedLines.Add(new Line(a, b));
+                }
+
+                // Обновление списка граней 
+                list_pols[i] = new Polygon(updatedLines);
+            }
+
             DrawLines(list_lines, list_points, g); // Отрисовка куба
 
         }
         void Tetrahedron()
         {
+         
             pictureBox1.Refresh(); // Очистка рисунка
 
             List<PointD> tetraPoints = new List<PointD>();
             tetraPoints.AddRange(new List<PointD>()
-    {
-        new PointD(1, 1, 1),
-        new PointD(1, -1, -1),
-        new PointD(-1, 1, -1),
-        new PointD(-1, -1, 1)
-    });
+            {
+                new PointD(1, 1, 1),
+                new PointD(1, -1, -1),
+                new PointD(-1, 1, -1),
+                new PointD(-1, -1, 1)
+            });
 
             list_points = tetraPoints; // Сохранение вершин тетраэдра
 
             List<Line> tetraLines = new List<Line>()
-    {
-        new Line(0, 1),
-        new Line(0, 2),
-        new Line(0, 3),
-        new Line(1, 2),
-        new Line(1, 3),
-        new Line(2, 3)
-    };
+            {
+                new Line(0, 1),
+                new Line(0, 2),
+                new Line(0, 3),
+                new Line(1, 2),
+                new Line(2, 3),
+                new Line(3, 1)
+            };
+
+
 
             list_lines.Clear();
             list_lines = tetraLines; // Сохранение рёбер тетраэдра
 
             list_pols.Clear(); // Очистка списка полигонов
 
-            // Определение граней тетраэдра (полигонов)
             Polygon tetraPolygon = new Polygon(new List<Line>() { tetraLines[0], tetraLines[1], tetraLines[2] });
             list_pols.Add(tetraPolygon);
 
@@ -323,6 +354,8 @@ namespace Lab6
             tetraPolygon = new Polygon(new List<Line>() { tetraLines[2], tetraLines[4], tetraLines[5] });
             list_pols.Add(tetraPolygon);
 
+
+
             var g = Graphics.FromHwnd(pictureBox1.Handle);
 
             for (int i = 0; i < list_points.Count(); i++)
@@ -331,6 +364,29 @@ namespace Lab6
                 list_points[i].y *= 50;
                 list_points[i].z *= 50;
             }
+            for (int i = 0; i < list_lines.Count; i++)
+            {
+                int a = list_lines[i].a;
+                int b = list_lines[i].b;
+
+
+                list_lines[i] = new Line(a, b);
+            }
+
+            for (int i = 0; i < list_pols.Count; i++)
+            {
+                List<Line> updatedLines = new List<Line>();
+                foreach (var line in list_pols[i].lines)
+                {
+                    int a = line.a;
+                    int b = line.b;
+
+                    updatedLines.Add(new Line(a, b));
+                }
+
+                // Обновление списка граней 
+                list_pols[i] = new Polygon(updatedLines);
+            }
 
             DrawLines(list_lines, list_points, g); // Отрисовка тетраэдра
         }
@@ -338,62 +394,89 @@ namespace Lab6
 
         void Octahedron()
         {
-            pictureBox1.Refresh(); // Очистка рисунка
+           
+            pictureBox1.Refresh();
 
-            List<PointD> octaPoints = new List<PointD>();
-            octaPoints.AddRange(new List<PointD>()
-    {
-        new PointD(1, 0, 0),
-        new PointD(-1, 0, 0),
-        new PointD(0, 1, 0),
-        new PointD(0, -1, 0),
-        new PointD(0, 0, 1),
-        new PointD(0, 0, -1)
-    });
+            List<PointD> octaPoints = new List<PointD>()
+            {
+                new PointD(1, 0, 0),
+                new PointD(-1, 0, 0),
+                new PointD(0, 1, 0),
+                new PointD(0, -1, 0),
+                new PointD(0, 0, 1),
+                new PointD(0, 0, -1)
+            };
 
-            list_points = octaPoints; // Сохранение вершин октаэдра
+
+
+            list_points = octaPoints;
 
             List<Line> octaLines = new List<Line>()
-    {
-        new Line(0, 2),
-        new Line(2, 1),
-        new Line(1, 3),
-        new Line(3, 0),
-        new Line(0, 4),
-        new Line(2, 4),
-        new Line(1, 4),
-        new Line(3, 4),
-        new Line(0, 5),
-        new Line(2, 5),
-        new Line(1, 5),
-        new Line(3, 5)
-    };
+            {new Line(0, 2), new Line(2, 1), new Line(1, 0),
+            new Line(1, 3), new Line(3, 0), new Line(0, 2),
+            new Line(3, 2), new Line(2, 4), new Line(4, 3),
+            new Line(4, 0), new Line(0, 5), new Line(5, 4),
+            new Line(5, 1), new Line(1, 3), new Line(3, 5),
+            new Line(5, 4), new Line(4, 2), new Line(2, 5),
+            new Line(0, 4), new Line(4, 5), new Line(5, 2),
+            new Line(2, 3), new Line(3, 4), new Line(4, 1),
+            new Line(1, 5), new Line(5, 3), new Line(3, 2)
+            };
 
             list_lines.Clear();
-            list_lines = octaLines; // Сохранение рёбер октаэдра
+            list_lines = octaLines;
 
-            list_pols.Clear(); // Очистка списка полигонов
+            list_pols.Clear();
 
-            // Определение граней октаэдра (полигонов)
-            Polygon octaPolygon = new Polygon(new List<Line>() { octaLines[0], octaLines[1], octaLines[2], octaLines[3] });
-            list_pols.Add(octaPolygon);
+            List<Polygon> octaPolygons = new List<Polygon>()
+            {
+                new Polygon(new List<Line>() { octaLines[0], octaLines[1], octaLines[2] }),
+            new Polygon(new List<Line>() { octaLines[3], octaLines[4], octaLines[5] }),
+            new Polygon(new List<Line>() { octaLines[6], octaLines[7], octaLines[8] }),
+            new Polygon(new List<Line>() { octaLines[9], octaLines[10], octaLines[11] }),
+            new Polygon(new List<Line>() { octaLines[12], octaLines[13], octaLines[14] }),
+            new Polygon(new List<Line>() { octaLines[15], octaLines[16], octaLines[17] }),
+            new Polygon(new List<Line>() { octaLines[18], octaLines[19], octaLines[20] }),
+            new Polygon(new List<Line>() { octaLines[21], octaLines[22], octaLines[23] })
+            };
 
-            octaPolygon = new Polygon(new List<Line>() { octaLines[4], octaLines[5], octaLines[6], octaLines[7] });
-            list_pols.Add(octaPolygon);
-
-            octaPolygon = new Polygon(new List<Line>() { octaLines[8], octaLines[9], octaLines[10], octaLines[11] });
-            list_pols.Add(octaPolygon);
+            list_pols = octaPolygons;
 
             var g = Graphics.FromHwnd(pictureBox1.Handle);
 
             for (int i = 0; i < list_points.Count(); i++)
             {
-                list_points[i].x *= 100; // Масштабирование координат
+                list_points[i].x *= 100;
                 list_points[i].y *= 100;
                 list_points[i].z *= 100;
             }
 
-            DrawLines(list_lines, list_points, g); // Отрисовка октаэдра
+            for (int i = 0; i < list_lines.Count; i++)
+            {
+                int a = list_lines[i].a;
+                int b = list_lines[i].b;
+
+
+                list_lines[i] = new Line(a, b);
+            }
+
+            for (int i = 0; i < list_pols.Count; i++)
+            {
+                List<Line> updatedLines = new List<Line>();
+                foreach (var line in list_pols[i].lines)
+                {
+                    int a = line.a;
+                    int b = line.b;
+
+                    updatedLines.Add(new Line(a, b));
+                }
+
+                // Обновление списка граней 
+                list_pols[i] = new Polygon(updatedLines);
+            }
+
+            DrawLines(list_lines, list_points, g);
+
         }
 
 
@@ -744,7 +827,50 @@ namespace Lab6
 
         private void save_button_Click(object sender, EventArgs e)
         {
+                SaveFileDialog saveFileDialog = new SaveFileDialog();
+                saveFileDialog.Filter = "Text files (*.txt)|*.txt|All files (*.*)|*.*";
+                if (saveFileDialog.ShowDialog() == DialogResult.OK)
+                {
+                    string filePath = saveFileDialog.FileName;
 
+                    try
+                    {
+                        using (StreamWriter writer = new StreamWriter(filePath))
+                        {
+                            writer.WriteLine("POINTS");
+                            foreach (var point in list_points)
+                            {
+                                writer.WriteLine($"{point.x / 50} {point.y / 50} {point.z / 50}");
+                            }
+
+                            writer.WriteLine("FACES");
+                            foreach (var p in list_pols)
+                            {
+                                List<string> faceIndices = new List<string>();
+
+                                foreach (var l in p.lines)
+                                {
+                                    faceIndices.Add(l.a.ToString());
+                                }
+
+                                string lineToWrite = string.Join(" ", faceIndices);
+                                writer.WriteLine(lineToWrite);
+                            }
+
+                        }
+
+
+                        MessageBox.Show("Файл успешно сохранен!");
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show("Ошибка при сохранении файла: " + ex.Message);
+                    }
+                }
+
+
+          
+            
         }
 
         private void load_button_Click(object sender, EventArgs e)
@@ -761,14 +887,10 @@ namespace Lab6
 
                 try
                 {
-                    string fileContent = File.ReadAllText(filePath);
-                    string[] lines = fileContent.Split(new[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
+                    string[] lines = File.ReadAllLines(filePath);
 
                     bool readingPoints = false;
                     bool readingFaces = false;
-                    List<PointD> points = new List<PointD>();
-                    List<Line> liness = new List<Line>();
-                    List<Polygon> polygons = new List<Polygon>();
 
                     foreach (string line in lines)
                     {
@@ -786,40 +908,39 @@ namespace Lab6
                         }
 
                         string[] values = line.Split(' ');
-                        textBox4.Text = values[0];
+
                         if (readingPoints && values.Length >= 3)
                         {
                             double x, y, z;
                             if (double.TryParse(values[0], out x) && double.TryParse(values[1], out y) && double.TryParse(values[2], out z))
                             {
-                                list_points.Add(new PointD(50*x, 50*y, 50*z));
+                                list_points.Add(new PointD(x * 50, y * 50, z * 50));
                             }
                         }
-                       
 
-                        
-                        else if (readingFaces && values.Length >= 2)
+                        else if (readingFaces && values.Length >= 3)
                         {
-                            int a, b, c;
-                            if (int.TryParse(values[0], out a) && int.TryParse(values[1], out b) && int.TryParse(values[2], out c))
+                            List<Line> faceLines = new List<Line>();
+                            int lastindex = values.Count() - 1;
+                            for (int i = 0; i < values.Length - 1; i++)
                             {
-                                list_lines.Add(new Line(a, b));
-                                list_lines.Add(new Line(b, c));
-                                list_lines.Add(new Line(c, a));
+                                if (int.TryParse(values[i], out int a) && int.TryParse(values[i + 1], out int b))
+                                {
+                                    faceLines.Add(new Line(a, b));
+                                }
+                                else
+                                {
+                                    MessageBox.Show("Ошибка в формате грани: " + line);
+                                    break;
+                                }
 
-                                List<Line> faceLines = new List<Line>
-        {
-            new Line(a, b),
-            new Line(b, c),
-            new Line(c, a)
-        };
-                                list_pols.Add(new Polygon(faceLines));
                             }
+                            faceLines.Add(new Line(int.Parse(values[0]), int.Parse(values[lastindex])));
+                            list_lines.AddRange(faceLines);
+                            list_pols.Add(new Polygon(faceLines));
                         }
-                    }
-                   
-                    list_lines.AddRange(liness);
 
+                    }                   
                     redraw();
                 }
                 catch (Exception ex)
@@ -827,7 +948,6 @@ namespace Lab6
                     MessageBox.Show("Error reading the file: " + ex.Message);
                 }
             }
-
         }
 
         private void textBox4_TextChanged(object sender, EventArgs e)
