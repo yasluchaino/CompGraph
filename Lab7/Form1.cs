@@ -828,7 +828,7 @@ namespace Lab6
         private void save_button_Click(object sender, EventArgs e)
         {
                 SaveFileDialog saveFileDialog = new SaveFileDialog();
-                saveFileDialog.Filter = "Text files (*.txt)|*.txt|All files (*.*)|*.*";
+                saveFileDialog.Filter = "Text files (*.txt)|*.txt|obj files (*.obj)|*.obj";
                 if (saveFileDialog.ShowDialog() == DialogResult.OK)
                 {
                     string filePath = saveFileDialog.FileName;
@@ -879,7 +879,7 @@ namespace Lab6
             list_points.Clear();
             list_pols.Clear();
             OpenFileDialog openFileDialog = new OpenFileDialog();
-            openFileDialog.Filter = "Text files (*.txt)|*.txt|All files (*.*)|*.*";
+            openFileDialog.Filter = "Text files (*.txt)|*.txt|obj files (*.obj)|*.obj";
 
             if (openFileDialog.ShowDialog() == DialogResult.OK)
             {
