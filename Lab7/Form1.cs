@@ -935,7 +935,7 @@ namespace Lab6
                                 }
 
                             }
-                            faceLines.Add(new Line(int.Parse(values[0]), int.Parse(values[lastindex])));
+                            faceLines.Add(new Line(int.Parse(values[lastindex]), int.Parse(values[0])));
                             list_lines.AddRange(faceLines);
                             list_pols.Add(new Polygon(faceLines));
                         }
