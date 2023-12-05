@@ -23,6 +23,7 @@ namespace Lab6
         List<Line> list_lines;
         List<Polygon> list_pols;
         Func<double, double, double> func;
+        List<Line> figureLines;
 
         public Form1()
         {
@@ -31,6 +32,7 @@ namespace Lab6
             list_points = new List<PointD>();
             list_lines = new List<Line>();
             list_pols = new List<Polygon>();
+            figureLines = new List<Line>();
 
             InitializeMatrices();
             axonometric_button.Checked = true;
@@ -768,23 +770,22 @@ namespace Lab6
                 {
                     using (StreamWriter writer = new StreamWriter(filePath))
                     {
-                        writer.WriteLine("POINTS");
+
                         foreach (var point in list_points)
                         {
-                            writer.WriteLine($"{point.x / 50} {point.y / 50} {point.z / 50}");
+                            writer.WriteLine($"v {point.x / 50} {point.y / 50} {point.z / 50}");
                         }
 
-                        writer.WriteLine("FACES");
                         foreach (var p in list_pols)
                         {
                             List<string> faceIndices = new List<string>();
 
                             foreach (var l in p.lines)
                             {
-                                faceIndices.Add(l.a.ToString());
+                                faceIndices.Add((l.a ).ToString()); 
                             }
 
-                            string lineToWrite = string.Join(" ", faceIndices);
+                            string lineToWrite = $"f {string.Join(" ", faceIndices)}";
                             writer.WriteLine(lineToWrite);
                         }
 
@@ -816,62 +817,50 @@ namespace Lab6
                 {
                     string[] lines = File.ReadAllLines(filePath);
 
-                    bool readingPoints = false;
-                    bool readingFaces = false;
 
                     foreach (string line in lines)
                     {
-                        if (line == "POINTS")
-                        {
-                            readingPoints = true;
-                            readingFaces = false;
-                            continue;
-                        }
-                        else if (line == "FACES")
-                        {
-                            readingPoints = false;
-                            readingFaces = true;
-                            continue;
-                        }
-
                         string[] values = line.Split(' ');
 
-                        if (readingPoints && values.Length >= 3)
+                        if (values.Length > 0)
                         {
-                            double x, y, z;
-                            if (double.TryParse(values[0], out x) && double.TryParse(values[1], out y) && double.TryParse(values[2], out z))
+                            if (values[0] == "v" && values.Length >= 4)
                             {
-                                list_points.Add(new PointD(x * 50, y * 50, z * 50));
+                                double x, y, z;
+                                if (double.TryParse(values[1], out x) && double.TryParse(values[2], out y) && double.TryParse(values[3], out z))
+                                {
+                                    list_points.Add(new PointD(x * 50, y * 50, z * 50));
+                                }
                             }
-                        }
-
-                        else if (readingFaces && values.Length >= 3)
-                        {
-                            List<Line> faceLines = new List<Line>();
-                            int lastindex = values.Count() - 1;
-                            for (int i = 0; i < values.Length - 1; i++)
+                            else if (values[0] == "f" && values.Length >= 4)
                             {
-                                if (int.TryParse(values[i], out int a) && int.TryParse(values[i + 1], out int b))
+                                List<Line> faceLines = new List<Line>();
+
+                                for (int i = 1; i < values.Length - 1; i++)
                                 {
-                                    faceLines.Add(new Line(a, b));
-                                }
-                                else
-                                {
-                                    MessageBox.Show("Ошибка в формате грани: " + line);
-                                    break;
+                                    if (int.TryParse(values[i], out int a) && int.TryParse(values[i + 1], out int b))
+                                    {
+                                        faceLines.Add(new Line(a, b));
+                                    }
+                                    else
+                                    {
+                                        MessageBox.Show("Ошибка в формате грани: " + line);
+                                        break;
+                                    }
                                 }
 
+                                faceLines.Add(new Line(int.Parse(values[values.Length - 1]), int.Parse(values[1])));
+                                list_lines.AddRange(faceLines);
+                                list_pols.Add(new Polygon(faceLines));
                             }
-                            faceLines.Add(new Line(int.Parse(values[lastindex]), int.Parse(values[0])));
-                            list_lines.AddRange(faceLines);
-                            list_pols.Add(new Polygon(faceLines));
                         }
                     }
+
                     redraw();
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("Error reading the file: " + ex.Message);
+                    MessageBox.Show("Ошибка при чтении файла: " + ex.Message);
                 }
             }
         }
@@ -900,53 +889,22 @@ namespace Lab6
             redraw();
             
         }
-
-        private void DrawRotationFigure(List<PointD> points, int axis, int partitions, Graphics g)
-        {
-            double angle = 2 * Math.PI / partitions;
-            foreach (PointD point in points)
-            {
-                point.x *= 50;
-                point.y *= 50;
-                point.z *= 50;
-            }
-            for (int i = 0; i < partitions; i++)
-            {
-                for (int j = 0; j < points.Count - 1; j++)
-                {
-                    PointD rotatedPoint1 = RotatePoint(points[j], axis, angle * i);
-                    PointD rotatedPoint2 = RotatePoint(points[j + 1], axis, angle * i);
-
-                    Point a = new Point(pictureBox1.Width / 2 + (int)(rotatedPoint1.x), pictureBox1.Height / 2 + (int)(rotatedPoint1.y));
-                    Point b = new Point(pictureBox1.Width / 2 + (int)(rotatedPoint2.x), pictureBox1.Height / 2 + (int)(rotatedPoint2.y));
-                    g.DrawLine(new Pen(Color.Black, 2.0f), a, b);
-                }
-
-                // Соединение первой и последней точек фигуры для создания основания
-                PointD rotatedFirst = RotatePoint(points[0], axis, angle * i);
-                PointD rotatedLast = RotatePoint(points[points.Count - 1], axis, angle * i);
-
-                Point first = new Point(pictureBox1.Width / 2 + (int)(rotatedFirst.x), pictureBox1.Height / 2 + (int)(rotatedFirst.y));
-                Point last = new Point(pictureBox1.Width / 2 + (int)(rotatedLast.x), pictureBox1.Height / 2 + (int)(rotatedLast.y));
-                g.DrawLine(new Pen(Color.Black, 2.0f), first, last);
-            }
-        }
-
+        
         private PointD RotatePoint(PointD point, int axis, double angle)
         {
             double newX = point.x, newY = point.y, newZ = point.z;
 
             switch (axis)
             {
-                case 0: // X-axis rotation
+                case 0: // X
                     newY = point.y * Math.Cos(angle) - point.z * Math.Sin(angle);
                     newZ = point.y * Math.Sin(angle) + point.z * Math.Cos(angle);
                     break;
-                case 1: // Y-axis rotation
+                case 1: // Y
                     newX = point.x * Math.Cos(angle) + point.z * Math.Sin(angle);
                     newZ = -point.x * Math.Sin(angle) + point.z * Math.Cos(angle);
                     break;
-                case 2: // Z-axis rotation
+                case 2: // Z
                     newX = point.x * Math.Cos(angle) - point.y * Math.Sin(angle);
                     newY = point.x * Math.Sin(angle) + point.y * Math.Cos(angle);
                     break;
@@ -957,14 +915,24 @@ namespace Lab6
             return new PointD(newX, newY, newZ);
         }
 
+     
 
         private void button3_Click(object sender, EventArgs e)
         {
-            int count = int.Parse(textBox6.Text);
-         
 
+            list_points.Clear();
+            list_lines.Clear();
+            list_pols.Clear();
+            List<PointD> points = new List<PointD>();
+            int count = int.Parse(textBox6.Text);
             foreach (var p in listBox1.Items)
-                list_points.Add((PointD)p);
+            {
+                PointD point = (PointD)p;
+                point.x *= 50; 
+                point.y *= 50; 
+                point.z *= 50; 
+                points.Add(point);
+            }
 
             int axis = 0;
             switch (textBox7.Text)
@@ -980,12 +948,49 @@ namespace Lab6
                     break;
             }
             var g = Graphics.FromHwnd(pictureBox1.Handle);
-            DrawRotationFigure(list_points, axis, count, g);
+
+            (list_points, list_lines) = CreateRotationFigurePointsAndLines(points, axis, count);
+
+            DrawLines(list_lines, list_points, g);
         }
 
-        private void groupBox1_Enter(object sender, EventArgs e)
+        private(List<PointD>, List<Line>) CreateRotationFigurePointsAndLines(List<PointD> basePoints, int axis, int partitions)
         {
+            List<PointD> points = new List<PointD>(basePoints);
+            List<PointD> rotatedPoints = new List<PointD>();
+            for (int i = 1; i < partitions; ++i)
+            {
+                var angle = 2 * Math.PI * i / partitions;
+                foreach (var point in basePoints)
+                {
+                    rotatedPoints.Add(RotatePoint(point, axis, angle));
+                }
+                points.AddRange(rotatedPoints);
+                rotatedPoints.Clear();
+            }
 
+            var n = basePoints.Count;
+
+            textBox4.Text = points.Count.ToString();
+            for (int i = 0; i < partitions; ++i)
+            {
+                for (int j = 0; j < n - 1; ++j)
+                {
+
+                    int indexA = i * n + j;
+                    int indexB = (i + 1) % partitions * n + j;
+                    int indexC = (i + 1) % partitions * n + j + 1;
+                    int indexD = i * n + j + 1;
+
+                    figureLines.Add(new Line(indexA, indexB));
+                    figureLines.Add(new Line(indexB, indexC));
+                    figureLines.Add(new Line(indexC, indexD));
+                    figureLines.Add(new Line(indexD, indexA));
+
+                }
+            }
+
+            return (points, figureLines);
         }
 
         private void button5_Click(object sender, EventArgs e)
