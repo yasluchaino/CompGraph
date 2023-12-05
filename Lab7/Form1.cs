@@ -22,10 +22,12 @@ namespace Lab6
         List<PointD> list_points;
         List<Line> list_lines;
         List<Polygon> list_pols;
+        Func<double, double, double> func;
 
         public Form1()
         {
             InitializeComponent();
+            ComboBoxInit();
             list_points = new List<PointD>();
             list_lines = new List<Line>();
             list_pols = new List<Polygon>();
@@ -984,6 +986,86 @@ namespace Lab6
         private void groupBox1_Enter(object sender, EventArgs e)
         {
 
+        }
+
+        private void button5_Click(object sender, EventArgs e)
+        {
+            if (comboBox1.SelectedIndex == -1)
+                return;
+            FunctionDraw();
+        }
+
+        void FunctionDraw() 
+        {
+            list_lines.Clear();
+            list_pols.Clear();
+            list_points.Clear();
+            double x0 = Convert.ToDouble(textBox10.Text);
+            double x1 = Convert.ToDouble(textBox12.Text);
+            double y0 = Convert.ToDouble(textBox11.Text);
+            double y1 = Convert.ToDouble(textBox13.Text);
+            int splits = int.Parse(textBox14.Text);
+            double sdvx = (x1 - x0) / splits;
+            double sdvy = (y1 - y0) / splits;
+            for (int i = 0; i < splits; i++)
+            {
+                for (int j = 0; j < splits; j++)
+                {
+                    var tx = x0 + i * sdvx;
+                    var ty = y0 + j * sdvy;
+                    PointD p = new PointD(tx, ty, func(tx,ty));
+                    list_points.Add(p);
+                }
+            }
+            for (int i = 0; i < splits - 1; i++)
+            {
+                int it0 = (splits * i);
+                int it1 = (splits * (i + 1));
+                for (int j = 0; j < splits - 1; j++)
+                {
+                    Line l0 = new Line(it0 + j, it0 + j + 1);
+                    Line l1 = new Line(it0 + j + 1, it1 + j + 1);
+                    Line l2 = new Line(it1 + j + 1, it1 + j);
+                    Line l3 = new Line(it1 + j, it0 + j);
+                    List<Line> lines_buf = new List<Line>() { l0, l1, l2, l3 };
+                    list_lines.AddRange(lines_buf);
+                    list_pols.Add(new Polygon(lines_buf));
+                }
+            } 
+            redraw();
+        }
+
+        void ComboBoxInit()
+        {
+            comboBox1.Items.Add("5*(cos(x^2+y^2+1)/(x^2+y^2+1)+0.1)");
+            comboBox1.Items.Add("sin(x)+cos(y)");
+            comboBox1.Items.Add("sin(x)*cos(y)");
+            comboBox1.Items.Add("x^2 + y^2");
+            comboBox1.Items.Add("cos(x*x+y*y)/(x*x+y*y+1)");
+        }
+
+        private void comboBox1_SelectedIndexChanged_1(object sender, EventArgs e)
+        {
+            switch (comboBox1.SelectedIndex)
+            {
+                case 0:
+                    func = (double x, double y) => { return 5 * (Math.Cos(x * x + y * y + 1) / (x * x + y * y + 1) + 0.1); };
+                    break;
+                case 1:
+                    func = (double x, double y) => { return Math.Sin(x) + Math.Cos(y); };
+                    break;
+                case 2:
+                    func = (double x, double y) => { return Math.Sin(x) * Math.Cos(y); };
+                    break;
+                case 3:
+                    func = (double x, double y) => { return x*x + y*y; };
+                    break;
+                case 4:
+                    func = (double x, double y) => { return Math.Cos(x * x + y * y) / (x * x + y * y + 1); };
+                    break;
+
+
+            }
         }
     }
 }
