@@ -6,19 +6,9 @@
 
 // ID шейдерной программы
 GLuint Program;
-// ID атрибута вершин
-GLint Attrib_vertex;
-// ID атрибута цвета
-GLint Attrib_color;
-// ID атрибута текстуры
-GLint Attrib_texture;
 
 // ID VBO вершин
-GLuint VBO_pos;
-// ID VBO цвета
-GLuint VBO_color;
-// ID VBO текстуры
-GLuint VBO_texture;
+GLuint VBO;
 
 sf::Image photo_img;
 GLuint texture;
@@ -98,14 +88,14 @@ void checkOpenGLerror() {
 
 bool InitTextures()
 {
-	if (!photo_img.loadFromFile("3.png"))
+	if (!photo_img.loadFromFile("1.png"))
 	{
 		return false;
 	}
 
 	glGenTextures(1, &texture);
 	glBindTexture(GL_TEXTURE_2D, texture);
-	glTexImage2D(GL_TEXTURE_2D, 0, 3, photo_img.getSize().x, photo_img.getSize().y, 0, GL_RGB, GL_UNSIGNED_BYTE,
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, photo_img.getSize().x, photo_img.getSize().y, 0, GL_RGBA, GL_UNSIGNED_BYTE,
 		photo_img.getPixelsPtr());
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
@@ -115,74 +105,56 @@ bool InitTextures()
 }
 
 void InitVBO() {
-	glGenBuffers(1, &VBO_pos);
-	glGenBuffers(1, &VBO_color);
-	glGenBuffers(1, &VBO_texture);
+	glGenBuffers(1, &VBO);
 
-	Vertex cube[] = {
-		{ -0.5, -0.5, 0.5 }, { -0.5, 0.5, 0.5 }, { 0.5, 0.5, 0.5 },
-		{ 0.5, 0.5, 0.5 }, { 0.5, -0.5, 0.5 }, { -0.5, -0.5, 0.5 },
-		{ -0.5, -0.5, -0.5 }, { 0.5, 0.5, -0.5 }, { -0.5, 0.5, -0.5 },
-		{ 0.5, 0.5, -0.5 }, { -0.5, -0.5, -0.5 }, { 0.5, -0.5, -0.5 },
-		{ -0.5, 0.5, -0.5 }, { -0.5, 0.5, 0.5 }, { 0.5, 0.5, 0.5 },
-		{ 0.5, 0.5, 0.5 }, { 0.5, 0.5, -0.5 }, { -0.5, 0.5, -0.5 },
-		{ -0.5, -0.5, -0.5 }, { 0.5, -0.5, 0.5 }, { -0.5, -0.5, 0.5 },
-		{ 0.5, -0.5, 0.5 }, { -0.5, -0.5, -0.5 }, { 0.5, -0.5, -0.5 },
-		{ 0.5, -0.5, -0.5 }, { 0.5, -0.5, 0.5 }, { 0.5, 0.5, 0.5 },
-		{ 0.5, 0.5, 0.5 }, { 0.5, 0.5, -0.5 }, { 0.5, -0.5, -0.5 },
-		{ -0.5, -0.5, -0.5 }, { -0.5, 0.5, 0.5 }, { -0.5, -0.5, 0.5 },
-		{ -0.5, 0.5, 0.5 }, { -0.5, -0.5, -0.5 }, { -0.5, 0.5, -0.5 },
+	float cube[] = {
+		-0.5f, -0.5f, -0.5f,  1.0f, 1.0f, 0.0f,  0.0f, 0.0f,
+		 0.5f, -0.5f, -0.5f,  0.0f, 1.0f, 1.0f,  1.0f, 0.0f,
+		 0.5f,  0.5f, -0.5f,  1.0f, 0.0f, 1.0f,  1.0f, 1.0f,
+		 0.5f,  0.5f, -0.5f,  1.0f, 0.0f, 1.0f,  1.0f, 1.0f,
+		-0.5f,  0.5f, -0.5f,  0.0f, 0.0f, 1.0f,  0.0f, 1.0f,
+		-0.5f, -0.5f, -0.5f,  1.0f, 1.0f, 0.0f,  0.0f, 0.0f,
+
+		-0.5f, -0.5f,  0.5f,   0.0f, 1.0f, 1.0f,  0.0f, 0.0f,
+		 0.5f, -0.5f,  0.5f,   1.0f, 1.0f, 0.0f,  1.0f, 0.0f,
+		 0.5f,  0.5f,  0.5f,   0.0f, 0.0f, 1.0f,  1.0f, 1.0f,
+		 0.5f,  0.5f,  0.5f,   0.0f, 0.0f, 1.0f,  1.0f, 1.0f,
+		-0.5f,  0.5f,  0.5f,   1.0f, 0.0f, 1.0f,  0.0f, 1.0f,
+		-0.5f, -0.5f,  0.5f,   0.0f, 1.0f, 1.0f,  0.0f, 0.0f,
+
+		-0.5f,  0.5f,  0.5f,   1.0f, 0.0f, 1.0f,  1.0f, 0.0f,
+		-0.5f,  0.5f, -0.5f,  0.0f, 0.0f, 1.0f,  1.0f, 1.0f,
+		-0.5f, -0.5f, -0.5f,  1.0f, 1.0f, 0.0f,  0.0f, 1.0f,
+		-0.5f, -0.5f, -0.5f,  1.0f, 1.0f, 0.0f,  0.0f, 1.0f,
+		-0.5f, -0.5f,  0.5f,   0.0f, 1.0f, 1.0f,  0.0f, 0.0f,
+		-0.5f,  0.5f,  0.5f,   1.0f, 0.0f, 1.0f,  1.0f, 0.0f,
+
+		 0.5f,  0.5f,  0.5f,   0.0f, 0.0f, 1.0f,  1.0f, 0.0f,
+		 0.5f,  0.5f, -0.5f,  1.0f, 0.0f, 1.0f,  1.0f, 1.0f,
+		 0.5f, -0.5f, -0.5f,  0.0f, 1.0f, 1.0f,  0.0f, 1.0f,
+		 0.5f, -0.5f, -0.5f,  0.0f, 1.0f, 1.0f,  0.0f, 1.0f,
+		 0.5f, -0.5f,  0.5f,   1.0f, 1.0f, 0.0f,  0.0f, 0.0f,
+		 0.5f,  0.5f,  0.5f,   0.0f, 0.0f, 1.0f,  1.0f, 0.0f,
+
+		-0.5f, -0.5f, -0.5f,  1.0f, 1.0f, 0.0f,  0.0f, 1.0f,
+		 0.5f, -0.5f, -0.5f,  0.0f, 1.0f, 1.0f,  1.0f, 1.0f,
+		 0.5f, -0.5f,  0.5f,   1.0f, 1.0f, 0.0f,  1.0f, 0.0f,
+		 0.5f, -0.5f,  0.5f,   1.0f, 1.0f, 0.0f,  1.0f, 0.0f,
+		-0.5f, -0.5f,  0.5f,   0.0f, 1.0f, 1.0f,  0.0f, 0.0f,
+		-0.5f, -0.5f, -0.5f,  1.0f, 1.0f, 0.0f,  0.0f, 1.0f,
+
+		-0.5f,  0.5f, -0.5f,  0.0f, 0.0f, 1.0f,  0.0f, 1.0f,
+		 0.5f,  0.5f, -0.5f,  1.0f, 0.0f, 1.0f,  1.0f, 1.0f,
+		 0.5f,  0.5f,  0.5f,   0.0f, 0.0f, 1.0f,  1.0f, 0.0f,
+		 0.5f,  0.5f,  0.5f,   0.0f, 0.0f, 1.0f,  1.0f, 0.0f,
+		-0.5f,  0.5f,  0.5f,   1.0f, 0.0f, 1.0f,  0.0f, 0.0f,
+		-0.5f,  0.5f, -0.5f,  0.0f, 0.0f, 1.0f,  0.0f, 1.0f
 	};
 
-	float colors[36][4] =
-	{
-		{ 1.0, 0.0, 1.0, 1.0 },{ 1.0, 0.0, 0.0, 1.0 },{ 1.0, 1.0, 0.0, 1.0 },
-		{ 1.0, 1.0, 0.0, 1.0 },{ 1.0, 1.0, 1.0, 1.0 },{ 1.0, 0.0, 1.0, 1.0 },
-
-		{ 1.0, 1.0, 1.0, 1.0 },{ 0.0, 1.0, 0.0, 1.0 },{ 1.0, 1.0, 0.0, 1.0 },
-		{ 0.0, 1.0, 0.0, 1.0 },{ 1.0, 1.0, 1.0, 1.0 },{ 0.0, 1.0, 1.0, 1.0 },
-
-		{ 1.0, 1.0, 0.0, 1.0 },{ 1.0, 0.0, 0.0, 1.0 },{ 1.0, 0.0, 0.0, 1.0 },
-		{ 0.0, 0.0, 0.0, 1.0 },{ 0.0, 1.0, 0.0, 1.0 },{ 1.0, 1.0, 0.0, 1.0 },
-
-		{ 1.0, 1.0, 1.0, 1.0 },{ 0.0, 0.0, 1.0, 1.0 },{ 1.0, 0.0, 1.0, 1.0 },
-		{ 0.0, 0.0, 1.0, 1.0 },{ 1.0, 1.0, 1.0, 1.0 },{ 0.0, 1.0, 1.0, 1.0 },
-
-		{ 0.0, 1.0, 1.0, 1.0 },{ 0.0, 0.0, 1.0, 1.0 },{ 0.0, 0.0, 0.0, 1.0 },
-		{ 0.0, 0.0, 0.0, 1.0 },{ 0.0, 1.0, 0.0, 1.0 },{ 0.0, 1.0, 1.0, 1.0 },
-
-		{ 1.0, 1.0, 1.0, 1.0 },{ 1.0, 0.0, 0.0, 1.0 },{ 1.0, 0.0, 1.0, 1.0 },
-		{ 1.0, 0.0, 0.0, 1.0 },{ 1.0, 1.0, 1.0, 1.0 },{ 1.0, 1.0, 0.0, 1.0 },
-	};
-
-	float textures[36][2] =
-	{
-		{1.0, 1.0},{0.0, 1.0},{0.0, 0.0},
-		{0.0, 0.0},{1.0, 0.0},{1.0, 1.0},
-
-		{1.0, 1.0},{0.0, 1.0},{0.0, 0.0},
-		{0.0, 0.0},{1.0, 0.0},{1.0, 1.0},
-
-		{1.0, 1.0},{0.0, 1.0},{0.0, 0.0},
-		{0.0, 0.0},{1.0, 0.0},{1.0, 1.0},
-
-		{1.0, 1.0},{0.0, 1.0},{0.0, 0.0},
-		{0.0, 0.0},{1.0, 0.0},{1.0, 1.0},
-
-		{1.0, 1.0},{0.0, 1.0},{0.0, 0.0},
-		{0.0, 0.0},{1.0, 0.0},{1.0, 1.0},
-
-		{1.0, 1.0},{0.0, 1.0},{0.0, 0.0},
-		{0.0, 0.0},{1.0, 0.0},{1.0, 1.0},
-	};
 
 	// Передаем вершины в буфер
-	glBindBuffer(GL_ARRAY_BUFFER, VBO_pos);
+	glBindBuffer(GL_ARRAY_BUFFER, VBO);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(cube), cube, GL_STATIC_DRAW);
-	glBindBuffer(GL_ARRAY_BUFFER, VBO_color);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(colors), colors, GL_STATIC_DRAW);
-	glBindBuffer(GL_ARRAY_BUFFER, VBO_texture);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(textures), textures, GL_STATIC_DRAW);
 	checkOpenGLerror();
 }
 
@@ -224,31 +196,6 @@ void InitShader() {
 		return;
 	}
 
-	const char* attr_name_p = "coord"; //имя в шейдере
-	const char* attr_name_c = "color"; //имя в шейдере
-	const char* attr_name_t = "texCoord"; //имя в шейдере
-
-	// Вытягиваем ID атрибута вершин из собранной программы
-	Attrib_vertex = glGetAttribLocation(Program, attr_name_p);
-	if (Attrib_vertex == -1) {
-		std::cout << "could not bind attrib coord" << std::endl;
-		return;
-	}
-	// Вытягиваем ID атрибута цвета
-	Attrib_color = glGetAttribLocation(Program, attr_name_c);
-	if (Attrib_color == -1)
-	{
-		std::cout << "could not bind attrib color" << std::endl;
-		return;
-	}
-	// Вытягиваем ID атрибута текстуры
-	Attrib_texture = glGetAttribLocation(Program, attr_name_t);
-	if (Attrib_texture == -1)
-	{
-		std::cout << "could not bind attrib  texCoord" << std::endl;
-		return;
-	}
-
 	// Вытягиваем ID юниформ
 	const char* unif_name = "coef";
 	Unif_Coef = glGetUniformLocation(Program, unif_name);
@@ -275,41 +222,31 @@ void Draw() {
 	glUseProgram(Program);
 
 	glUniform1f(Unif_Coef, coef);
-
-	// Включаем массивы атрибутов
-	glEnableVertexAttribArray(Attrib_vertex);
-	glEnableVertexAttribArray(Attrib_color);
-	glEnableVertexAttribArray(Attrib_texture);
-
-	// Подключаем VBO_pos
-	glBindBuffer(GL_ARRAY_BUFFER, VBO_pos);
-	glVertexAttribPointer(Attrib_vertex, 3, GL_FLOAT, GL_FALSE, 0, 0);
-
-	// Подключаем VBO_color
-	glBindBuffer(GL_ARRAY_BUFFER, VBO_color);
-	glVertexAttribPointer(Attrib_color, 4, GL_FLOAT, GL_FALSE, 0, 0);
-
-	glBindBuffer(GL_ARRAY_BUFFER, VBO_texture);
-	glVertexAttribPointer(Attrib_texture, 2, GL_FLOAT, GL_FALSE, 0, 0);
-
 	glBindTexture(GL_TEXTURE_2D, texture);
+	// подключаем VBO
+	glBindBuffer(GL_ARRAY_BUFFER, VBO);
 
-	// Отключаем VBO
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	// Подключаем массив аттрибутов с указанием на каких местах кто находится
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
+	glEnableVertexAttribArray(0);
 
-	// Передаем данные на видеокарту
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
+	glEnableVertexAttribArray(1);
+
+	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
+	glEnableVertexAttribArray(2);
+
+	glBindBuffer(GL_ARRAY_BUFFER, 0);  // Отключаем VBO
+
+	//Рисуем 
 	glDrawArrays(GL_TRIANGLES, 0, 36);
-	glBindVertexArray(0);
 
 	// Отключаем массивы атрибутов
-	glDisableVertexAttribArray(Attrib_vertex);
-	glDisableVertexAttribArray(Attrib_color);
-	glDisableVertexAttribArray(Attrib_texture);
+	glDisableVertexAttribArray(0);
+	glDisableVertexAttribArray(1);
+	glDisableVertexAttribArray(2);
 
-
-	// Отключаем шейдерную программу
-	glUseProgram(0); 
-	checkOpenGLerror();
+	glUseProgram(0); // Отключаем шейдерную программу
 }
 
 
@@ -324,9 +261,8 @@ void ReleaseShader() {
 // Освобождение буфера
 void ReleaseVBO() {
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
-	glDeleteBuffers(1, &VBO_pos);
-	glDeleteBuffers(1, &VBO_color);
-	glDeleteBuffers(1, &VBO_texture);
+	glDeleteBuffers(1, &VBO);
+
 }
 
 void Release() {
@@ -351,6 +287,10 @@ int main() {
 				case (sf::Keyboard::S): coef -= 0.1f; break;
 				default: break;
 				}
+				if (coef >= 1.0f)
+					coef = 1.0f;
+				if (coef <= 0.0f)
+					coef = 0.0f;
 			}
 		}
 
