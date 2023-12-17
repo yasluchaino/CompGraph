@@ -7,6 +7,7 @@ using System.Drawing.Drawing2D;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.ConstrainedExecution;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
@@ -19,11 +20,13 @@ namespace Lab6
 {
     public partial class Form1 : Form
     {
-        List<PointD> list_points;
+        static List<PointD> list_points;
         List<Line> list_lines;
         List<Polygon> list_pols;
         Func<double, double, double> func;
         List<Line> figureLines;
+        Polyhedra polyhedra;
+        Vector view;
 
         public Form1()
         {
@@ -33,6 +36,8 @@ namespace Lab6
             list_lines = new List<Line>();
             list_pols = new List<Polygon>();
             figureLines = new List<Line>();
+            polyhedra = new Polyhedra();
+            view = new Vector();
 
             InitializeMatrices();
             axonometric_button.Checked = true;
@@ -40,7 +45,33 @@ namespace Lab6
 
         }
 
+        public class Vector 
+        {
+            public double x;
+            public double y;
+            public double z;
 
+            public Vector() 
+            {
+
+            }
+
+            public Vector(double x, double y, double z)
+            {
+                this.x = x;
+                this.y = y;
+                this.z = z;
+            }
+
+            public void Reverse()
+            {
+                x *= -1;
+                y *= -1;
+                z *= -1;
+            }
+        }
+        
+        
         public class PointD
         {
             public double x;
@@ -68,6 +99,7 @@ namespace Lab6
             public int b;
             public PointD pointD1;
             public PointD pointD2;
+            public bool visible = true;
 
             public Line(int aa, int bb)
             {
@@ -87,6 +119,7 @@ namespace Lab6
 
             public List<Line> lines;
             public List<PointD> points;
+            public Vector normal;
             public Polygon(List<Line> l)
             {
                 lines = l;
@@ -97,16 +130,67 @@ namespace Lab6
                 points = p;
             }
 
+            public void Calculate_Normal(PointD center) 
+            {
+                Vector t1 = new Vector(list_points[lines[0].b].x - list_points[lines[0].a].x, list_points[lines[0].b].y - list_points[lines[0].a].y, list_points[lines[0].b].z - list_points[lines[0].a].z);
+                Vector t2 = new Vector(list_points[lines[1].b].x - list_points[lines[1].a].x, list_points[lines[1].b].y - list_points[lines[1].a].y, list_points[lines[1].b].z - list_points[lines[1].a].z);
+
+                normal = new Vector(t1.y * t2.z - t1.z * t2.y, t1.z * t2.x - t1.x * t2.z, t1.x * t2.y - t1.y * t2.x);
+                double dist = -1 * (list_points[lines[0].b].x * normal.x + list_points[lines[0].b].y * normal.y + list_points[lines[0].b].z * normal.z);
+                
+                if (OnSide(normal, dist, center, list_points[lines[0].b]))
+                {
+                    normal.Reverse();
+                }
+            }
+
+        }
+
+        static public bool OnSide(Vector normal, double dist, PointD center, PointD view)
+        {
+            double scal1 = (view.x + normal.x) * normal.x + (view.y + normal.y) * normal.y + (view.z + normal.z) * normal.z + dist;
+            double scal2 = normal.x * center.x + normal.y * center.y + normal.z * center.z + dist;
+            return scal1 * scal2 > 0;
         }
 
         public class Polyhedra
         {
 
             public List<Polygon> polygons;
+            public PointD center;
+
+            public Polyhedra() 
+            {
+
+            }
 
             public Polyhedra(List<Polygon> l)
             {
                 polygons = l;
+                Calculate_Center();
+            }
+
+            void Calculate_Center() 
+            {
+                double x = 0;
+                double y = 0;
+                double z = 0;
+                int cnt = 0;
+                foreach (var p in polygons) 
+                {
+                    foreach (var l in p.lines) 
+                    {
+                        cnt++;
+                        x += list_points[l.a].x;
+                        y += list_points[l.a].y;
+                        z += list_points[l.a].z;
+                    }
+                }
+                center = new PointD(x/cnt, y/cnt, z/cnt);
+                foreach (var p in polygons) 
+                {
+                    p.Calculate_Normal(center);
+                }
             }
         }
 
@@ -247,27 +331,27 @@ namespace Lab6
 
             List<PointD> cubePoints = new List<PointD>();
             cubePoints.AddRange(new List<PointD>()
-    {
-        new PointD(1, 1, 1),
-        new PointD(1, 1, -1),
-        new PointD(1, -1, 1),
-        new PointD(1, -1, -1),
-        new PointD(-1, 1, 1),
-        new PointD(-1, 1, -1),
-        new PointD(-1, -1, 1),
-        new PointD(-1, -1, -1)
-    });
+            {
+                new PointD(0, 0, 0),
+                new PointD(0, 0, 1),
+                new PointD(0, 1, 0),
+                new PointD(0, 1, 1),
+                new PointD(1, 0, 0),
+                new PointD(1, 0, 1),
+                new PointD(1, 1, 0),
+                new PointD(1, 1, 1)
+            });
 
             list_points = cubePoints; // Сохранение вершин куба
             List<Line> cubeLines = new List<Line>()
-{
-    new Line(0, 1), new Line(1, 3), new Line(3, 2), new Line(2, 0),
-    new Line(6, 7), new Line(7, 3), new Line(3, 2), new Line(2, 6),
-    new Line(3, 7), new Line(7, 5), new Line(5, 1), new Line(1, 3),
-    new Line(5, 7), new Line(7, 6), new Line(6, 4), new Line(4, 5),
-    new Line(5, 4), new Line(4, 0), new Line(0, 1), new Line(1, 5),
-    new Line(0, 2), new Line(2, 6), new Line(6, 4), new Line(4, 0)
-};
+            {
+                new Line(0, 1), new Line(1, 3), new Line(3, 2), new Line(2, 0),
+                new Line(6, 7), new Line(7, 3), new Line(3, 2), new Line(2, 6),
+                new Line(3, 7), new Line(7, 5), new Line(5, 1), new Line(1, 3),
+                new Line(5, 7), new Line(7, 6), new Line(6, 4), new Line(4, 5),
+                new Line(5, 4), new Line(4, 0), new Line(0, 1), new Line(1, 5),
+                new Line(0, 2), new Line(2, 6), new Line(6, 4), new Line(4, 0)
+            };
 
             list_lines.Clear();
             list_lines.AddRange(cubeLines);
@@ -284,10 +368,18 @@ namespace Lab6
 
             for (int i = 0; i < list_points.Count(); i++)
             {
-                list_points[i].x *= 50; // Масштабирование координат
-                list_points[i].y *= 50;
-                list_points[i].z *= 50;
+                list_points[i].x *= 100; // Масштабирование координат
+                list_points[i].y *= 100;
+                list_points[i].z *= 100;
             }
+
+            for (int i = 0; i < list_points.Count(); i++)
+            {
+                list_points[i].x -= 100;
+
+            }
+
+            polyhedra = new Polyhedra(list_pols);
 
             DrawLines(list_lines, list_points, g); // Отрисовка куба
 
@@ -297,12 +389,12 @@ namespace Lab6
             pictureBox1.Refresh(); // Очистка рисунка
 
             List<PointD> tetraPoints = new List<PointD>()
-    {
-        new PointD(2, 2, 2),
-        new PointD(2, 0, 0),
-        new PointD(0, 2, 0),
-        new PointD(0, 0, 2)
-    };
+            {
+                new PointD(2, 2, 2),
+                new PointD(2, 0, 0),
+                new PointD(0, 2, 0),
+                new PointD(0, 0, 2)
+            };
             list_points = tetraPoints;
             for (int i = 0; i < list_points.Count(); i++)
             {
@@ -310,15 +402,19 @@ namespace Lab6
                 list_points[i].y *= 50;
                 list_points[i].z *= 50;
             }
-            
+
+            for (int i = 0; i < list_points.Count(); i++)
+            {
+                list_points[i].x -= 100;
+
+            }
+
             List<Line> tetraLines = new List<Line>()
             {
-                new Line(0, 1),
-                new Line(0, 2),
-                new Line(0, 3),
-                new Line(1, 2),
-                new Line(2, 3),
-                new Line(3, 1)
+                new Line(0, 2), new Line(2, 1), new Line(1, 0),
+                new Line(3, 0), new Line(0, 1), new Line(1, 3),
+                new Line(3, 1), new Line(1, 2), new Line(2, 3),
+                new Line(2, 0), new Line(0, 3), new Line(3, 2)
             };
 
             list_lines.Clear();
@@ -328,16 +424,18 @@ namespace Lab6
             Polygon tetraPolygon = new Polygon(new List<Line>() { tetraLines[0], tetraLines[1], tetraLines[2] });
             list_pols.Add(tetraPolygon);
 
-            tetraPolygon = new Polygon(new List<Line>() { tetraLines[0], tetraLines[3], tetraLines[4] });
+            tetraPolygon = new Polygon(new List<Line>() { tetraLines[3], tetraLines[4], tetraLines[5] });
             list_pols.Add(tetraPolygon);
 
-            tetraPolygon = new Polygon(new List<Line>() { tetraLines[1], tetraLines[3], tetraLines[5] });
+            tetraPolygon = new Polygon(new List<Line>() { tetraLines[6], tetraLines[7], tetraLines[8] });
             list_pols.Add(tetraPolygon);
 
-            tetraPolygon = new Polygon(new List<Line>() { tetraLines[2], tetraLines[4], tetraLines[5] });
+            tetraPolygon = new Polygon(new List<Line>() { tetraLines[9], tetraLines[10], tetraLines[11] });
             list_pols.Add(tetraPolygon);
 
             var g = Graphics.FromHwnd(pictureBox1.Handle);
+
+            polyhedra = new Polyhedra(list_pols);
 
             DrawLines(list_lines, list_points, g);
         }
@@ -347,32 +445,39 @@ namespace Lab6
 
             List<PointD> octaPoints = new List<PointD>()
             {
-                new PointD(2, 1, 1),
                 new PointD(0, 1, 1),
                 new PointD(1, 2, 1),
-                new PointD(1, 0, 1),
                 new PointD(1, 1, 2),
+                new PointD(2, 1, 1),
+                new PointD(1, 0, 1),
                 new PointD(1, 1, 0)
             };
 
             list_points = octaPoints;
             for (int i = 0; i < list_points.Count(); i++)
             {
-                list_points[i].x *= 50;
-                list_points[i].y *= 50;
-                list_points[i].z *= 50;
+                list_points[i].x *= 75;
+                list_points[i].y *= 75;
+                list_points[i].z *= 75;
+            }
+
+            for (int i = 0; i < list_points.Count(); i++)
+            {
+                list_points[i].x -= 150;
+
             }
 
             List<Line> octaLines = new List<Line>()
-            {new Line(0, 2), new Line(2, 1), new Line(1, 0),
-            new Line(1, 3), new Line(3, 0), new Line(0, 2),
-            new Line(3, 2), new Line(2, 4), new Line(4, 3),
-            new Line(4, 0), new Line(0, 5), new Line(5, 4),
-            new Line(5, 1), new Line(1, 3), new Line(3, 5),
-            new Line(5, 4), new Line(4, 2), new Line(2, 5),
-            new Line(0, 4), new Line(4, 5), new Line(5, 2),
-            new Line(2, 3), new Line(3, 4), new Line(4, 1),
-            new Line(1, 5), new Line(5, 3), new Line(3, 2)
+            {
+                new Line(0,  2), new Line(2, 1), new Line(1, 0),
+                new Line(1,  3), new Line(3, 2), new Line(2, 1),
+                new Line(3,  4), new Line(4, 2), new Line(2, 3),
+                new Line(4,  0), new Line(0, 2), new Line(2, 4),
+
+                new Line(1,  5), new Line(5, 3), new Line(3, 1),
+                new Line(3,  5), new Line(5, 4), new Line(4, 3),
+                new Line(4,  5), new Line(5, 0), new Line(0, 4),
+                new Line(0,  5), new Line(5, 1), new Line(1, 0)
             };
 
             list_lines.Clear();
@@ -382,18 +487,21 @@ namespace Lab6
 
             List<Polygon> octaPolygons = new List<Polygon>()
             {
-            new Polygon(new List<Line>() { octaLines[0], octaLines[1], octaLines[2] }),
-            new Polygon(new List<Line>() { octaLines[3], octaLines[4], octaLines[5] }),
-            new Polygon(new List<Line>() { octaLines[6], octaLines[7], octaLines[8] }),
-            new Polygon(new List<Line>() { octaLines[9], octaLines[10], octaLines[11] }),
-            new Polygon(new List<Line>() { octaLines[12], octaLines[13], octaLines[14] }),
-            new Polygon(new List<Line>() { octaLines[15], octaLines[16], octaLines[17] }),
-            new Polygon(new List<Line>() { octaLines[18], octaLines[19], octaLines[20] }),
-            new Polygon(new List<Line>() { octaLines[21], octaLines[22], octaLines[23] })
+                new Polygon(new List<Line>() { octaLines[0], octaLines[1], octaLines[2] }),
+                new Polygon(new List<Line>() { octaLines[3], octaLines[4], octaLines[5] }),
+                new Polygon(new List<Line>() { octaLines[6], octaLines[7], octaLines[8] }),
+                new Polygon(new List<Line>() { octaLines[9], octaLines[10], octaLines[11] }),
+                new Polygon(new List<Line>() { octaLines[12], octaLines[13], octaLines[14] }),
+                new Polygon(new List<Line>() { octaLines[15], octaLines[16], octaLines[17] }),
+                new Polygon(new List<Line>() { octaLines[18], octaLines[19], octaLines[20] }),
+                new Polygon(new List<Line>() { octaLines[21], octaLines[22], octaLines[23] })
             };
 
             list_pols = octaPolygons;
-            var g = Graphics.FromHwnd(pictureBox1.Handle);          
+            var g = Graphics.FromHwnd(pictureBox1.Handle);
+
+            polyhedra = new Polyhedra(list_pols);
+
             DrawLines(list_lines, list_points, g);
 
         }
@@ -416,6 +524,7 @@ namespace Lab6
 
 
             int cathet = (int)Math.Sqrt(Math.Pow(pictureBox1.Width / 2, 2) / 3);
+            /**/
             int shiftX = 0; // Смещение по оси X
             int shiftY = 0; // Смещение по оси Y
 
@@ -492,6 +601,8 @@ namespace Lab6
 
             for (int i = 0; i < list_lines.Count(); i++)
             {
+                if (!list_lines[i].visible)
+                    continue;
                 Point a = new Point((int)(newImage[list_lines[i].a].x) + centerX, (int)(newImage[list_lines[i].a].y) + centerY);
                 Point b = new Point((int)(newImage[list_lines[i].b].x) + centerX, (int)(newImage[list_lines[i].b].y) + centerY);
 
@@ -1071,6 +1182,36 @@ namespace Lab6
 
 
             }
+        }
+
+        private void button6_Click(object sender, EventArgs e)
+        {
+            PointD center = polyhedra.center;
+            view = new Vector(Convert.ToDouble(textBox15.Text) - center.x, Convert.ToDouble(textBox16.Text) - center.y, Convert.ToDouble(textBox17.Text) - center.z);
+            int i = 0;
+            foreach (var p in list_pols)
+            {
+                double angle = (p.normal.x * view.x + p.normal.y * view.y + p.normal.z * view.z) / (Math.Sqrt(Math.Pow(p.normal.x, 2) + Math.Pow(p.normal.y, 2) + Math.Pow(p.normal.z, 2)) * Math.Sqrt(Math.Pow(view.x, 2) + Math.Pow(view.y, 2) + Math.Pow(view.z, 2)));
+                double arc = Math.Acos(angle);
+                if (arc * 180 / Math.PI > 90)
+                {
+                    for (int j = 0; j < list_pols[i].lines.Count; j++)
+                    {
+                        list_lines[list_pols[i].lines.Count * i + j].visible = false;
+                    }
+                }
+                i++;
+            }
+            redraw();
+        }
+
+        private void button7_Click(object sender, EventArgs e)
+        {
+            for (int i = 0; i < list_lines.Count; i++)
+            {
+                list_lines[i].visible = true;
+            }
+            redraw();
         }
     }
 }
