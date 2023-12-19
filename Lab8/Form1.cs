@@ -684,6 +684,7 @@ namespace Lab6
 
         private void redraw()
         {
+
             var g = Graphics.FromHwnd(pictureBox1.Handle);
 
             if (axonometric_button.Checked)
@@ -1186,6 +1187,9 @@ namespace Lab6
 
         private void button6_Click(object sender, EventArgs e)
         {
+            
+
+            polyhedra = new Polyhedra(list_pols);
             PointD center = polyhedra.center;
             view = new Vector(Convert.ToDouble(textBox15.Text) - center.x, Convert.ToDouble(textBox16.Text) - center.y, Convert.ToDouble(textBox17.Text) - center.z);
             int i = 0;
