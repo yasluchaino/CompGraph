@@ -10,6 +10,7 @@ using System.Reflection;
 using System.Runtime.ConstrainedExecution;
 using System.Security.Cryptography;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using static Lab6.Form1;
@@ -1250,6 +1251,39 @@ namespace Lab6
             {
                 list_lines[i].visible = true;
             }
+        }
+
+        private void Pokruti() 
+        {
+            int angl = 1;
+            while (angl <= 180) 
+            {
+                RotateY(2);
+                for (int i = 0; i < list_points.Count; i++)
+                {
+                    double[,] matrixPoint = new double[1, 4] { { list_points[i].x, list_points[i].y, list_points[i].z, 1.0 } };
+
+                    var res = (multipleMatrix(matrixPoint, currentRotate));
+
+                    list_points[i] = new PointD(res[0, 0], res[0, 1], res[0, 2]);
+                }
+
+                if (invisible_edges)
+                {
+                    MakeVisible();
+                    MakeInvisible();
+                }
+
+                redraw();
+                Thread.Sleep(1);
+                angl++;
+
+            }
+        }
+
+        private void button8_Click(object sender, EventArgs e)
+        {
+            Pokruti();
         }
     }
 }
