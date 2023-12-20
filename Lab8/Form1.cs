@@ -27,6 +27,7 @@ namespace Lab6
         List<Line> figureLines;
         Polyhedra polyhedra;
         Vector view;
+        public bool invisible_edges = false;
 
         public Form1()
         {
@@ -612,8 +613,6 @@ namespace Lab6
 
         private void buttonTranslite_Click(object sender, EventArgs e)
         {
-
-
             var g = Graphics.FromHwnd(pictureBox1.Handle);
 
             matrixTranslation[3, 0] = Convert.ToDouble(textBox1.Text);
@@ -627,6 +626,12 @@ namespace Lab6
                 var res = (multipleMatrix(matrixPoint, matrixTranslation));
 
                 list_points[i] = new PointD(res[0, 0], res[0, 1], res[0, 2]);
+            }
+
+            if (invisible_edges) 
+            {
+                MakeVisible();
+                MakeInvisible();
             }
 
             redraw();
@@ -701,7 +706,7 @@ namespace Lab6
 
         private void radioButton2_CheckedChanged(object sender, EventArgs e)
         {
-
+            invisible_edges = false;
             if (radioButton1.Checked)
             {
                 pictureBox1.Refresh();
@@ -789,6 +794,12 @@ namespace Lab6
                 list_points[i] = new PointD(res[0, 0], res[0, 1], res[0, 2]);
             }
 
+            if (invisible_edges)
+            {
+                MakeVisible();
+                MakeInvisible();
+            }
+
             redraw();
         }
 
@@ -844,6 +855,13 @@ namespace Lab6
 
                 list_points[i] = new PointD(res[0, 0], res[0, 1], res[0, 2]);
             }
+
+            if (invisible_edges)
+            {
+                MakeVisible();
+                MakeInvisible();
+            }
+
             redraw();
         }
 
@@ -864,6 +882,12 @@ namespace Lab6
                 var res = (multipleMatrix(matrixPoint, matrixScale));
 
                 list_points[i] = new PointD(res[0, 0], res[0, 1], res[0, 2]);
+            }
+
+            if (invisible_edges)
+            {
+                MakeVisible();
+                MakeInvisible();
             }
 
             redraw();
@@ -1187,8 +1211,13 @@ namespace Lab6
 
         private void button6_Click(object sender, EventArgs e)
         {
-            
+            invisible_edges = true;
+            MakeInvisible();
+            redraw();
+        }
 
+        private void MakeInvisible() 
+        {
             polyhedra = new Polyhedra(list_pols);
             PointD center = polyhedra.center;
             view = new Vector(Convert.ToDouble(textBox15.Text) - center.x, Convert.ToDouble(textBox16.Text) - center.y, Convert.ToDouble(textBox17.Text) - center.z);
@@ -1206,16 +1235,21 @@ namespace Lab6
                 }
                 i++;
             }
-            redraw();
         }
 
         private void button7_Click(object sender, EventArgs e)
+        {
+            invisible_edges = false;
+            MakeVisible();
+            redraw();
+        }
+
+        private void MakeVisible() 
         {
             for (int i = 0; i < list_lines.Count; i++)
             {
                 list_lines[i].visible = true;
             }
-            redraw();
         }
     }
 }
