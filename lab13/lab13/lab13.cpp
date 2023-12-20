@@ -39,7 +39,7 @@ GLint Unif_mvp;
 GLint Unif_offsets;
 
 
-sf::Image photo_img;
+sf::Image img;
 GLuint texture;
 
 struct Vertex
@@ -188,18 +188,14 @@ void InitTextures()
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	sf::Image img;
 	if (!img.loadFromFile("gun.png"))
 	{
 		std::cout << "could not load texture " << std::endl;
 		return;
 	}
 
-	sf::Vector2u size = img.getSize();
-	int width = size.x;
-	int height = size.y;
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, img.getPixelsPtr());
-	glGenerateMipmap(GL_TEXTURE_2D);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, img.getSize().x, img.getSize().y, 0, GL_RGBA, GL_UNSIGNED_BYTE, img.getPixelsPtr());
+
 }
 
 void InitShader()
