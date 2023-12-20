@@ -26,15 +26,14 @@ struct Vertex {
 // Исходный код вершинного шейдера
 const char* VertexShaderSource = R"(
 #version 330 core
-in vec3 coord;
-in vec4 color;
-in vec2  texCoord;
-    
-out vec4 vert_color;
-out vec2 TexCoord;
+layout (location = 0) in vec3 coord_pos;
+layout (location = 1) in vec3 color_value;
+layout (location = 2) in vec2 tex_coord_in;
+out vec3 frag_color;
+out vec2 coord_tex;    
 
 void main() {
-	vec3 position = coord * mat3(
+	vec3 position = coord_pos * mat3(
            1, 0, 0,
             0, cos(1), -sin(1),
             0, sin(1), cos(1)
@@ -44,24 +43,24 @@ void main() {
             -sin(-1), 0, cos(-1)
 		);
 	gl_Position = vec4(position, 1.0);
-    vert_color = color;
-	TexCoord =  texCoord;
+    frag_color = color_value;
+    coord_tex = tex_coord_in;
 }
 )";
 
 // Исходный код фрагментного шейдера
 const char* FragShaderSource = R"(
 #version 330 core
-in vec4 vert_color;
-in vec2 TexCoord;
+in vec3 frag_color;
+in vec2 coord_tex;
+out vec4 color;
 
 uniform sampler2D ourTexture;
 uniform float coef;
 
-out vec4 color;
 
 void main() {
-    color = mix(texture(ourTexture, TexCoord), vec4(vert_color), coef);
+    color = mix(texture(ourTexture, coord_tex), vec4(frag_color,1), coef);
 }
 )";
 
@@ -94,9 +93,9 @@ bool InitTextures()
 	}
 
 	glGenTextures(1, &texture);
-	glBindTexture(GL_TEXTURE_2D, texture);
+	glBindTexture(GL_TEXTURE_2D, texture);//привязыываем текстуру
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, photo_img.getSize().x, photo_img.getSize().y, 0, GL_RGBA, GL_UNSIGNED_BYTE,
-		photo_img.getPixelsPtr());
+		photo_img.getPixelsPtr());//устанавливаем изображение в стуктуру
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
