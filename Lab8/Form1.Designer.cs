@@ -114,6 +114,7 @@ namespace Lab6
             this.label31 = new System.Windows.Forms.Label();
             this.button7 = new System.Windows.Forms.Button();
             this.button8 = new System.Windows.Forms.Button();
+            this.button9 = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
@@ -763,7 +764,7 @@ namespace Lab6
             // 
             // button3
             // 
-            this.button3.Location = new System.Drawing.Point(1043, 384);
+            this.button3.Location = new System.Drawing.Point(1039, 394);
             this.button3.Margin = new System.Windows.Forms.Padding(2);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(110, 29);
@@ -774,7 +775,7 @@ namespace Lab6
             // 
             // button4
             // 
-            this.button4.Location = new System.Drawing.Point(1188, 380);
+            this.button4.Location = new System.Drawing.Point(1169, 394);
             this.button4.Margin = new System.Windows.Forms.Padding(2);
             this.button4.Name = "button4";
             this.button4.Size = new System.Drawing.Size(94, 29);
@@ -795,7 +796,7 @@ namespace Lab6
             // label23
             // 
             this.label23.AutoSize = true;
-            this.label23.Location = new System.Drawing.Point(1050, 433);
+            this.label23.Location = new System.Drawing.Point(1050, 443);
             this.label23.Name = "label23";
             this.label23.Size = new System.Drawing.Size(86, 13);
             this.label23.TabIndex = 81;
@@ -804,7 +805,7 @@ namespace Lab6
             // comboBox1
             // 
             this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Location = new System.Drawing.Point(1142, 430);
+            this.comboBox1.Location = new System.Drawing.Point(1142, 440);
             this.comboBox1.Name = "comboBox1";
             this.comboBox1.Size = new System.Drawing.Size(121, 21);
             this.comboBox1.TabIndex = 82;
@@ -813,7 +814,7 @@ namespace Lab6
             // label24
             // 
             this.label24.AutoSize = true;
-            this.label24.Location = new System.Drawing.Point(1055, 460);
+            this.label24.Location = new System.Drawing.Point(1055, 470);
             this.label24.Name = "label24";
             this.label24.Size = new System.Drawing.Size(73, 13);
             this.label24.TabIndex = 83;
@@ -821,7 +822,7 @@ namespace Lab6
             // 
             // textBox10
             // 
-            this.textBox10.Location = new System.Drawing.Point(1068, 483);
+            this.textBox10.Location = new System.Drawing.Point(1068, 493);
             this.textBox10.Name = "textBox10";
             this.textBox10.Size = new System.Drawing.Size(100, 20);
             this.textBox10.TabIndex = 84;
@@ -830,7 +831,7 @@ namespace Lab6
             // label25
             // 
             this.label25.AutoSize = true;
-            this.label25.Location = new System.Drawing.Point(1050, 485);
+            this.label25.Location = new System.Drawing.Point(1050, 495);
             this.label25.Name = "label25";
             this.label25.Size = new System.Drawing.Size(12, 13);
             this.label25.TabIndex = 85;
@@ -839,7 +840,7 @@ namespace Lab6
             // label26
             // 
             this.label26.AutoSize = true;
-            this.label26.Location = new System.Drawing.Point(1049, 511);
+            this.label26.Location = new System.Drawing.Point(1049, 521);
             this.label26.Name = "label26";
             this.label26.Size = new System.Drawing.Size(12, 13);
             this.label26.TabIndex = 86;
@@ -847,7 +848,7 @@ namespace Lab6
             // 
             // textBox11
             // 
-            this.textBox11.Location = new System.Drawing.Point(1067, 511);
+            this.textBox11.Location = new System.Drawing.Point(1067, 521);
             this.textBox11.Name = "textBox11";
             this.textBox11.Size = new System.Drawing.Size(100, 20);
             this.textBox11.TabIndex = 87;
@@ -855,7 +856,7 @@ namespace Lab6
             // 
             // textBox12
             // 
-            this.textBox12.Location = new System.Drawing.Point(1174, 482);
+            this.textBox12.Location = new System.Drawing.Point(1174, 492);
             this.textBox12.Name = "textBox12";
             this.textBox12.Size = new System.Drawing.Size(100, 20);
             this.textBox12.TabIndex = 88;
@@ -863,7 +864,7 @@ namespace Lab6
             // 
             // textBox13
             // 
-            this.textBox13.Location = new System.Drawing.Point(1173, 511);
+            this.textBox13.Location = new System.Drawing.Point(1173, 521);
             this.textBox13.Name = "textBox13";
             this.textBox13.Size = new System.Drawing.Size(100, 20);
             this.textBox13.TabIndex = 89;
@@ -872,7 +873,7 @@ namespace Lab6
             // label27
             // 
             this.label27.AutoSize = true;
-            this.label27.Location = new System.Drawing.Point(1049, 540);
+            this.label27.Location = new System.Drawing.Point(1049, 550);
             this.label27.Name = "label27";
             this.label27.Size = new System.Drawing.Size(62, 13);
             this.label27.TabIndex = 90;
@@ -880,7 +881,7 @@ namespace Lab6
             // 
             // textBox14
             // 
-            this.textBox14.Location = new System.Drawing.Point(1117, 537);
+            this.textBox14.Location = new System.Drawing.Point(1117, 547);
             this.textBox14.Name = "textBox14";
             this.textBox14.Size = new System.Drawing.Size(100, 20);
             this.textBox14.TabIndex = 91;
@@ -888,7 +889,7 @@ namespace Lab6
             // 
             // button5
             // 
-            this.button5.Location = new System.Drawing.Point(1126, 563);
+            this.button5.Location = new System.Drawing.Point(1126, 573);
             this.button5.Name = "button5";
             this.button5.Size = new System.Drawing.Size(86, 23);
             this.button5.TabIndex = 92;
@@ -986,12 +987,25 @@ namespace Lab6
             this.button8.UseVisualStyleBackColor = true;
             this.button8.Click += new System.EventHandler(this.button8_Click);
             // 
+            // button9
+            // 
+            this.button9.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.button9.Location = new System.Drawing.Point(1058, 367);
+            this.button9.Margin = new System.Windows.Forms.Padding(2);
+            this.button9.Name = "button9";
+            this.button9.Size = new System.Drawing.Size(67, 23);
+            this.button9.TabIndex = 103;
+            this.button9.Text = "Тестовое";
+            this.button9.UseVisualStyleBackColor = true;
+            this.button9.Click += new System.EventHandler(this.button9_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSize = true;
             this.ClientSize = new System.Drawing.Size(1578, 607);
+            this.Controls.Add(this.button9);
             this.Controls.Add(this.button8);
             this.Controls.Add(this.button7);
             this.Controls.Add(this.textBox17);
@@ -1172,6 +1186,7 @@ namespace Lab6
         private System.Windows.Forms.Label label31;
         private System.Windows.Forms.Button button7;
         private System.Windows.Forms.Button button8;
+        private System.Windows.Forms.Button button9;
     }
 }
 

@@ -1060,8 +1060,10 @@ namespace Lab6
             list_points.Clear();
             list_lines.Clear();
             list_pols.Clear();
+            redraw();
             List<PointD> points = new List<PointD>();
             int count = int.Parse(textBox6.Text);
+
             foreach (var p in listBox1.Items)
             {
                 PointD point = (PointD)p;
@@ -1070,6 +1072,15 @@ namespace Lab6
                 point.z *= 50; 
                 points.Add(point);
             }
+
+
+            foreach (var point in points)
+            {
+                point.x *= 25;
+                point.y *= 25;
+                point.z *= 25;
+            }
+
 
             int axis = 0;
             switch (textBox7.Text)
@@ -1087,7 +1098,6 @@ namespace Lab6
             var g = Graphics.FromHwnd(pictureBox1.Handle);
 
             (list_points, list_lines) = CreateRotationFigurePointsAndLines(points, axis, count);
-
             DrawLines(list_lines, list_points, g);
         }
 
@@ -1107,23 +1117,26 @@ namespace Lab6
             }
 
             var n = basePoints.Count;
-
+            
             textBox4.Text = points.Count.ToString();
             for (int i = 0; i < partitions; ++i)
             {
                 for (int j = 0; j < n - 1; ++j)
                 {
-
+                    List<Line> templines = new List<Line>();
                     int indexA = i * n + j;
                     int indexB = (i + 1) % partitions * n + j;
                     int indexC = (i + 1) % partitions * n + j + 1;
                     int indexD = i * n + j + 1;
 
-                    figureLines.Add(new Line(indexA, indexB));
-                    figureLines.Add(new Line(indexB, indexC));
-                    figureLines.Add(new Line(indexC, indexD));
-                    figureLines.Add(new Line(indexD, indexA));
-
+                    templines.Add(new Line(indexA, indexB));
+                    templines.Add(new Line(indexB, indexC));
+                    templines.Add(new Line(indexC, indexD));
+                    templines.Add(new Line(indexD, indexA));
+                    figureLines.AddRange(templines);
+                    
+                    Polygon temppolygon = new Polygon(templines);
+                    list_pols.Add(temppolygon);
                 }
             }
 
@@ -1255,6 +1268,10 @@ namespace Lab6
 
         private void Pokruti() 
         {
+            foreach (var p in list_points) 
+            {
+                Console.WriteLine($"x:{p.x} y:{p.y} z:{p.z}");
+            }
             int angl = 1;
             while (angl <= 180) 
             {
@@ -1275,15 +1292,65 @@ namespace Lab6
                 }
 
                 redraw();
-                Thread.Sleep(1);
+                Thread.Sleep(5);
                 angl++;
 
             }
+            Console.WriteLine();
+            foreach (var p in list_points)
+            {
+                Console.WriteLine($"x:{p.x} y:{p.y} z:{p.z}");
+            }
+
         }
 
         private void button8_Click(object sender, EventArgs e)
         {
             Pokruti();
+        }
+
+        private void button9_Click(object sender, EventArgs e)
+        {
+            invisible_edges = false;
+            list_points.Clear();
+            list_lines.Clear();
+            list_pols.Clear();
+            redraw();
+            List<PointD> points = new List<PointD>();
+
+            int count = 20;
+            points.Add(new PointD(0, 0.1, 0));
+            points.Add(new PointD(0, 1, 0));
+            points.Add(new PointD(1, 2, 0));
+            points.Add(new PointD(2, 3, 0));
+            points.Add(new PointD(4, 3, 0));
+            points.Add(new PointD(5, 2, 0));
+            points.Add(new PointD(6, 1, 0));
+            points.Add(new PointD(9, 1, 0));
+            points.Add(new PointD(9, 0.1, 0));
+
+            foreach (var point in points)
+            {
+                point.x *= 25;
+                point.y *= 25;
+                point.z *= 25;
+            }
+
+
+            int axis = 0;
+            var g = Graphics.FromHwnd(pictureBox1.Handle);
+
+            (list_points, list_lines) = CreateRotationFigurePointsAndLines(points, axis, count);
+            RotateZ(270);
+            for (int i = 0; i < list_points.Count; i++)
+            {
+                double[,] matrixPoint = new double[1, 4] { { list_points[i].x, list_points[i].y, list_points[i].z, 1.0 } };
+
+                var res = (multipleMatrix(matrixPoint, currentRotate));
+
+                list_points[i] = new PointD(res[0, 0], res[0, 1], res[0, 2]);
+            }
+            redraw();
         }
     }
 }
