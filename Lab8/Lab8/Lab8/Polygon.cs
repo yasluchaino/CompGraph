@@ -30,25 +30,6 @@ namespace Lab8
             }
         }
 
-        public Polygon(string s)
-        {
-            Points = new List<PointD>();
-
-            var arr = s.Split(' ');
-
-            for (int i = 0; i < arr.Length; i += 3)
-            {
-                if (string.IsNullOrEmpty(arr[i]))
-                    continue;
-                float x = (float)Math.Truncate(float.Parse(arr[i], CultureInfo.InvariantCulture));
-                float y = (float)Math.Truncate(float.Parse(arr[i + 1], CultureInfo.InvariantCulture));
-                float z = (float)Math.Truncate(float.Parse(arr[i + 2], CultureInfo.InvariantCulture));
-                PointD p = new PointD(x, y, z);
-                Points.Add(p);
-            }
-            UpdateCenter();
-        }
-
         private void UpdateCenter()
         {
             Center.X = 0;
