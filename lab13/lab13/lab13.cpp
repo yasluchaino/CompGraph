@@ -25,14 +25,19 @@ int VERTICES;
 
 GLuint VBO;
 
+glm::mat4 model = glm::mat4(1.0f);
 GLuint Program;
-
-GLint Unif_mvp;
 
 // ID 
 GLint Unif_offsets;
+GLint Unif_model;
 
 vector<glm::vec4> offsets;
+
+vector<float> speed_around_axis;
+
+vector<float> speed_around_center;
+
 
 sf::Image img;
 GLuint texture;
@@ -49,7 +54,7 @@ struct Vertex
 	GLfloat t;
 };
 
-	
+
 void load_obj(const char* filename, vector<Vertex>& out)
 {
 	vector<glm::vec3> vertices;
@@ -115,20 +120,33 @@ void load_obj(const char* filename, vector<Vertex>& out)
 }
 
 const char* VertexShaderSource = R"(
-#version 330 core
-layout (location = 0) in vec3 coord;
-layout (location = 1) in vec2 textCoord;
-out vec2 texcoord;
+    #version 330 core
+    layout (location = 0) in vec3 coord;
+    layout (location = 1) in vec2 textCoord;
+    out vec2 texcoord;
 
-uniform vec4 offsets[6];
+    uniform vec4 offsets[6];
+	uniform mat4 model;
 
-void main() {
-	float offset = offsets[gl_InstanceID].x;
-	vec4 pos = vec4(coord, 1.0);
-    pos = (pos + vec4(offset, 0.0, 0.0, 0.0));
-    gl_Position = pos;
-    texcoord =  vec2(textCoord.x, 1.0f - textCoord.y);
-})";
+	mat4 rotateY( in float angle ) {
+	return mat4(	cos(angle),		0,		sin(angle),	0,
+			 				0,		1.0,			 0,	0,
+					-sin(angle),	0,		cos(angle),	0,
+							0, 		0,				0,	1);
+	}
+
+
+    void main() {
+        float offset = offsets[gl_InstanceID].x;
+		float rot_axis = offsets[gl_InstanceID].z;
+		float rot_center = offsets[gl_InstanceID].w;
+
+        vec4 pos = rotateY(rot_axis) * vec4(coord, 1.0);//вокруг оси
+		pos = rotateY(rot_center) * (pos + vec4(offset, 0.0, 0.0, 0.0));//вокруг центрального объекта
+        gl_Position = model * pos;
+        texcoord = vec2(textCoord.x, 1.0 - textCoord.y);
+    }
+)";
 
 const char* FragShaderSource = R"(
 #version 330 core
@@ -180,7 +198,8 @@ void InitVBO() {
 }
 // Функция для инициализации ресурсов
 void InitTextures()
-{	if (!img.loadFromFile("gun.png"))
+{
+	if (!img.loadFromFile("gun.png"))
 	{
 		std::cout << "could not load texture " << std::endl;
 		return;
@@ -239,35 +258,76 @@ void InitShader()
 		return;
 	}
 
+	Unif_model = glGetUniformLocation(Program, "model");
+	if (Unif_offsets == -1)
+	{
+		std::cout << "could not bind uniform " << std::endl;
+		return;
+	}
+
 	checkOpenGLerror();
 }
 
 
+void Rotate()
+{
+	for (int i = 0; i < offsets.size(); i++)
+	{
+		offsets[i].z = fmod(offsets[i].z + speed_around_axis[i], 2 * M_PI);
+		offsets[i].w = fmod(offsets[i].w + speed_around_center[i], 2 * M_PI);
+	}
+}
 
 void Init() {
 
-	offsets = {
-	{0, 1.0, 0, 0}, 
-	{3, 0.5, 0, 0}, 
-	{4, 0.008691, 0, 0},
-	{5, 0.009149, 0, 0}, 
-	{6, 0.004868, 0, 0},
+	speed_around_axis = {
+		0.05, 0.01, 0.02, 0.015, 0.023, 0.016
 	};
+	speed_around_center = {
+		0.0, 0.1, 0.025, 0.012, 0.015, 0.0116
+	};
+	offsets = {
+	{0, 1.0, 0, 0},
+	{1, 0.9, 0, 0},
+	{2, 0.008691, 0, 0},
+	{3, 0.009149, 0, 0},
+	{4, 0.004868, 0, 0},
+	{5, 0.003, 0, 0},
+
+	};
+
 	InitVBO();
 	InitShader();
 	InitTextures();
-	
+
 	glEnable(GL_DEPTH_TEST);
 }
 
+float angle = 0.0f;
 
 void Draw() {
+
+	glClearColor(0.5f, 0.7f, 1.0f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
 	glUseProgram(Program);
 
 	glUniform4fv(glGetUniformLocation(Program, "offsets"), 6, glm::value_ptr(offsets[0]));
+	angle += 0.01f;
 
 	
+	//пока нет какмеры
+	glm::mat4 model = glm::mat4(1.0f);
+
+	model = glm::rotate(model, angle, glm::vec3(0.0f, 1.0f, 0.0f));
+	glm::mat4 projection = glm::perspective(glm::radians(45.0f), (float)800 / (float)800, 0.1f, 100.0f);
+	glm::mat4 view = glm::lookAt(glm::vec3(0.0f, 0.0f, 5.0f),  // позиция камеры
+		glm::vec3(0.0f, 0.0f, 0.0f),  
+		glm::vec3(0.0f, 1.0f, 0.0f));
+	glm::mat4  mvp = projection * view * model;
+
+	glUniformMatrix4fv(Unif_model, 1, GL_FALSE, glm::value_ptr(mvp));
+
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
 
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (void*)0);
@@ -318,6 +378,7 @@ int main() {
 			if (event.type == sf::Event::Closed) { window.close(); }
 			else if (event.type == sf::Event::Resized) { glViewport(0, 0, event.size.width, event.size.height); }
 		}
+		Rotate();
 		Draw();
 		window.display();
 	}
