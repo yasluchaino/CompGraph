@@ -27,17 +27,12 @@ GLuint VBO;
 
 GLuint Program;
 
-// ID атрибута вершин
-GLint Attrib_vertex;
-
-// ID атрибута текстуры
-GLint Attrib_t;
-
 GLint Unif_mvp;
 
 // ID 
 GLint Unif_offsets;
 
+vector<glm::vec4> offsets;
 
 sf::Image img;
 GLuint texture;
@@ -57,7 +52,7 @@ struct Vertex
 	
 void load_obj(const char* filename, vector<Vertex>& out)
 {
-vector<glm::vec3> vertices;
+	vector<glm::vec3> vertices;
 	vector<glm::vec3> normals;
 	vector<glm::vec2> uvs;
 
@@ -121,13 +116,18 @@ vector<glm::vec3> vertices;
 
 const char* VertexShaderSource = R"(
 #version 330 core
-in vec3 coord;
-in vec2 textCoord;
+layout (location = 0) in vec3 coord;
+layout (location = 1) in vec2 textCoord;
 out vec2 texcoord;
 
+uniform vec4 offsets[6];
+
 void main() {
-    texcoord = textCoord;
-    gl_Position = vec4(coord, 1.0);
+	float offset = offsets[gl_InstanceID].x;
+	vec4 pos = vec4(coord, 1.0);
+    pos = (pos + vec4(offset, 0.0, 0.0, 0.0));
+    gl_Position = pos;
+    texcoord =  vec2(textCoord.x, 1.0f - textCoord.y);
 })";
 
 const char* FragShaderSource = R"(
@@ -180,22 +180,20 @@ void InitVBO() {
 }
 // Функция для инициализации ресурсов
 void InitTextures()
-{
-	glGenTextures(1, &texture); // Генерируем текстуру
-	/*glActiveTexture(GL_TEXTURE0);*/
-	glBindTexture(GL_TEXTURE_2D, texture); // Привязываем текстуру
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT); // Устанавливаем параметры текстуры
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	if (!img.loadFromFile("gun.png"))
+{	if (!img.loadFromFile("gun.png"))
 	{
 		std::cout << "could not load texture " << std::endl;
 		return;
 	}
-
+	glGenTextures(1, &texture); // Генерируем текстуру
+	/*glActiveTexture(GL_TEXTURE0);*/
+	glBindTexture(GL_TEXTURE_2D, texture); // Привязываем текстуру
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, img.getSize().x, img.getSize().y, 0, GL_RGBA, GL_UNSIGNED_BYTE, img.getPixelsPtr());
-
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT); // Устанавливаем параметры текстуры
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	checkOpenGLerror();
 }
 
 void InitShader()
@@ -231,24 +229,15 @@ void InitShader()
 		std::cout << "error attach shaders \n";
 		return;
 	}
-	const char* attr_name_p = "coord";
-	const char* attr_name_t = "textCoord"; 
 
+	const char* unif_off = "offsets";
 
-
-	Attrib_vertex = glGetAttribLocation(Program, attr_name_p);
-	if (Attrib_vertex == -1) {
-		std::cout << "could not bind attrib coord" << std::endl;
-		return;
-	}
-
-	Attrib_t = glGetAttribLocation(Program, attr_name_t);
-	if (Attrib_t == -1)
+	Unif_offsets = glGetUniformLocation(Program, unif_off);
+	if (Unif_offsets == -1)
 	{
-		std::cout << "could not bind attrib  texCoord" << std::endl;
+		std::cout << "could not bind uniform " << std::endl;
 		return;
 	}
-
 
 	checkOpenGLerror();
 }
@@ -256,33 +245,46 @@ void InitShader()
 
 
 void Init() {
+
+	offsets = {
+	{0, 1.0, 0, 0}, 
+	{3, 0.5, 0, 0}, 
+	{4, 0.008691, 0, 0},
+	{5, 0.009149, 0, 0}, 
+	{6, 0.004868, 0, 0},
+	};
+	InitVBO();
 	InitShader();
 	InitTextures();
-	InitVBO();
+	
 	glEnable(GL_DEPTH_TEST);
 }
+
 
 void Draw() {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glUseProgram(Program);
 
-	glEnableVertexAttribArray(Attrib_vertex);
-	glEnableVertexAttribArray(Attrib_t);
+	glUniform4fv(glGetUniformLocation(Program, "offsets"), 6, glm::value_ptr(offsets[0]));
 
+	
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	glVertexAttribPointer(Attrib_vertex, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (GLvoid*)0);
-	glVertexAttribPointer(Attrib_t, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (GLvoid*)(3 * sizeof(GLfloat)));
+
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (void*)0);
+	glEnableVertexAttribArray(0);
+
+	// Атрибуты текстурных координат
+	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (void*)(3 * sizeof(GLfloat)));
+	glEnableVertexAttribArray(1);
 
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
-	glDrawArraysInstanced(GL_TRIANGLES, 0, VERTICES, 1);
+	glDrawArraysInstanced(GL_TRIANGLES, 0, VERTICES, 6);
 
 
-	glDisableVertexAttribArray(Attrib_vertex);
-	glDisableVertexAttribArray(Attrib_t);
+	glDisableVertexAttribArray(0);
+	glDisableVertexAttribArray(1);
 
 	glUseProgram(0);
-	checkOpenGLerror();
-
 
 }
 
@@ -316,7 +318,6 @@ int main() {
 			if (event.type == sf::Event::Closed) { window.close(); }
 			else if (event.type == sf::Event::Resized) { glViewport(0, 0, event.size.width, event.size.height); }
 		}
-
 		Draw();
 		window.display();
 	}
