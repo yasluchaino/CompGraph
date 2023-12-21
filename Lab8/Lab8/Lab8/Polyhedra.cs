@@ -552,9 +552,6 @@ namespace Lab8
                     }
                 }
 
-                SortedSet<float> test = new SortedSet<float>();
-                for (int i = 0; i < width * height; ++i)
-                    test.Add(intensive[i]);
             }
         private Dictionary<PointD, List<float>> point_to_normal = null;
 
