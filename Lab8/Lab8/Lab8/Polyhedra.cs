@@ -27,22 +27,6 @@ namespace Lab8
             Polygons = polyhedron.Polygons.Select(face => new Polygon(face)).ToList();
             Center = new PointD(polyhedron.Center);
         }
-
-        public Polyhedra(string s)
-        {
-            Polygons = new List<Polygon>();
-
-            var arr = s.Split('\n');
-
-            for (int i = 0; i < arr.Length; ++i)
-            {
-                if (string.IsNullOrEmpty(arr[i]))
-                    continue;
-                Polygon f = new Polygon(arr[i]);
-                Polygons.Add(f);
-            }
-            UpdateCenter();
-        }
         private void UpdateCenter()
         {
             Center.X = 0;
