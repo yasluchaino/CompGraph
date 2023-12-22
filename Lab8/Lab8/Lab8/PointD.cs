@@ -73,23 +73,7 @@ namespace Lab8
 
             return new PointF(c[0], c[1]);
         }
-        //public void DrawLines(Graphics g, Projection pr = 0, Pen pen = null)
-        //{
-        //    if (pen == null)
-        //        pen = Pens.Black;
 
-        //    PointF p;
-        //    switch (pr)
-        //    {
-        //        case Projection.AXONOMETRIC:
-        //            p = make_isometric();
-        //            break;
-        //         default:
-        //            p = make_perspective();
-        //            break;
-        //    }
-        //    g.DrawRectangle(pen, p.X, p.Y, 2, 2);
-        //}
 
         static public List<float> mul_matrix(List<float> matr1, int m1, int n1, List<float> matr2, int m2, int n2)
         {
@@ -189,6 +173,18 @@ namespace Lab8
             Y = c[1];
             Z = c[2];
         }
-     
+        public static PointD CrossProduct(PointD a, PointD b)
+        {
+            float newX = a.Y * b.Z - a.Z * b.Y;
+            float newY = a.Z * b.X - a.X * b.Z;
+            float newZ = a.X * b.Y - a.Y * b.X;
+
+            return new PointD(newX, newY, newZ);
+        }
+        public static PointD operator -(PointD v)
+        {
+            return new PointD(-v.X, -v.Y, -v.Z);
+        }
+
     }
 }

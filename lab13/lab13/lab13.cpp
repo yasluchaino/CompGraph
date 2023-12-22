@@ -18,7 +18,6 @@
 #include <cstring>
 #include <sstream>
 #include <fstream>
-
 using namespace std;
 
 int VERTICES;
@@ -38,7 +37,6 @@ GLint Unif_mvp;
 // ID 
 GLint Unif_offsets;
 
-
 sf::Image img;
 GLuint texture;
 
@@ -53,7 +51,6 @@ struct Vertex
 	GLfloat s;
 	GLfloat t;
 };
-
 	
 void load_obj(const char* filename, vector<Vertex>& out)
 {
@@ -168,7 +165,6 @@ void checkOpenGLerror()
 
 
 void InitVBO() {
-
 	glGenBuffers(1, &VBO); // Генерируем вершинный буфер
 	vector<Vertex> data;
 	load_obj("gun.obj", data);
@@ -193,9 +189,7 @@ void InitTextures()
 		std::cout << "could not load texture " << std::endl;
 		return;
 	}
-
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, img.getSize().x, img.getSize().y, 0, GL_RGBA, GL_UNSIGNED_BYTE, img.getPixelsPtr());
-
 }
 
 void InitShader()
@@ -234,8 +228,6 @@ void InitShader()
 	const char* attr_name_p = "coord";
 	const char* attr_name_t = "textCoord"; 
 
-
-
 	Attrib_vertex = glGetAttribLocation(Program, attr_name_p);
 	if (Attrib_vertex == -1) {
 		std::cout << "could not bind attrib coord" << std::endl;
@@ -248,8 +240,6 @@ void InitShader()
 		std::cout << "could not bind attrib  texCoord" << std::endl;
 		return;
 	}
-
-
 	checkOpenGLerror();
 }
 
@@ -283,7 +273,6 @@ void Draw() {
 	glUseProgram(0);
 	checkOpenGLerror();
 
-
 }
 
 void ReleaseShader() {
@@ -292,7 +281,6 @@ void ReleaseShader() {
 
 	glDeleteProgram(Program);
 }
-
 
 void ReleaseVBO() {
 	glBindBuffer(GL_ARRAY_BUFFER, 0);

@@ -160,9 +160,9 @@ namespace Lab8
         public void FindNormal(PointD pCenter, Line camera)
         {
             PointD first = Points[0], second = Points[1], third = Points[2];
-            var A = first.Y * (second.Z - third.Z) + second.Y * (third.Z - first.Z) + third.Y * (first.Z - second.Z);
-            var B = first.Z * (second.X - third.X) + second.Z * (third.X - first.X) + third.Z * (first.X - second.X);
-            var C = first.X * (second.Y - third.Y) + second.X * (third.Y - first.Y) + third.X * (first.Y - second.Y);
+            float A = first.Y * (second.Z - third.Z) + second.Y * (third.Z - first.Z) + third.Y * (first.Z - second.Z);
+            float B = first.Z * (second.X - third.X) + second.Z * (third.X - first.X) + third.Z * (first.X - second.X);
+            float C = first.X * (second.Y - third.Y) + second.X * (third.Y - first.Y) + third.X * (first.Y - second.Y);
 
             Normal = new List<float> { A, B, C };
 
@@ -174,11 +174,14 @@ namespace Lab8
                 Normal[2] *= -1;
             }
 
-            PointD P = camera.First;
-            PointD E = new PointD(P.X - Center.X, P.Y - Center.Y, P.Z - Center.Z);
-            double angle = Math.Acos((Normal[0] * E.X + Normal[1] * E.Y + Normal[2] * E.Z) /
+            PointD observationPoint = camera.First;
+            PointD centerToObservation = new PointD(observationPoint.X - Center.X, observationPoint.Y - Center.Y, observationPoint.Z - Center.Z);
+
+            double angle = Math.Acos((Normal[0] * centerToObservation.X + Normal[1] * centerToObservation.Y + Normal[2] * centerToObservation.Z) /
                 ((Math.Sqrt(Normal[0] * Normal[0] + Normal[1] * Normal[1] + Normal[2] * Normal[2]) *
-                Math.Sqrt(E.X * E.X + E.Y * E.Y + E.Z * E.Z))));
+                Math.Sqrt(centerToObservation.X * centerToObservation.X + centerToObservation.Y * centerToObservation.Y + centerToObservation.Z * centerToObservation.Z))));
+
+            //не забыыыть из радиан в градусы     
             angle = angle * 180 / Math.PI;
 
             IsVisible = angle >= 90;

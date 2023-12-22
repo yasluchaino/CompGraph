@@ -27,22 +27,6 @@ namespace Lab8
             Polygons = polyhedron.Polygons.Select(face => new Polygon(face)).ToList();
             Center = new PointD(polyhedron.Center);
         }
-
-        public Polyhedra(string s)
-        {
-            Polygons = new List<Polygon>();
-
-            var arr = s.Split('\n');
-
-            for (int i = 0; i < arr.Length; ++i)
-            {
-                if (string.IsNullOrEmpty(arr[i]))
-                    continue;
-                Polygon f = new Polygon(arr[i]);
-                Polygons.Add(f);
-            }
-            UpdateCenter();
-        }
         private void UpdateCenter()
         {
             Center.X = 0;
@@ -222,21 +206,21 @@ namespace Lab8
             );
 
             Polygons = new List<Polygon> { f0, f1, f2, f3 };
-            Polygons[0].TextureCoord.Add(new Vector2(0, 0));
-            Polygons[0].TextureCoord.Add(new Vector2(1, 0));
-            Polygons[0].TextureCoord.Add(new Vector2(1, 1));
+            //Polygons[0].TextureCoord.Add(new Vector2(0, 0));
+            //Polygons[0].TextureCoord.Add(new Vector2(1, 0));
+            //Polygons[0].TextureCoord.Add(new Vector2(1, 1));
 
-            Polygons[1].TextureCoord.Add(new Vector2(0, 0));
-            Polygons[1].TextureCoord.Add(new Vector2(1, 0));
-            Polygons[1].TextureCoord.Add(new Vector2(1, 1));
+            //Polygons[1].TextureCoord.Add(new Vector2(0, 0));
+            //Polygons[1].TextureCoord.Add(new Vector2(1, 0));
+            //Polygons[1].TextureCoord.Add(new Vector2(1, 1));
 
-            Polygons[2].TextureCoord.Add(new Vector2(0, 0));
-            Polygons[2].TextureCoord.Add(new Vector2(1, 0));
-            Polygons[2].TextureCoord.Add(new Vector2(1, 1));
+            //Polygons[2].TextureCoord.Add(new Vector2(0, 0));
+            //Polygons[2].TextureCoord.Add(new Vector2(1, 0));
+            //Polygons[2].TextureCoord.Add(new Vector2(1, 1));
 
-            Polygons[3].TextureCoord.Add(new Vector2(0, 0));
-            Polygons[3].TextureCoord.Add(new Vector2(1, 0));
-            Polygons[3].TextureCoord.Add(new Vector2(1, 1));
+            //Polygons[3].TextureCoord.Add(new Vector2(0, 0));
+            //Polygons[3].TextureCoord.Add(new Vector2(1, 0));
+            //Polygons[3].TextureCoord.Add(new Vector2(1, 1));
             UpdateCenter();
         }
 
@@ -485,8 +469,8 @@ namespace Lab8
             int[] h012 = h01.Take(h01.Length - 1).Concat(h12).ToArray();
 
             // Определяем, какая сторона является левой и правой
-            int m = x012.Length / 2;
-            int[] x_left, x_right, h_left, h_right;
+            int m = x012.Length / 2; // это средняя
+            int[] x_left, x_right, h_left, h_right; //x это координаты  h это глубина  
             if (x02[m] < x012[m])
             {
                 x_left = x02;

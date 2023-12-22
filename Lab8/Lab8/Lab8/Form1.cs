@@ -21,15 +21,14 @@ namespace Lab8
         Axis rotateLineMode = 0;
         Clipping clipping = 0;
 
-        List<Polyhedra> polyhedrons = new List<Polyhedra>();
-        Camera camera = new Camera(50, 50);
-
+        Camera camera;
         public Form1()
         {
             InitializeComponent();
             g = pictureBox1.CreateGraphics();
             g.TranslateTransform(pictureBox1.ClientSize.Width / 2, pictureBox1.ClientSize.Height / 2);
             g.ScaleTransform(1, -1);
+            camera = new Camera(new PointD(2, 2,2), 0, Math.PI / 4, -Math.PI / 4);
         }
 
         private void radioButton1_CheckedChanged(object sender, EventArgs e)
@@ -77,8 +76,10 @@ namespace Lab8
                 else if (clipping == Clipping.Gouro)
                     show_gouro();
             }
+            camera = new Camera(new PointD(10, 10, 10), 0, Math.PI / 4, -Math.PI / 4);
+
         }
-       
+
         //----------------------------------------------LAB8/9-------------------------------------------------------\\
         private void comboBox5_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -147,55 +148,8 @@ namespace Lab8
 
             pictureBox1.Refresh();
         }
-     
-        private void button6_Click(object sender, EventArgs e)
-        {
-            if (figure == null)
-            {
-                MessageBox.Show("Сначала создайте фигуру", "Нет фигуры", MessageBoxButtons.OK);
-            }
-            else
-            {
-                int dx = (int)numericUpDown22.Value,
-                        dy = (int)numericUpDown21.Value,
-                        dz = (int)numericUpDown20.Value;
-                figure.Translate(-dx, -dy, -dz);
-
-                camera.translate(dx, dy, dz);
-
-                float old_x_camera = figure.Center.X,
-                        old_y_camera = figure.Center.Y,
-                        old_z_camera = figure.Center.Z;
-
-                camera.translate(-old_x_camera, -old_y_camera, -old_z_camera);
-
-                double angleOX = (int)numericUpDown19.Value;
-                figure.Rotate(-angleOX, Axis.AXIS_X);
-                camera.rotate(angleOX, Axis.AXIS_X);
-
-                double angleOY = (int)numericUpDown18.Value;
-                figure.Rotate(-angleOY, Axis.AXIS_Y);
-                camera.rotate(angleOY, Axis.AXIS_Y);
-
-                double angleOZ = (int)numericUpDown17.Value;
-                figure.Rotate(-angleOZ, Axis.AXIS_Z);
-                camera.rotate(angleOZ, Axis.AXIS_Z);
-
-                camera.translate(old_x_camera, old_y_camera, old_z_camera);
-            }
-
-            g.Clear(Color.White);
-
-            camera.show(g, projection);
-            figure.DrawLines(g, projection);
-            if (clipping == 0)
-                figure.DrawLines(g, projection);
-            else if (clipping == Clipping.ZBuffer)
-                show_z_buff();
-            else if (clipping == Clipping.Gouro)
-                show_gouro();
-        }
-
+  
+       
 
         //------------------------------------------------------------\\   
         //фигура вращения
@@ -369,6 +323,145 @@ namespace Lab8
             g.Clear(Color.White);
             graph.picture = pictureBox1;
             graph.DrawGraphic();
+        }
+        protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
+        {
+            switch (keyData)
+            {
+                case Keys.W: UpBtn_Click();  break;
+                case Keys.A: LeftBtn_Click(); break;
+                case Keys.S: DownBtn_Click(); break;
+                case Keys.D: RightBtn_Click(); break;
+
+                case Keys.Left: RotLeftBtn_Click(); break;
+                case Keys.Right:  RotRightBtn_Click(); break;
+                case Keys.Up:BackBtn_Click(); break;
+                case Keys.Down:  ForwardBtn_Click(); break;
+            }
+            return base.ProcessCmdKey(ref msg, keyData);
+        }
+
+
+        private void UpBtn_Click()
+        {
+
+            figure.Translate(0,(float)-5, 0);
+
+            camera.translate(0, (float)5, 0);
+
+            g.Clear(Color.White);
+            if (clipping == 0)
+                figure.DrawLines(g, projection);
+            else if (clipping == Clipping.ZBuffer)
+                show_z_buff();
+            else if (clipping == Clipping.Gouro)
+                show_gouro();
+        }
+
+        private void DownBtn_Click()
+        {
+            figure.Translate(0, (float)5, 0);
+
+            camera.translate(0, (float)-5, 0);
+
+            g.Clear(Color.White);
+            if (clipping == 0)
+                figure.DrawLines(g, projection);
+            else if (clipping == Clipping.ZBuffer)
+                show_z_buff();
+            else if (clipping == Clipping.Gouro)
+                show_gouro();
+        }
+
+        private void RightBtn_Click()
+        {
+            figure.Translate((float)-5, 0, 0);
+
+            camera.translate((float)5, 0, 0);
+
+
+
+            g.Clear(Color.White);
+            if (clipping == 0)
+                figure.DrawLines(g, projection);
+            else if (clipping == Clipping.ZBuffer)
+                show_z_buff();
+            else if (clipping == Clipping.Gouro)
+                show_gouro();
+        }
+
+        private void LeftBtn_Click()
+        {
+            figure.Translate((float)5, 0, 0);
+
+            camera.translate((float)-5, 0, 0);
+
+            g.Clear(Color.White);
+            if (clipping == 0)
+                figure.DrawLines(g, projection);
+            else if (clipping == Clipping.ZBuffer)
+                show_z_buff();
+            else if (clipping == Clipping.Gouro)
+                show_gouro();
+        }
+
+        private void ForwardBtn_Click()
+        {
+
+            double angleOY = 5;
+            figure.Rotate(-angleOY, Axis.AXIS_X);
+            camera.rotate(angleOY, Axis.AXIS_X);
+            g.Clear(Color.White);
+            if (clipping == 0)
+                figure.DrawLines(g, projection);
+            else if (clipping == Clipping.ZBuffer)
+                show_z_buff();
+            else if (clipping == Clipping.Gouro)
+                show_gouro();
+        }
+
+        private void BackBtn_Click()
+        {
+            double angleOY = 5;
+            figure.Rotate(angleOY, Axis.AXIS_X);
+            camera.rotate(-angleOY, Axis.AXIS_X);
+     
+            g.Clear(Color.White);
+            if (clipping == 0)
+                figure.DrawLines(g, projection);
+            else if (clipping == Clipping.ZBuffer)
+                show_z_buff();
+            else if (clipping == Clipping.Gouro)
+                show_gouro();
+        }
+
+        private void RotRightBtn_Click()
+        {
+  double angleOX = 5;
+            figure.Rotate(-angleOX, Axis.AXIS_Y);
+            camera.rotate(angleOX, Axis.AXIS_Y);
+            g.Clear(Color.White);
+            if (clipping == 0)
+                figure.DrawLines(g, projection);
+            else if (clipping == Clipping.ZBuffer)
+                show_z_buff();
+            else if (clipping == Clipping.Gouro)
+                show_gouro();
+        }
+
+        private void RotLeftBtn_Click()
+        {
+            double angleOX = 5;
+            figure.Rotate(angleOX, Axis.AXIS_Y);
+            camera.rotate(angleOX, Axis.AXIS_Y);
+            g.Clear(Color.White);
+            figure.DrawLines(g, projection);
+            if (clipping == 0)
+                figure.DrawLines(g, projection);
+            else if (clipping == Clipping.ZBuffer)
+                show_z_buff();
+            else if (clipping == Clipping.Gouro)
+                show_gouro();
         }
     }
 }

@@ -98,7 +98,7 @@ namespace Lab8
             UpdateCenter();
         }
 
-        public void Hexahedron(float size = 50)
+        public void Hexahedron(float size = 100)
         {
             Polygon f = new Polygon(
         new List<PointD>
@@ -206,21 +206,21 @@ namespace Lab8
             );
 
             Polygons = new List<Polygon> { f0, f1, f2, f3 };
-            Polygons[0].TextureCoord.Add(new Vector2(0, 0));
-            Polygons[0].TextureCoord.Add(new Vector2(1, 0));
-            Polygons[0].TextureCoord.Add(new Vector2(1, 1));
+            //Polygons[0].TextureCoord.Add(new Vector2(0, 0));
+            //Polygons[0].TextureCoord.Add(new Vector2(1, 0));
+            //Polygons[0].TextureCoord.Add(new Vector2(1, 1));
 
-            Polygons[1].TextureCoord.Add(new Vector2(0, 0));
-            Polygons[1].TextureCoord.Add(new Vector2(1, 0));
-            Polygons[1].TextureCoord.Add(new Vector2(1, 1));
+            //Polygons[1].TextureCoord.Add(new Vector2(0, 0));
+            //Polygons[1].TextureCoord.Add(new Vector2(1, 0));
+            //Polygons[1].TextureCoord.Add(new Vector2(1, 1));
 
-            Polygons[2].TextureCoord.Add(new Vector2(0, 0));
-            Polygons[2].TextureCoord.Add(new Vector2(1, 0));
-            Polygons[2].TextureCoord.Add(new Vector2(1, 1));
+            //Polygons[2].TextureCoord.Add(new Vector2(0, 0));
+            //Polygons[2].TextureCoord.Add(new Vector2(1, 0));
+            //Polygons[2].TextureCoord.Add(new Vector2(1, 1));
 
-            Polygons[3].TextureCoord.Add(new Vector2(0, 0));
-            Polygons[3].TextureCoord.Add(new Vector2(1, 0));
-            Polygons[3].TextureCoord.Add(new Vector2(1, 1));
+            //Polygons[3].TextureCoord.Add(new Vector2(0, 0));
+            //Polygons[3].TextureCoord.Add(new Vector2(1, 0));
+            //Polygons[3].TextureCoord.Add(new Vector2(1, 1));
             UpdateCenter();
         }
 
@@ -325,28 +325,24 @@ namespace Lab8
         }
 
         //---------------------------------LAB8------------------------------------------------------\\
-        //  Z-буфера (алгоритм из презентации)
+        //  zбуфер (алгоритм из презентации)
         public void calculateZBuffer(int width, int height, out int[] zbuf)
         {
-            // Создание буфера глубины Z для хранения значений Z для каждого пикселя
+            // cоздание буфера глубины начений Z для каждого пикселя
             zbuf = new int[width * height];
 
-            // Инициализация буфера минимальными значениями Z
             for (int i = 0; i < width * height; ++i)
                 zbuf[i] = int.MinValue;
 
-            // Проход по всем полигонам для их растеризации
             foreach (var f in Polygons)
-            {
-                // Получение точек полигона
+            {           
                 PointD P0 = new PointD(f.Points[0]);
                 PointD P1 = new PointD(f.Points[1]);
                 PointD P2 = new PointD(f.Points[2]);
 
-                // Растеризация текущего полигона и заполнение Z-буфера
+                // растеризация текущего полигона и заполнение буфера
                 helpForZbuf(P0, P1, P2, zbuf, width, height);
 
-                // Проверка наличия дополнительных точек полигона для обработки
                 if (f.Points.Count > 3)
                 {
                     P0 = new PointD(f.Points[2]);
@@ -367,14 +363,13 @@ namespace Lab8
             int min_z = int.MaxValue;
             int max_z = 0;
             for (int i = 0; i < width * height; ++i)
-            {
+            { 
                 if (zbuf[i] != int.MinValue && zbuf[i] < min_z)
                     min_z = zbuf[i];
                 if (zbuf[i] > max_z)
                     max_z = zbuf[i];
             }
-
-            // Нормализация значений Z для приведения их к диапазону от 0 до 255
+            // нормализация значений Z для приведения их к диапазону от 0 до 255
             if (min_z < 0)
             {
                 min_z = -min_z;
@@ -386,9 +381,7 @@ namespace Lab8
 
             for (int i = 0; i < width * height; ++i)
             {
-                // Заполнение буфера кадра атрибутами многоугольников, учитывая Z-буфер
-                // Если глубина Z текущего пикселя больше, чем значение Z-буфера в этой же позиции,
-                // то атрибуты многоугольника записываются в буфер кадра, а Z-буфер обновляется значением глубины Z.
+               
                 if (zbuf[i] == int.MinValue)
                     zbuf[i] = 255;
                 else if (max_z != 0)
@@ -445,7 +438,7 @@ namespace Lab8
 
         private void drawFilledTriangle(PointD P0, PointD P1, PointD P2, int[] buff, int width, int height)
         {
-            // Преобразование трехмерных точек в двумерные точки с учетом перспективы
+           
             PointF p0 = P0.make_perspective();
             PointF p1 = P1.make_perspective();
             PointF p2 = P2.make_perspective();
@@ -488,7 +481,6 @@ namespace Lab8
                 h_right = h02;
             }
 
-            // Отрисовка горизонтальных отрезков
             for (int y = y0; y <= y2; ++y)
             {
                 int x_l = x_left[y - y0];
@@ -504,7 +496,9 @@ namespace Lab8
                     int xx = x + width / 2;
                     int yy = -y + height / 2;
 
-                    // Проверка глубины z для отрисовки пикселя
+                    // 
+                    // Если глубина Z текущего пикселя больше, чем значение Z-буфера в этой же позиции,
+                    //  Z-буфер обновляется значением глубины Z.
                     if (z > buff[xx * height + yy])
                     {
                         buff[xx * height + yy] = (int)(z);
