@@ -53,21 +53,6 @@ struct Vertex
 	GLfloat s;
 	GLfloat t;
 };
-vector <string> split(string str, char separator) {
-	vector < string > strings;
-	int startIndex = 0, endIndex = 0;
-	for (int i = 0; i <= str.size(); i++) {
-
-		if (str[i] == separator || i == str.size()) {
-			endIndex = i;
-			string temp;
-			temp.append(str, startIndex, endIndex - startIndex);
-			strings.push_back(temp);
-			startIndex = endIndex + 1;
-		}
-	}
-	return strings;
-}
 
 void load_obj(const char* filename, vector<Vertex>& out)
 {
@@ -208,7 +193,7 @@ void InitVBO() {
 
 	glGenBuffers(1, &VBO); // Генерируем вершинный буфер
 	vector<Vertex> data;
-	load_obj("gun.obj", data);
+	load_obj("Fish.obj", data);
 	VERTICES = data.size();
 	glBindBuffer(GL_ARRAY_BUFFER, VBO); // Привязываем вершинный буфер
 	glBufferData(GL_ARRAY_BUFFER, VERTICES * sizeof(Vertex), data.data(), GL_STATIC_DRAW);
@@ -218,7 +203,7 @@ void InitVBO() {
 // Функция для инициализации ресурсов
 void InitTextures()
 {
-	if (!img.loadFromFile("gun.png"))
+	if (!img.loadFromFile("fish.jpg"))
 	{
 		std::cout << "could not load texture " << std::endl;
 		return;
