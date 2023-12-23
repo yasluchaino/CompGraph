@@ -1,4 +1,4 @@
-?#pragma once
+#pragma once
 #include <gl/glew.h>
 #include <gl/GL.h>
 #include <gl/GLU.h>
@@ -53,7 +53,21 @@ struct Vertex
 	GLfloat s;
 	GLfloat t;
 };
+vector <string> split(string str, char separator) {
+	vector < string > strings;
+	int startIndex = 0, endIndex = 0;
+	for (int i = 0; i <= str.size(); i++) {
 
+		if (str[i] == separator || i == str.size()) {
+			endIndex = i;
+			string temp;
+			temp.append(str, startIndex, endIndex - startIndex);
+			strings.push_back(temp);
+			startIndex = endIndex + 1;
+		}
+	}
+	return strings;
+}
 
 void load_obj(const char* filename, vector<Vertex>& out)
 {
@@ -85,8 +99,8 @@ void load_obj(const char* filename, vector<Vertex>& out)
 		{
 			istringstream s(line.substr(3));
 			glm::vec2 uv;
-			s >> uv.x;
-			s >> uv.y;
+			s >> uv.s;
+			s >> uv.t;
 			uvs.push_back(uv);
 		}
 		else if (s == "vn")
@@ -101,20 +115,24 @@ void load_obj(const char* filename, vector<Vertex>& out)
 		else if (s == "f ")
 		{
 			istringstream s(line.substr(2));
-			string s1, s2, s3;
+			string s1, s2, s3, s4;
 			s >> s1;
 			s >> s2;
 			s >> s3;
-			unsigned int v1, v2, v3, uv1, uv2, uv3, n1, n2, n3;
+			s >> s4;
+			unsigned int v1, v2, v3, v4, uv1, uv2, uv3, uv4, n1, n2, n3, n4;
 			sscanf_s(s1.c_str(), "%d/%d/%d", &v1, &uv1, &n1);
 			sscanf_s(s2.c_str(), "%d/%d/%d", &v2, &uv2, &n2);
 			sscanf_s(s3.c_str(), "%d/%d/%d", &v3, &uv3, &n3);
-			Vertex ve1 = { vertices[v1 - 1].x, vertices[v1 - 1].y, vertices[v1 - 1].z, uvs[uv1 - 1].x, uvs[uv1 - 1].y };
-			Vertex ve2 = { vertices[v2 - 1].x, vertices[v2 - 1].y, vertices[v2 - 1].z, uvs[uv2 - 1].x, uvs[uv2 - 1].y };
-			Vertex ve3 = { vertices[v3 - 1].x, vertices[v3 - 1].y, vertices[v3 - 1].z, uvs[uv3 - 1].x, uvs[uv3 - 1].y };
+			sscanf_s(s4.c_str(), "%d/%d/%d", &v4, &uv4, &n4);
+			Vertex ve1 = { vertices[v1 - 1].x, vertices[v1 - 1].y, vertices[v1 - 1].z, uvs[uv1 - 1].s, uvs[uv1 - 1].t };
+			Vertex ve2 = { vertices[v2 - 1].x, vertices[v2 - 1].y, vertices[v2 - 1].z, uvs[uv2 - 1].s, uvs[uv2 - 1].t };
+			Vertex ve3 = { vertices[v3 - 1].x, vertices[v3 - 1].y, vertices[v3 - 1].z, uvs[uv3 - 1].s, uvs[uv3 - 1].t };
+			Vertex ve4 = { vertices[v4 - 1].x, vertices[v4 - 1].y, vertices[v4 - 1].z, uvs[uv4 - 1].s, uvs[uv4 - 1].t };
 			out.push_back(ve1);
 			out.push_back(ve2);
 			out.push_back(ve3);
+			out.push_back(ve4);
 		}
 	}
 }
@@ -134,8 +152,6 @@ const char* VertexShaderSource = R"(
 					-sin(angle),	0,		cos(angle),	0,
 							0, 		0,				0,	1);
 	}
-
-
     void main() {
         float offset = offsets[gl_InstanceID].x;
 		float rot_axis = offsets[gl_InstanceID].z;
@@ -143,8 +159,8 @@ const char* VertexShaderSource = R"(
 
         vec4 pos = rotateY(rot_axis) * vec4(coord, 1.0);//вокруг оси
 		pos = rotateY(rot_center) * (pos + vec4(offset, 0.0, 0.0, 0.0));//вокруг центрального объекта
-        gl_Position = model * pos;
-        texcoord = vec2(textCoord.x, 1.0 - textCoord.y);
+        gl_Position = model* pos;
+        texcoord = vec2(textCoord.x, 1.0f - textCoord.y);
     }
 )";
 
@@ -187,6 +203,9 @@ void checkOpenGLerror()
 
 void InitVBO() {
 
+
+
+
 	glGenBuffers(1, &VBO); // Генерируем вершинный буфер
 	vector<Vertex> data;
 	load_obj("gun.obj", data);
@@ -212,6 +231,7 @@ void InitTextures()
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
 	checkOpenGLerror();
 }
 
@@ -338,7 +358,7 @@ void Draw() {
 	glEnableVertexAttribArray(1);
 
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
-	glDrawArraysInstanced(GL_TRIANGLES, 0, VERTICES, 6);
+	glDrawArraysInstanced(GL_QUADS, 0, VERTICES, 6);
 
 
 	glDisableVertexAttribArray(0);
@@ -378,8 +398,11 @@ int main() {
 			if (event.type == sf::Event::Closed) { window.close(); }
 			else if (event.type == sf::Event::Resized) { glViewport(0, 0, event.size.width, event.size.height); }
 		}
+		
 		Rotate();
+		
 		Draw();
+		
 		window.display();
 	}
 	Release();
