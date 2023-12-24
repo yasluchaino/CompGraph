@@ -31,6 +31,15 @@ GLuint Program;
 // ID 
 GLint Unif_offsets;
 GLint Unif_model;
+GLint Unif_view;
+GLint Unif_projection;
+
+glm::vec3 cameraPos = glm::vec3(2.0f, 2.0f, 20.0f);  //позиция камеры
+glm::vec3 cameraFront = glm::vec3(0.0f, 0.0f, -1.0f); //направление
+glm::vec3 cameraUp = glm::vec3(0.0f, 1.0f, 0.0f);  // верх камеры
+
+float yaw = -90.0f;
+float pitch = 0.0f;
 
 vector<glm::vec4> offsets;
 
@@ -110,10 +119,10 @@ void load_obj(const char* filename, vector<Vertex>& out)
 			sscanf_s(s2.c_str(), "%d/%d/%d", &v2, &uv2, &n2);
 			sscanf_s(s3.c_str(), "%d/%d/%d", &v3, &uv3, &n3);
 			sscanf_s(s4.c_str(), "%d/%d/%d", &v4, &uv4, &n4);
-			Vertex ve1 = { vertices[v1 - 1].x, vertices[v1 - 1].y, vertices[v1 - 1].z, uvs[uv1 - 1].s, uvs[uv1 - 1].t };
-			Vertex ve2 = { vertices[v2 - 1].x, vertices[v2 - 1].y, vertices[v2 - 1].z, uvs[uv2 - 1].s, uvs[uv2 - 1].t };
-			Vertex ve3 = { vertices[v3 - 1].x, vertices[v3 - 1].y, vertices[v3 - 1].z, uvs[uv3 - 1].s, uvs[uv3 - 1].t };
-			Vertex ve4 = { vertices[v4 - 1].x, vertices[v4 - 1].y, vertices[v4 - 1].z, uvs[uv4 - 1].s, uvs[uv4 - 1].t };
+			Vertex ve1 = { vertices[v1 - 1].x, vertices[v1 - 1].y, vertices[v1 - 1].z, uvs[uv1 - 1].x, uvs[uv1 - 1].y };
+			Vertex ve2 = { vertices[v2 - 1].x, vertices[v2 - 1].y, vertices[v2 - 1].z, uvs[uv2 - 1].x, uvs[uv2 - 1].y };
+			Vertex ve3 = { vertices[v3 - 1].x, vertices[v3 - 1].y, vertices[v3 - 1].z, uvs[uv3 - 1].x, uvs[uv3 - 1].y };
+			Vertex ve4 = { vertices[v4 - 1].x, vertices[v4 - 1].y, vertices[v4 - 1].z, uvs[uv4 - 1].x, uvs[uv4 - 1].y };
 			out.push_back(ve1);
 			out.push_back(ve2);
 			out.push_back(ve3);
@@ -129,7 +138,7 @@ const char* VertexShaderSource = R"(
     out vec2 texcoord;
 
     uniform vec4 offsets[6];
-	uniform mat4 model;
+    uniform mat4 model;
 
 	mat4 rotateY( in float angle ) {
 	return mat4(	cos(angle),		0,		sin(angle),	0,
@@ -139,12 +148,13 @@ const char* VertexShaderSource = R"(
 	}
     void main() {
         float offset = offsets[gl_InstanceID].x;
+		float scale = offsets[gl_InstanceID].y;
 		float rot_axis = offsets[gl_InstanceID].z;
 		float rot_center = offsets[gl_InstanceID].w;
 
-        vec4 pos = rotateY(rot_axis) * vec4(coord, 1.0);//вокруг оси
+        vec4 pos = rotateY(rot_axis) * vec4(coord*scale, 1.0);//вокруг оси
 		pos = rotateY(rot_center) * (pos + vec4(offset, 0.0, 0.0, 0.0));//вокруг центрального объекта
-        gl_Position = model* pos;
+        gl_Position =  model * pos;
         texcoord = vec2(textCoord.x, 1.0f - textCoord.y);
     }
 )";
@@ -188,12 +198,9 @@ void checkOpenGLerror()
 
 void InitVBO() {
 
-
-
-
 	glGenBuffers(1, &VBO); // Генерируем вершинный буфер
 	vector<Vertex> data;
-	load_obj("Fish.obj", data);
+	load_obj("gun.obj", data);
 	VERTICES = data.size();
 	glBindBuffer(GL_ARRAY_BUFFER, VBO); // Привязываем вершинный буфер
 	glBufferData(GL_ARRAY_BUFFER, VERTICES * sizeof(Vertex), data.data(), GL_STATIC_DRAW);
@@ -203,7 +210,7 @@ void InitVBO() {
 // Функция для инициализации ресурсов
 void InitTextures()
 {
-	if (!img.loadFromFile("fish.jpg"))
+	if (!img.loadFromFile("gun.png"))
 	{
 		std::cout << "could not load texture " << std::endl;
 		return;
@@ -292,12 +299,12 @@ void Init() {
 		0.0, 0.1, 0.025, 0.012, 0.015, 0.0116
 	};
 	offsets = {
-	{0, 1.0, 0, 0},
-	{1, 0.9, 0, 0},
-	{2, 0.008691, 0, 0},
-	{3, 0.009149, 0, 0},
-	{4, 0.004868, 0, 0},
-	{5, 0.003, 0, 0},
+	{0, 5.0, 0, 0},
+	{3, 3.5, 0, 0},
+	{6, 2.6, 0, 0},
+	{7, 1.5, 0, 0},
+	{8, 0.7, 0, 0},
+	{9, 0.5, 0, 0},
 
 	};
 
@@ -319,16 +326,12 @@ void Draw() {
 
 	glUniform4fv(glGetUniformLocation(Program, "offsets"), 6, glm::value_ptr(offsets[0]));
 	angle += 0.01f;
+	glm::mat4 projection = glm::perspective(glm::radians(45.0f), 800.0f / 600.0f, 0.1f, 100.0f);
+	glm::mat4 view = glm::lookAt(cameraPos, cameraPos + cameraFront, cameraUp);
 
-	
-	//пока нет какмеры
 	glm::mat4 model = glm::mat4(1.0f);
 
 	model = glm::rotate(model, angle, glm::vec3(0.0f, 1.0f, 0.0f));
-	glm::mat4 projection = glm::perspective(glm::radians(45.0f), (float)800 / (float)800, 0.1f, 100.0f);
-	glm::mat4 view = glm::lookAt(glm::vec3(0.0f, 0.0f, 5.0f),  // позиция камеры
-		glm::vec3(0.0f, 0.0f, 0.0f),  
-		glm::vec3(0.0f, 1.0f, 0.0f));
 	glm::mat4  mvp = projection * view * model;
 
 	glUniformMatrix4fv(Unif_model, 1, GL_FALSE, glm::value_ptr(mvp));
@@ -382,6 +385,48 @@ int main() {
 		while (window.pollEvent(event)) {
 			if (event.type == sf::Event::Closed) { window.close(); }
 			else if (event.type == sf::Event::Resized) { glViewport(0, 0, event.size.width, event.size.height); }
+			else if (event.type == sf::Event::KeyPressed)
+			{
+				if (sf::Keyboard::isKeyPressed(sf::Keyboard::E))
+					cameraPos += cameraFront;
+				if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q))
+					cameraPos -= cameraFront;
+				if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
+					cameraPos -= glm::normalize(glm::cross(cameraFront, cameraUp));
+				if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
+					cameraPos += glm::normalize(glm::cross(cameraFront, cameraUp));
+				if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)) {
+					cameraPos += cameraUp;
+				}
+				if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)) {
+					cameraPos -= cameraUp;
+				}
+				const float sensitivity = 0.5f;
+				if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
+					yaw -= sensitivity;
+				}
+				if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
+					yaw += sensitivity;
+				}
+				if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) {
+					pitch -= sensitivity;
+				}
+				if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) {
+					pitch += sensitivity;
+				}
+				if (pitch > 89.0f) {
+					pitch = 89.0f;
+				}
+				if (pitch < -89.0f) {
+					pitch = -89.0f;
+				}
+
+				glm::vec3 front;
+				front.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));
+				front.y = sin(glm::radians(pitch));
+				front.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
+				cameraFront = glm::normalize(front);
+			}
 		}
 		
 		Rotate();
