@@ -315,7 +315,6 @@ void Init() {
 	glEnable(GL_DEPTH_TEST);
 }
 
-float angle = 0.0f;
 
 void Draw() {
 
@@ -325,13 +324,12 @@ void Draw() {
 	glUseProgram(Program);
 
 	glUniform4fv(glGetUniformLocation(Program, "offsets"), 6, glm::value_ptr(offsets[0]));
-	angle += 0.01f;
+
 	glm::mat4 projection = glm::perspective(glm::radians(45.0f), 800.0f / 600.0f, 0.1f, 100.0f);
 	glm::mat4 view = glm::lookAt(cameraPos, cameraPos + cameraFront, cameraUp);
 
 	glm::mat4 model = glm::mat4(1.0f);
 
-	model = glm::rotate(model, angle, glm::vec3(0.0f, 1.0f, 0.0f));
 	glm::mat4  mvp = projection * view * model;
 
 	glUniformMatrix4fv(Unif_model, 1, GL_FALSE, glm::value_ptr(mvp));
