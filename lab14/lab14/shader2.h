@@ -15,7 +15,7 @@ uniform mat4 model;
 void main() {
     gl_Position = model * vec4(coord, 1.0);
     pos = coord;
-	texcoord = texCoord;
+	texcoord = vec2(texCoord.x, 1.0f - texCoord.y);
     norm = normal;
     }
 )";

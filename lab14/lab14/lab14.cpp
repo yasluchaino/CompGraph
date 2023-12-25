@@ -24,10 +24,10 @@
 #include "lights.h"
 using namespace std;
 
-int VERTICES[5];
+int VERTICES[6];
 
-GLuint VBO[5];
-GLuint texture[5];
+GLuint VBO[6];
+GLuint texture[6];
 
 GLuint Program[2];
 
@@ -175,17 +175,15 @@ void LoadObject(int i, const char* path)
 
 void InitVBO()
 {
-	LoadObject(0, "models/drawer.obj");
+	LoadObject(0, "models/stool.obj");
 	LoadObject(1, "models/table.obj");
 	LoadObject(2, "models/stool.obj");
-	LoadObject(3, "models/drawer.obj");
-	LoadObject(4, "models/drawer.obj");
-	LoadObject(5, "models/drawer.obj");
+	LoadObject(3, "models/floor.obj");//не считается как модель
 }
 // Функция для инициализации ресурсов
 void InitTextures()
 {
-	if (!img.loadFromFile("Textures\\Drawer.jpg"))
+	if (!img.loadFromFile("Textures\\stool.png"))
 	{
 		std::cout << "could not load texture " << std::endl;
 		return;
@@ -227,7 +225,7 @@ void InitTextures()
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-	if (!img.loadFromFile("Textures\\Drawer.jpg"))
+	if (!img.loadFromFile("Textures\\floor.jpg"))
 	{
 		std::cout << "could not load texture " << std::endl;
 		return;
@@ -241,19 +239,6 @@ void InitTextures()
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-	if (!img.loadFromFile("Textures\\Drawer.jpg"))
-	{
-		std::cout << "could not load texture " << std::endl;
-		return;
-	}
-	glGenTextures(1, &texture[4]); // Генерируем текстуру
-	glActiveTexture(GL_TEXTURE4);
-	glBindTexture(GL_TEXTURE_2D, texture[4]); // Привязываем текстуру
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, img.getSize().x, img.getSize().y, 0, GL_RGBA, GL_UNSIGNED_BYTE, img.getPixelsPtr());
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT); // Устанавливаем параметры текстуры
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
 	checkOpenGLerror();
 }
@@ -386,6 +371,7 @@ void Draw() {
 	//glClearColor(0.5f, 0.7f, 1.0f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+	//1ый стул
 	glUseProgram(Program[1]);
 	tex_loc = glGetUniformLocation(Program[1], "tex");
 	pl.Load(Program[1]);
@@ -396,10 +382,9 @@ void Draw() {
 	glm::mat4 view = glm::lookAt(cameraPos, cameraPos + cameraFront, cameraUp);
 
 	glm::mat4 model = glm::mat4(1.0f);
-	float offsetX = 1.0f;
-	float offsetY = 0.0f;
-	float offsetZ = 0.0f;
-	model = glm::translate(model, glm::vec3(offsetX, offsetY, offsetZ));
+	/*glm::vec3 scale = glm::vec3(0.25f);*/
+	model = glm::translate(model, glm::vec3(-8.0f, -0.02f, 0.0f));
+	/*model = glm::scale(model, scale);*/
 	glm::mat4  mvp = projection * view * model;
 
 	glUniformMatrix4fv(Unif_toonmodel, 1, GL_FALSE, glm::value_ptr(mvp));
@@ -426,11 +411,13 @@ void Draw() {
 
 	glUseProgram(0);
 
-
+	//стол
 	glUseProgram(Program[0]);
 	tex_loc = glGetUniformLocation(Program[0], "tex");
-	model = glm::translate(model, glm::vec3(2.0f, offsetY, offsetZ));
-	  mvp = projection * view * model;
+	glm::mat4 model1 = glm::mat4(1.0f);
+	model1 = glm::translate(model1, glm::vec3(0.0f, 0.0f, 0.0f));
+	model1 = glm::scale(model1, glm::vec3(3.75f));
+	mvp = projection * view * model1;
 
 	glUniformMatrix4fv(Unif_model, 1, GL_FALSE, glm::value_ptr(mvp));
 	glUniform1i(tex_loc, 1);
@@ -457,13 +444,14 @@ void Draw() {
 	glUseProgram(0);
 
 
-
+	//2ой стул
 	glUseProgram(Program[0]);
 	tex_loc = glGetUniformLocation(Program[0], "tex");
-	glm::vec3 scale = glm::vec3(0.25f);
-	model = glm::translate(model, glm::vec3(3.0f, offsetY, offsetZ));
-	model = glm::scale(model, scale);
-	mvp = projection * view * model;
+
+	glm::mat4 model3 = glm::mat4(1.0f);
+	model3 = glm::translate(model3, glm::vec3(8.0f, -0.02f, 0.0f));
+	//model3 = glm::scale(model3, scale);
+	mvp = projection * view * model3;
 	glUniformMatrix4fv(Unif_model, 1, GL_FALSE, glm::value_ptr(mvp));
 	glUniform1i(tex_loc, 2);
 	glBindBuffer(GL_ARRAY_BUFFER, VBO[2]);
@@ -487,6 +475,38 @@ void Draw() {
 	glDisableVertexAttribArray(2);
 
 	glUseProgram(0);
+
+	//пол
+	glUseProgram(Program[0]);
+	tex_loc = glGetUniformLocation(Program[0], "tex");
+	glm::mat4 model4 = glm::mat4(1.0f);
+	model4 = glm::translate(model4 , glm::vec3(0.0f, -9.83f, 0.0f));
+	mvp = projection * view * model4;
+	glUniformMatrix4fv(Unif_model, 1, GL_FALSE, glm::value_ptr(mvp));
+	glUniform1i(tex_loc, 3);
+	glBindBuffer(GL_ARRAY_BUFFER, VBO[3]);
+
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), (void*)0);
+	glEnableVertexAttribArray(0);
+
+	// Атрибуты текстурных координат
+	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), (void*)(3 * sizeof(GLfloat)));
+	glEnableVertexAttribArray(1);
+
+	glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), (GLvoid*)(5 * sizeof(GLfloat)));
+	glEnableVertexAttribArray(2);
+
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glDrawArrays(GL_QUADS, 0, VERTICES[3]);
+
+
+	glDisableVertexAttribArray(0);
+	glDisableVertexAttribArray(1);
+	glDisableVertexAttribArray(2);
+
+	glUseProgram(0);
+	
+
 
 }
 
