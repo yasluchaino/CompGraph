@@ -129,6 +129,11 @@
   <ItemGroup>
     <ClCompile Include="lab14.cpp" />
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="lights.h" />
+    <ClInclude Include="shader1.h" />
+    <ClInclude Include="shader2.h" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

@@ -1,5 +1,4 @@
-﻿#include <iostream>
-#include <gl/glew.h>
+﻿#include <gl/glew.h>
 #include <gl/GL.h>
 #include <gl/GLU.h>
 #include <SFML/Graphics.hpp>
@@ -20,7 +19,9 @@
 #include <fstream>
 #include <array>
 #include <locale>
-
+#include "shader1.h"
+#include "shader2.h"
+#include "lights.h"
 using namespace std;
 
 int VERTICES[5];
@@ -28,14 +29,11 @@ int VERTICES[5];
 GLuint VBO[5];
 GLuint texture[5];
 
-GLuint Program;
+GLuint Program[2];
 
 // ID 
-GLint Unif_offsets;
 GLint Unif_model;
-GLint Unif_view;
-GLint Unif_projection;
-
+GLint Unif_toonmodel;
 glm::vec3 cameraPos = glm::vec3(2.0f, 2.0f, 20.0f);  //позиция камеры
 glm::vec3 cameraFront = glm::vec3(0.0f, 0.0f, -1.0f); //направление
 glm::vec3 cameraUp = glm::vec3(0.0f, 0.5f, 0.0f);  // верх камеры
@@ -45,14 +43,12 @@ glm::mat4 model = glm::mat4(1.0f);
 float yaw = -90.0f;
 float pitch = 0.0f;
 
-vector<glm::vec4> offsets;
-
-vector<float> speed_around_axis;
-
-vector<float> speed_around_center;
-
-
 sf::Image img;
+
+PointLight pl;
+DirLight dl;
+SpotLight sl;
+Material mat;
 
 struct Vertex
 {
@@ -139,33 +135,6 @@ int load_obj(const char* filename, vector<Vertex>& out)
 	}
 	return out.size();
 }
-
-const char* VertexShaderSource = R"(
-    #version 330 core
-    layout (location = 0) in vec3 coord;
-    layout (location = 1) in vec2 textCoord;
-    out vec2 texcoord;
-
-    uniform mat4 model;
-	
-    void main() {
-
-        vec4 pos =vec4(coord, 1.0);//вокруг оси
-        gl_Position =  model * pos;
-        texcoord = vec2(textCoord.x, 1.0f - textCoord.y);
-    }
-)";
-
-const char* FragShaderSource = R"(
-#version 330 core
-in vec2 texcoord;
-out vec4 FragColor;
-uniform sampler2D tex;
-
-void main() {
-    FragColor = texture(tex, texcoord);
-})";
-
 
 void ShaderLog(unsigned int shader)
 {
@@ -303,32 +272,69 @@ void InitShader()
 	std::cout << "fragment shader \n";
 	ShaderLog(fShader);
 
+
+	GLuint ToonvShader = glCreateShader(GL_VERTEX_SHADER);
+	glShaderSource(ToonvShader, 1, &ToonVertexShaderSource, NULL);
+	glCompileShader(ToonvShader);
+	std::cout << "toon vertex shader \n";
+	ShaderLog(ToonvShader);
+
+	GLuint ToonfShader = glCreateShader(GL_FRAGMENT_SHADER);
+	glShaderSource(ToonfShader, 1, &ToonFragShaderSource, NULL);
+	glCompileShader(ToonfShader);
+	std::cout << "toon fragment shader \n";
+	ShaderLog(ToonfShader);
+
+
+
+
 	// Создаем шейдерную программу
-	Program = glCreateProgram();
+	Program[0] = glCreateProgram();
+	Program[1] = glCreateProgram();
 
 	// Прикрепляем шейдеры к программе
-	glAttachShader(Program, vShader);
-	glAttachShader(Program, fShader);
+	glAttachShader(Program[0], vShader);
+	glAttachShader(Program[0], fShader);
+
+	glAttachShader(Program[1], ToonvShader);
+	glAttachShader(Program[1], ToonfShader);
 
 	// Линкуем шейдерную программу
-	glLinkProgram(Program);
+	glLinkProgram(Program[0]);
+	glLinkProgram(Program[1]);
 
-	int link;
-	glGetProgramiv(Program, GL_LINK_STATUS, &link);
-
-	// Проверяем на ошибки
-	if (!link)
+	int link1, link2;
+	glGetProgramiv(Program[0], GL_LINK_STATUS, &link1);
+	if (!link1)
 	{
 		std::cout << "error attach shaders \n";
 		return;
 	}
 
-	Unif_model = glGetUniformLocation(Program, "model");
-	if (Unif_offsets == -1)
+	glGetProgramiv(Program[1], GL_LINK_STATUS, &link2);
+
+	// Проверяем на ошибки
+	if (!link2)
+	{
+		std::cout << "error attach shaders \n";
+		return;
+	}
+
+
+	Unif_model = glGetUniformLocation(Program[0], "model");
+	if (Unif_model == -1)
 	{
 		std::cout << "could not bind uniform " << std::endl;
 		return;
 	}
+
+	Unif_toonmodel = glGetUniformLocation(Program[1], "model");
+	if (Unif_model == -1)
+	{
+		std::cout << "could not bind uniform " << std::endl;
+		return;
+	}
+
 
 	checkOpenGLerror();
 }
@@ -337,6 +343,34 @@ void InitShader()
 
 
 void Init() {
+
+	pl.pos = glm::vec3(-3.12f, 8.27f, -2.83f);
+	pl.ambient = glm::vec3(0.1f);
+	pl.diffuse = glm::vec3(1.0f);
+	pl.specular = glm::vec3(1.0f);
+	pl.atten = glm::vec3(0.2f);
+
+	// Directional light
+	dl.direction = glm::vec3(0.0f, -1.0f, 0.0f);
+	dl.ambient = glm::vec3(0.25f);
+	dl.diffuse = glm::vec3(0.25f);
+	dl.specular = glm::vec3(0.25f);
+
+	// Spot light
+	sl.pos = glm::vec3(-5.0f, -8.37f, -5.0f);
+	sl.direction = glm::vec3(1.0f);
+	sl.ambient = glm::vec3(1.0f);
+	sl.diffuse = glm::vec3(1.0f);
+	sl.specular = glm::vec3(1.0f);
+	sl.cutoff = 12.5f;
+	sl.atten = glm::vec3(0.1f, 0.1f, 0.1f);
+
+	// Material
+	mat.ambient = glm::vec3(0.5f, 0.5f, 0.5f);
+	mat.diffuse = glm::vec3(0.5f, 0.5f, 0.5f);
+	mat.specular = glm::vec3(0.5f, 0.5f, 0.5f);
+	mat.emission = glm::vec3(0.0f, 0.0f, 0.0f);
+	mat.shininess = 1.0f;
 
 	InitVBO();
 	InitShader();
@@ -349,12 +383,15 @@ void Init() {
 void Draw() {
 
 	GLuint tex_loc;
-	glClearColor(0.5f, 0.7f, 1.0f, 1.0f);
+	//glClearColor(0.5f, 0.7f, 1.0f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	glUseProgram(Program);
-	tex_loc = glGetUniformLocation(Program, "tex");
-
+	glUseProgram(Program[1]);
+	tex_loc = glGetUniformLocation(Program[1], "tex");
+	pl.Load(Program[1]);
+	dl.Load(Program[1]);
+	sl.Load(Program[1]);
+	mat.Load(Program[1]);
 	glm::mat4 projection = glm::perspective(glm::radians(45.0f), 800.0f / 600.0f, 0.1f, 100.0f);
 	glm::mat4 view = glm::lookAt(cameraPos, cameraPos + cameraFront, cameraUp);
 
@@ -365,7 +402,7 @@ void Draw() {
 	model = glm::translate(model, glm::vec3(offsetX, offsetY, offsetZ));
 	glm::mat4  mvp = projection * view * model;
 
-	glUniformMatrix4fv(Unif_model, 1, GL_FALSE, glm::value_ptr(mvp));
+	glUniformMatrix4fv(Unif_toonmodel, 1, GL_FALSE, glm::value_ptr(mvp));
 	glUniform1i(tex_loc, 0);
 	glBindBuffer(GL_ARRAY_BUFFER, VBO[0]);
 
@@ -390,8 +427,8 @@ void Draw() {
 	glUseProgram(0);
 
 
-	glUseProgram(Program);
-	tex_loc = glGetUniformLocation(Program, "tex");
+	glUseProgram(Program[0]);
+	tex_loc = glGetUniformLocation(Program[0], "tex");
 	model = glm::translate(model, glm::vec3(2.0f, offsetY, offsetZ));
 	  mvp = projection * view * model;
 
@@ -421,9 +458,11 @@ void Draw() {
 
 
 
-	glUseProgram(Program);
-	tex_loc = glGetUniformLocation(Program, "tex");
+	glUseProgram(Program[0]);
+	tex_loc = glGetUniformLocation(Program[0], "tex");
+	glm::vec3 scale = glm::vec3(0.25f);
 	model = glm::translate(model, glm::vec3(3.0f, offsetY, offsetZ));
+	model = glm::scale(model, scale);
 	mvp = projection * view * model;
 	glUniformMatrix4fv(Unif_model, 1, GL_FALSE, glm::value_ptr(mvp));
 	glUniform1i(tex_loc, 2);
@@ -455,7 +494,8 @@ void ReleaseShader() {
 
 	glUseProgram(0);
 
-	glDeleteProgram(Program);
+	glDeleteProgram(Program[0]);
+	glDeleteProgram(Program[1]);
 }
 
 
