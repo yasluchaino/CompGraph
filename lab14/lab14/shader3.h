@@ -1,6 +1,6 @@
 #pragma once
 
-const char* ToonVertexShaderSource = R"(
+const char* TopVertexShaderSource = R"(
    #version 330 core
  layout (location = 0) in vec3 coord;
 layout (location = 1) in vec2 texCoord;
@@ -20,7 +20,7 @@ void main() {
     }
 )";
 
-const char* ToonFragShaderSource = R"(
+const char* TopFragShaderSource = R"(
 #version 330 core
 in vec3 pos;
 in vec2 texcoord;
@@ -102,7 +102,7 @@ void main()
             r3 = vec3(1.1);
     }
 
-    vec3 res = r1 + r2; //+ r2 + r3;
+    vec3 res = r1 + r2 + r3;
     res *= vec3(texture(tex, texcoord));
     Frag_Color = vec4(min(res, 1.0f), 1.0);
 })";

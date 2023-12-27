@@ -22,6 +22,7 @@
 #include "shader1.h"
 #include "shader2.h"
 #include "lights.h"
+#include "shader3.h"
 using namespace std;
 
 int VERTICES[6];
@@ -29,7 +30,9 @@ int VERTICES[6];
 GLuint VBO[6];
 GLuint texture[6];
 
-GLuint Program[2];
+GLuint Program[3];
+int prog_ind = 0;
+int light_ind = 0;
 
 // ID 
 GLint Unif_model;
@@ -270,12 +273,25 @@ void InitShader()
 	std::cout << "toon fragment shader \n";
 	ShaderLog(ToonfShader);
 
+	GLuint TopvShader = glCreateShader(GL_VERTEX_SHADER);
+	glShaderSource(TopvShader, 1, &TopVertexShaderSource, NULL);
+	glCompileShader(TopvShader);
+	std::cout << "top vertex shader \n";
+	ShaderLog(TopvShader);
+
+	GLuint TopfShader = glCreateShader(GL_FRAGMENT_SHADER);
+	glShaderSource(TopfShader, 1, &TopFragShaderSource, NULL);
+	glCompileShader(TopfShader);
+	std::cout << "top fragment shader \n";
+	ShaderLog(TopfShader);
+
 
 
 
 	// Создаем шейдерную программу
 	Program[0] = glCreateProgram();
 	Program[1] = glCreateProgram();
+	Program[2] = glCreateProgram();
 
 	// Прикрепляем шейдеры к программе
 	glAttachShader(Program[0], vShader);
@@ -284,11 +300,15 @@ void InitShader()
 	glAttachShader(Program[1], ToonvShader);
 	glAttachShader(Program[1], ToonfShader);
 
+	glAttachShader(Program[2], TopvShader);
+	glAttachShader(Program[2], TopfShader);
+
 	// Линкуем шейдерную программу
 	glLinkProgram(Program[0]);
 	glLinkProgram(Program[1]);
+	glLinkProgram(Program[2]);
 
-	int link1, link2;
+	int link1, link2, link3;
 	glGetProgramiv(Program[0], GL_LINK_STATUS, &link1);
 	if (!link1)
 	{
@@ -300,6 +320,15 @@ void InitShader()
 
 	// Проверяем на ошибки
 	if (!link2)
+	{
+		std::cout << "error attach shaders \n";
+		return;
+	}
+
+	glGetProgramiv(Program[2], GL_LINK_STATUS, &link3);
+
+	// Проверяем на ошибки
+	if (!link3)
 	{
 		std::cout << "error attach shaders \n";
 		return;
@@ -320,6 +349,12 @@ void InitShader()
 		return;
 	}
 
+	Unif_model = glGetUniformLocation(Program[2], "model");
+	if (Unif_model == -1)
+	{
+		std::cout << "could not bind uniform " << std::endl;
+		return;
+	}
 
 	checkOpenGLerror();
 }
@@ -329,33 +364,39 @@ void InitShader()
 
 void Init() {
 
-	pl.pos = glm::vec3(-3.12f, 8.27f, -2.83f);
-	pl.ambient = glm::vec3(0.1f);
-	pl.diffuse = glm::vec3(1.0f);
-	pl.specular = glm::vec3(1.0f);
-	pl.atten = glm::vec3(0.2f);
+	//Point light
+	pl.pos = glm::vec3(2.0f, 2.0f, 20.0f); // -3.12f, 8.27f, -2.83f
+	pl.ambient = glm::vec3(0.2f, 0.2f, 0.2f); // 0.1f
+	pl.diffuse = glm::vec3(0.9f, 0.9f, 0.9); // 1.0f
+	pl.specular = glm::vec3(1.0f, 1.0f, 1.0f); // 1.0f
+	pl.constant_attenuation = 1.0f;
+	pl.linear_attenuation = 0.045f;
+	pl.quadratic_attenuation = 0.0075f;
 
 	// Directional light
-	dl.direction = glm::vec3(0.0f, -1.0f, 0.0f);
+	dl.pos = glm::vec3(2.0f, 2.0f, 20.0f);
+	dl.direction = glm::vec3(0.0f, 0.0f, -1.0f);
 	dl.ambient = glm::vec3(0.25f);
 	dl.diffuse = glm::vec3(0.25f);
 	dl.specular = glm::vec3(0.25f);
 
-	// Spot light
-	sl.pos = glm::vec3(-5.0f, -8.37f, -5.0f);
-	sl.direction = glm::vec3(1.0f);
+	// Spotlight
+	sl.pos = glm::vec3(2.0f, 2.0f, 20.0f);
+	sl.direction = glm::vec3(0.0f, 0.0f, -1.0f);
 	sl.ambient = glm::vec3(1.0f);
 	sl.diffuse = glm::vec3(1.0f);
 	sl.specular = glm::vec3(1.0f);
 	sl.cutoff = 12.5f;
-	sl.atten = glm::vec3(0.1f, 0.1f, 0.1f);
+	sl.constant_attenuation = 1.0f;
+	sl.linear_attenuation = 0.045f;
+	sl.quadratic_attenuation = 0.0075f;
 
 	// Material
 	mat.ambient = glm::vec3(0.5f, 0.5f, 0.5f);
 	mat.diffuse = glm::vec3(0.5f, 0.5f, 0.5f);
 	mat.specular = glm::vec3(0.5f, 0.5f, 0.5f);
 	mat.emission = glm::vec3(0.0f, 0.0f, 0.0f);
-	mat.shininess = 1.0f;
+	mat.shininess = 32.0f;
 
 	InitVBO();
 	InitShader();
@@ -364,20 +405,27 @@ void Init() {
 	glEnable(GL_DEPTH_TEST);
 }
 
+void InitUni() 
+{
+	pl.Load(Program[prog_ind]);
+	dl.Load(Program[prog_ind]);
+	sl.Load(Program[prog_ind]);
+	mat.Load(Program[prog_ind]);
+	glUniform3f(glGetUniformLocation(Program[prog_ind], "viewPos"), cameraPos.x, cameraPos.y, cameraPos.z);
+	glUniform1i(glGetUniformLocation(Program[prog_ind], "light_ind"), light_ind);
+
+}
 
 void Draw() {
 
 	GLuint tex_loc;
 	//glClearColor(0.5f, 0.7f, 1.0f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
+	InitUni();
 	//1ый стул
-	glUseProgram(Program[1]);
-	tex_loc = glGetUniformLocation(Program[1], "tex");
-	pl.Load(Program[1]);
-	dl.Load(Program[1]);
-	sl.Load(Program[1]);
-	mat.Load(Program[1]);
+	glUseProgram(Program[prog_ind]);
+	tex_loc = glGetUniformLocation(Program[prog_ind], "tex");
+	
 	glm::mat4 projection = glm::perspective(glm::radians(45.0f), 800.0f / 600.0f, 0.1f, 100.0f);
 	glm::mat4 view = glm::lookAt(cameraPos, cameraPos + cameraFront, cameraUp);
 
@@ -412,8 +460,8 @@ void Draw() {
 	glUseProgram(0);
 
 	//стол
-	glUseProgram(Program[0]);
-	tex_loc = glGetUniformLocation(Program[0], "tex");
+	glUseProgram(Program[prog_ind]);
+	tex_loc = glGetUniformLocation(Program[prog_ind], "tex");
 	glm::mat4 model1 = glm::mat4(1.0f);
 	model1 = glm::translate(model1, glm::vec3(0.0f, 0.0f, 0.0f));
 	model1 = glm::scale(model1, glm::vec3(3.75f));
@@ -445,8 +493,8 @@ void Draw() {
 
 
 	//2ой стул
-	glUseProgram(Program[0]);
-	tex_loc = glGetUniformLocation(Program[0], "tex");
+	glUseProgram(Program[prog_ind]);
+	tex_loc = glGetUniformLocation(Program[prog_ind], "tex");
 
 	glm::mat4 model3 = glm::mat4(1.0f);
 	model3 = glm::translate(model3, glm::vec3(8.0f, -0.02f, 0.0f));
@@ -477,8 +525,8 @@ void Draw() {
 	glUseProgram(0);
 
 	//пол
-	glUseProgram(Program[0]);
-	tex_loc = glGetUniformLocation(Program[0], "tex");
+	glUseProgram(Program[prog_ind]);
+	tex_loc = glGetUniformLocation(Program[prog_ind], "tex");
 	glm::mat4 model4 = glm::mat4(1.0f);
 	model4 = glm::translate(model4 , glm::vec3(0.0f, -9.83f, 0.0f));
 	mvp = projection * view * model4;
@@ -578,7 +626,20 @@ int main() {
 				if (pitch < -89.0f) {
 					pitch = -89.0f;
 				}
-
+				if (sf::Keyboard::isKeyPressed(sf::Keyboard::P)) {
+					prog_ind++;
+				}
+				if (prog_ind > 2) 
+				{
+					prog_ind = 0;
+				}
+				if (sf::Keyboard::isKeyPressed(sf::Keyboard::L)) {
+					light_ind++;
+				}
+				if (light_ind > 2)
+				{
+					light_ind = 0;
+				}
 				glm::vec3 front;
 				front.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));
 				front.y = sin(glm::radians(pitch));

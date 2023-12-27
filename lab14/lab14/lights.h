@@ -16,7 +16,10 @@ struct PointLight {
 	glm::vec3 ambient;
 	glm::vec3 diffuse;
 	glm::vec3 specular;
-	glm::vec3 atten;
+	float constant_attenuation;
+	float linear_attenuation;
+	float quadratic_attenuation;
+
 
 	void Load(GLuint program)
 	{
@@ -25,11 +28,16 @@ struct PointLight {
 		glUniform3fv(glGetUniformLocation(program, (type + "ambient").c_str()), 1, glm::value_ptr(ambient));
 		glUniform3fv(glGetUniformLocation(program, (type + "diffuse").c_str()), 1, glm::value_ptr(diffuse));
 		glUniform3fv(glGetUniformLocation(program, (type + "specular").c_str()), 1, glm::value_ptr(specular));
-		glUniform3fv(glGetUniformLocation(program, (type + "atten").c_str()), 1, glm::value_ptr(atten));
+		glUniform1f(glGetUniformLocation(program, (type + "constant_attenuation").c_str()), constant_attenuation);
+		glUniform1f(glGetUniformLocation(program, (type + "linear_attenuation").c_str()), linear_attenuation);
+		glUniform1f(glGetUniformLocation(program, (type + "quadratic_attenuation").c_str()), quadratic_attenuation);
+
+
 	}
 };
 
 struct DirLight {
+	glm::vec3 pos;
 	glm::vec3 direction;
 	glm::vec3 ambient;
 	glm::vec3 diffuse;
@@ -38,6 +46,7 @@ struct DirLight {
 	void Load(GLuint program)
 	{
 		std::string type = "dirl.";
+		glUniform3fv(glGetUniformLocation(program, (type + "pos").c_str()), 1, glm::value_ptr(pos));
 		glUniform3fv(glGetUniformLocation(program, (type + "direction").c_str()), 1, glm::value_ptr(direction));
 		glUniform3fv(glGetUniformLocation(program, (type + "ambient").c_str()), 1, glm::value_ptr(ambient));
 		glUniform3fv(glGetUniformLocation(program, (type + "diffuse").c_str()), 1, glm::value_ptr(diffuse));
@@ -51,8 +60,11 @@ struct SpotLight {
 	glm::vec3 ambient;
 	glm::vec3 diffuse;
 	glm::vec3 specular;
+	float constant_attenuation;
+	float linear_attenuation;
+	float quadratic_attenuation;
 	float cutoff;
-	glm::vec3 atten;
+
 
 	void Load(GLuint program)
 	{
@@ -63,7 +75,9 @@ struct SpotLight {
 		glUniform3fv(glGetUniformLocation(program, (type + "diffuse").c_str()), 1, glm::value_ptr(diffuse));
 		glUniform3fv(glGetUniformLocation(program, (type + "specular").c_str()), 1, glm::value_ptr(specular));
 		glUniform1f(glGetUniformLocation(program, (type + "cutoff").c_str()), cutoff);
-		glUniform3fv(glGetUniformLocation(program, (type + "atten").c_str()), 1, glm::value_ptr(atten));
+		glUniform1f(glGetUniformLocation(program, (type + "constant_attenuation").c_str()), constant_attenuation);
+		glUniform1f(glGetUniformLocation(program, (type + "linear_attenuation").c_str()), linear_attenuation);
+		glUniform1f(glGetUniformLocation(program, (type + "quadratic_attenuation").c_str()), quadratic_attenuation);
 	}
 };
 
